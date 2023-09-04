@@ -11,4 +11,5 @@
     <color name="mainYellow">#FFE600</color>
     <color name="mainBlack">#000000</color>
     <color name="mainWhite">#FFFFFF</color>
+    <color name="gray_545454">#545454</color>
 </resources>
