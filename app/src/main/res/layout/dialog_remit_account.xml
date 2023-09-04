@@ -1,11 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/dialog_remit_account"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mainBlack">
+        android:background="@color/mainWhite">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="계좌 번호"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="123dp"
+            android:layout_marginStart="36dp"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:textSize="20sp"
+            android:textColor="@color/mainBlack"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="63dp"
+            android:layout_marginEnd="36dp"
+            android:background="@color/mainBlack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/tv_account"
+            app:layout_constraintTop_toBottomOf="@+id/tv_account" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/nanum_gothic"
+            android:text="계좌번호가 맞습니까? 잘못 입력하셨습니다."
+            android:textColor="@color/mainBlack"
+            android:textSize="10sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/view"
+            app:layout_constraintTop_toBottomOf="@+id/view" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
