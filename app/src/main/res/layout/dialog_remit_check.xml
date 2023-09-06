@@ -14,12 +14,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="33dp"
-            android:layout_marginTop="86dp"
-            android:text="한성대 님\n국민은행 통장"
-            android:textSize="20sp"
-            android:textColor="@color/mainBlack"
-            android:lineHeight="30dp"
+            android:layout_marginTop="116dp"
             android:fontFamily="@font/nanum_gothic_bold"
+            android:lineHeight="30dp"
+            android:text="한성대 님\n국민은행 통장"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
