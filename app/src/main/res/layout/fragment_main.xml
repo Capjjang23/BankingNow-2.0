@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/main">
+
+        <Button
+            android:id="@+id/btn_balance"
+            android:layout_width="0dp"
+            android:layout_height="92dp"
+            android:layout_marginBottom="52dp"
+            android:background="@color/mainWhite"
+            android:elevation="20dp"
+            android:text="현재 잔액"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/btn_remit"
+            app:layout_constraintEnd_toEndOf="@+id/btn_remit"
+            app:layout_constraintStart_toStartOf="@+id/btn_remit" />
+
+        <Button
+            android:id="@+id/btn_remit"
+            android:layout_width="0dp"
+            android:layout_height="92dp"
+            android:layout_marginStart="33dp"
+            android:layout_marginEnd="29dp"
+            android:layout_marginBottom="111dp"
+            android:background="@color/mainWhite"
+            android:text="송금하기"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
