@@ -5,10 +5,11 @@ import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.example.bankingnow.R
+import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.writenow.base.BaseDialogFragment
 
-class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
+class RemitCheckDialog : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
 
     override fun onResume() {
         super.onResume()
@@ -23,8 +24,9 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-        // 비밀번호 맞으면 송금완료 화면 띄우기
-//        RemitSuccessDialog().show(parentFragmentManager,"송금 완료")
-//        this.dismiss()
+        binding.dialogRemitCheck.setOnClickListener {
+            RemitPasswordDialog().show(parentFragmentManager,"비밀 번호")
+            this.dismiss()
+        }
     }
 }

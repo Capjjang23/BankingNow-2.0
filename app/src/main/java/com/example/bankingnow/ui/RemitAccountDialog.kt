@@ -19,4 +19,13 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
+
+    override fun initAfterBinding() {
+        super.initAfterBinding()
+
+        binding.dialogRemitAccount.setOnClickListener {
+            RemitCheckDialog().show(parentFragmentManager,"송금 확인")
+            this.dismiss()
+        }
+    }
 }

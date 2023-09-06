@@ -18,4 +18,12 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
+    override fun initAfterBinding() {
+        super.initAfterBinding()
+
+        binding.dialogRemitMoney.setOnClickListener {
+            RemitBankDialog().show(parentFragmentManager,"보내실 은행")
+            this.dismiss()
+        }
+    }
 }
