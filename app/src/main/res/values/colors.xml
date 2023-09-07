@@ -8,9 +8,11 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="transparent">#00FFFFFF</color>
     <color name="mainYellow">#FFE600</color>
     <color name="mainBlack">#000000</color>
     <color name="mainWhite">#FFFFFF</color>
     <color name="shadow">#1E000000</color>
     <color name="gray_545454">#545454</color>
+
 </resources>
