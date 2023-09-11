@@ -29,18 +29,8 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         super.initAfterBinding()
 
         setTouchScreen()
+        setTTS()
 
-        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status!=TextToSpeech.ERROR){
-                tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
-                tts.setSpeechRate(1.0f)
-                Log.d("TTS INIT", "SUCCESS")
-            }
-            else{
-                Log.d("TTS INIT", "FAIL")
-            }
-        })
         binding.btnSpeak.setOnClickListener {
             tts?.speak("생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해", TextToSpeech.QUEUE_FLUSH, null, TTS_ID)
         }
@@ -54,9 +44,8 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         }
         tts.shutdown()
     }
-
     private fun setTouchScreen() {
-        binding.view.setOnTouchListener { _, motionEvent ->
+        binding.fragmentBalance.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - lastTouchTime < doubleClickDelay) {
@@ -67,5 +56,19 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
             }
             true
         }
+    }
+
+    private fun setTTS() {
+        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
+            if (status!=TextToSpeech.ERROR){
+                tts.language = Locale.KOREAN
+                tts.setPitch(1.0f)
+                tts.setSpeechRate(1.0f)
+                Log.d("TTS INIT", "SUCCESS")
+            }
+            else{
+                Log.d("TTS INIT", "FAIL")
+            }
+        })
     }
 }

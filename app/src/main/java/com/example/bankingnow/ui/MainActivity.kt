@@ -13,13 +13,13 @@ import com.example.bankingnow.R
 import com.example.bankingnow.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-
     companion object {
         private const val REQUEST_RECORD_AUDIO_CODE = 200
     }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController : NavController
+    private var isLogin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -72,5 +72,12 @@ class MainActivity : AppCompatActivity() {
                     REQUEST_RECORD_AUDIO_CODE)
             }.setNegativeButton("취소"){ dialogInterface, _ -> dialogInterface.cancel()}
             .show()
+    }
+
+    fun getIsLogin(): Boolean{
+        return isLogin
+    }
+    fun setIsLogin(){
+        isLogin = true
     }
 }

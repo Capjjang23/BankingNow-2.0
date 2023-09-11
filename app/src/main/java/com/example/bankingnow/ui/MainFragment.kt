@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.util.Log
 import androidx.navigation.ActionOnlyNavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.bankingnow.R
@@ -12,8 +13,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-        val dialog = RemitPasswordDialog()
-        dialog.show(parentFragmentManager,"")
+        if (!(activity as MainActivity).getIsLogin()) {
+            LoginDialog().show(parentFragmentManager,"")
+        }
+
     }
 
     override fun initDataBinding() {
