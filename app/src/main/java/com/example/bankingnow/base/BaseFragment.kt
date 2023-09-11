@@ -1,15 +1,20 @@
 package com.example.writenow.base
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.findNavController
 
 abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutResourceId: Int) :
@@ -49,4 +54,5 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
         initAfterBinding()
 
     }
+
 }
