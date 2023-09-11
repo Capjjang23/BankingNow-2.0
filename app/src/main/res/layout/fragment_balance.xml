@@ -5,6 +5,7 @@
     android:background="@color/mainWhite">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -43,6 +44,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/logo_screen_bottom_right" />
+
+        <Button
+            android:id="@+id/btn_speak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="154dp"
+            android:layout_marginTop="112dp"
+            android:text="Button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_balance" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
