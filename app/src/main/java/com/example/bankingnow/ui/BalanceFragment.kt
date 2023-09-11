@@ -29,11 +29,8 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         super.initAfterBinding()
 
         setTouchScreen()
-        setTTS()
+//        setTTS("생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해")
 
-        binding.btnSpeak.setOnClickListener {
-            tts?.speak("생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해", TextToSpeech.QUEUE_FLUSH, null, TTS_ID)
-        }
     }
 
     override fun onDestroy() {
@@ -58,12 +55,14 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         }
     }
 
-    private fun setTTS() {
+    private fun setTTS(message: String) {
         tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status!=TextToSpeech.ERROR){
                 tts.language = Locale.KOREAN
                 tts.setPitch(1.0f)
                 tts.setSpeechRate(1.0f)
+
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, TTS_ID)
                 Log.d("TTS INIT", "SUCCESS")
             }
             else{

@@ -4,14 +4,15 @@ import android.media.MediaRecorder
 import android.util.Log
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.writenow.model.TestPostModel
+import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
+import java.lang.Thread.sleep
 
 // 녹음시작 -> 3초후 중단 -> 녹음 데이터 서버로 보냄 -> -결과값을 받아옴 -> 다시 녹음시작
 class Recorder {
-
     // 릴리즈(쉬고있는 상태) -> 녹음중 -> 릴리즈
     private enum class State {
         RELEASE, RECORDING
@@ -21,10 +22,10 @@ class Recorder {
     private var state: State = State.RELEASE
 
     private var apiManager:RecordApiManager = RecordApiManager()
-
     fun startRecording(filename: String) {
         state = State.RECORDING
 
+        // MediaRecorder 객체 초기화 및 설정
         recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
@@ -34,20 +35,32 @@ class Recorder {
             setAudioEncodingBitRate(320000)
             setMaxDuration(1500)
 
-
             try {
                 prepare()
             } catch (e: IOException) {
                 Log.e("APP", "prepare() failed $e")
             }
 
-            start()
+            // 녹음 상태 변경을 감시하는 리스너 설정
+            setOnInfoListener { _, what, _ ->
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    // 녹음이 완료되면 호출되는 코드
+                    stop()
+                    release()
 
-            Thread.sleep(1500)
+                    // 녹음 완료 후 다음 작업을 실행
+                    Log.d("audioRecorder","녹음 중단 및 서버 전송")
+                    sendFileToServer(filename)
+                }
+            }
 
-            sendFileToServer(filename)
+            start() // 녹음 시작은 여기에서
         }
     }
+
+
+
+
     fun stopRecording() {
         recorder?.apply {
             stop()

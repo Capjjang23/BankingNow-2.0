@@ -1,27 +1,17 @@
 package com.example.bankingnow.ui
 
-import android.app.Activity.RESULT_OK
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.net.Uri
-import android.provider.ContactsContract
+import android.os.Environment
 import android.speech.tts.TextToSpeech
 import android.util.Log
-import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import com.example.bankingnow.R
+import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.writenow.base.BaseDialogFragment
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.normal.TedPermission
+import java.util.Date
 import java.util.Locale
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
@@ -30,15 +20,24 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
     private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
 
+    val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
+
+    private var recorder = Recorder()
+
+
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-        setTTS()
+        // setTTS 함수 실행
+        setTTS("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
 
         binding.dialogLogin.setOnClickListener{
-            (activity as MainActivity).setIsLogin()
-
-            dismiss()
+//            (activity as MainActivity).setIsLogin()
+//
+//            dismiss()
+            recorder.startRecording(filePath)
+            // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
+            binding.dialogLogin.setOnClickListener(null)
         }
     }
 
@@ -51,12 +50,15 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
 
-    private fun setTTS() {
+    private fun setTTS(message: String) {
         tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
             if (status!=TextToSpeech.ERROR){
                 tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
+                tts.setPitch(0.9f)
                 tts.setSpeechRate(1.0f)
+
+                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, TTS_ID)
+//                delay(1000)
                 Log.d("TTS INIT", "SUCCESS")
             }
             else{
