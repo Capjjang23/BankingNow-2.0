@@ -1,6 +1,7 @@
 package com.example.bankingnow.ui
 
 import com.example.bankingnow.R
+import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.FragmentBalanceBinding
 import com.example.writenow.base.BaseFragment
 

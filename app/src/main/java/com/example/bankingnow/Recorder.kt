@@ -1,12 +1,9 @@
 package com.example.bankingnow
 
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.util.Log
-import androidx.core.content.ContextCompat
 import com.example.bankingnow.apiManager.RecordApiManager
+import com.example.writenow.model.TestPostModel
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -21,14 +18,11 @@ class Recorder {
     }
 
     private var recorder: MediaRecorder? = null
-    private var filename: String = ""
     private var state: State = State.RELEASE
 
     private var apiManager:RecordApiManager = RecordApiManager()
 
-    private fun onRecord(start: Boolean) = if (start) startRecording() else stopRecording()
-
-    private fun startRecording() {
+    fun startRecording(filename: String) {
         state = State.RECORDING
 
         recorder = MediaRecorder().apply {
@@ -54,7 +48,7 @@ class Recorder {
             sendFileToServer(filename)
         }
     }
-    private fun stopRecording() {
+    fun stopRecording() {
         recorder?.apply {
             stop()
             release()
@@ -64,7 +58,7 @@ class Recorder {
         state = State.RELEASE
     }
 
-    fun mediaRecorderToByteArray(outputFile: String): ByteArray? {
+    private fun mediaRecorderToByteArray(outputFile: String): ByteArray? {
         val file = File(outputFile)
         if (!file.exists()) {
             return null
@@ -87,14 +81,12 @@ class Recorder {
         return buffer.toByteArray()
     }
 
-    fun sendFileToServer(filename:String){
+    private fun sendFileToServer(filename:String){
         // 서버 전송
         Log.d("[mmihye]","녹음 멈춤 & 서버 전송")
         val byteArray = mediaRecorderToByteArray(filename)
-//        val recordModel = byteArray?.let { RecordModel(it) }
-//        if (recordModel != null) {
-//            apiManager.postTest(recordModel)
-//        }
+        apiManager.postTest(byteArray.toString())
+
     }
 
 
