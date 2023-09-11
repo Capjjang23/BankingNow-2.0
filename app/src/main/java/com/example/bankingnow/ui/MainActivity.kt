@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         when {
             // 권한확인
             ContextCompat.checkSelfPermission(
-                this, // this == context
+                this, // this => context
                 android.Manifest.permission.RECORD_AUDIO
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // 실제로 녹음 시작하면 됨
