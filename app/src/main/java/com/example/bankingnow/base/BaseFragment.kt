@@ -1,9 +1,13 @@
 package com.example.writenow.base
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
@@ -53,6 +57,19 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
         initDataBinding()
         initAfterBinding()
 
+    }
+
+    fun vibratePhone() {
+        val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        // Android 26 (Oreo) 버전 이상에서는 VibrationEffect를 사용합니다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE) // 1000ms(1초) 동안 진동
+            vibrator.vibrate(vibrationEffect)
+        } else {
+            // Android 25 (Nougat) 이하에서는 deprecated된 vibrate() 메서드를 사용합니다.
+            vibrator.vibrate(300) // 1000ms(1초) 동안 진동
+        }
     }
 
 }

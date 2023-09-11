@@ -6,6 +6,8 @@ import android.graphics.Point
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -86,6 +88,20 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
             window?.setLayout(x, y)
         }
     }
+
+    fun vibratePhone() {
+        val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+
+        // Android 26 (Oreo) 버전 이상에서는 VibrationEffect를 사용합니다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE) // 1000ms(1초) 동안 진동
+            vibrator.vibrate(vibrationEffect)
+        } else {
+            // Android 25 (Nougat) 이하에서는 deprecated된 vibrate() 메서드를 사용합니다.
+            vibrator.vibrate(300) // 1000ms(1초) 동안 진동
+        }
+    }
+
     /* 다이얼로그 프래그먼트에서 사용시.
     * override fun onResume() {
 	* 	super.onResume()

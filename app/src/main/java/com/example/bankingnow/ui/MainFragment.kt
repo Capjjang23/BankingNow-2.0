@@ -1,5 +1,10 @@
 package com.example.bankingnow.ui
 
+import android.content.Context
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.ActionOnlyNavDirections
 import androidx.navigation.fragment.findNavController
 import com.example.bankingnow.R
@@ -27,10 +32,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initAfterBinding()
 
         binding.btnBalance.setOnClickListener{
+            vibratePhone()
             navController.navigate(R.id.action_mainFragment_to_balanceFragment)
         }
         binding.btnRemit.setOnClickListener{
+            vibratePhone()
             navController.navigate(R.id.action_mainFragment_to_remitFragment)
         }
     }
+
 }
