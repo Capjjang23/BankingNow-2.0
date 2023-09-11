@@ -2,11 +2,14 @@ package com.example.bankingnow.ui
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
@@ -18,6 +21,8 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
     private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
+    private val handler = Handler()
+    private var isSingleClick = false
 
     override fun onResume() {
         super.onResume()
@@ -47,18 +52,26 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
 
 
     private fun setTouchScreen() {
-        binding.dialogRemitPassword.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastTouchTime < doubleClickDelay) {
-                    // 더블 클릭 처리: 뒤로 가기
-                    RemitCheckDialog().show(parentFragmentManager,"송금 완료")
-                    dismiss()
-                } else{
-                    RemitSuccessDialog().show(parentFragmentManager,"송금")
-                    dismiss()
+        binding.dialogRemitPassword.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (isSingleClick) {
+                        // 더블 클릭 처리: 뒤로 가기
+                        RemitCheckDialog().show(parentFragmentManager,"송금 완료")
+                        dismiss()
+                    } else {
+                        // 첫 번째 클릭 시작
+                        isSingleClick = true
+                        handler.postDelayed({
+                            if (isSingleClick) {
+                                // 한 번 클릭 처리: Log 출력
+                                RemitSuccessDialog().show(parentFragmentManager,"송금")
+                                dismiss()
+                            }
+                            isSingleClick = false
+                        }, doubleClickDelay)
+                    }
                 }
-                lastTouchTime = currentTime
             }
             true
         }
