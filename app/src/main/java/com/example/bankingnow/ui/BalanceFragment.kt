@@ -4,6 +4,7 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
 import com.example.bankingnow.R
+import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.FragmentBalanceBinding
 import com.example.writenow.base.BaseFragment
 import java.util.Locale

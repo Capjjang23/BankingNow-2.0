@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.ViewGroup
 import android.view.WindowManager
 import com.example.bankingnow.R
+import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.writenow.base.BaseDialogFragment
 
@@ -17,6 +18,11 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
         dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    }
+
+    override fun initStartView() {
+        super.initStartView()
+
     }
 
 
