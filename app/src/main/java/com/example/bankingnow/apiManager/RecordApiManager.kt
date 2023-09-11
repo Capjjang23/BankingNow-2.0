@@ -38,7 +38,6 @@ class RecordApiManager {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        Log.d("retrofitt","init")
         retrofitService = retrofit?.create(RecordService::class.java)
     }
 

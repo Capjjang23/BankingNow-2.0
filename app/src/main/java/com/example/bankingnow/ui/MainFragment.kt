@@ -1,12 +1,6 @@
 package com.example.bankingnow.ui
 
-import android.content.Context
-import android.os.Build
-import android.os.VibrationEffect
-import android.os.Vibrator
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.navigation.ActionOnlyNavDirections
-import androidx.navigation.fragment.findNavController
+import android.util.Log
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.databinding.FragmentRemitBinding
@@ -17,8 +11,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-        val dialog = RemitPasswordDialog()
-        dialog.show(parentFragmentManager,"")
+        if (!(activity as MainActivity).getIsLogin()) {
+            LoginDialog().show(parentFragmentManager,"")
+        }
+
     }
 
     override fun initDataBinding() {
@@ -40,5 +36,4 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             navController.navigate(R.id.action_mainFragment_to_remitFragment)
         }
     }
-
 }
