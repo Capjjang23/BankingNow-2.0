@@ -2,6 +2,7 @@ package com.example.bankingnow.ui
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
@@ -19,6 +20,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
     private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
+    private val handler = Handler()
+    private var isSingleClick = false
 
     override fun onResume() {
         super.onResume()
@@ -41,19 +44,26 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
 
     private fun setTouchScreen() {
-        binding.dialogRemitMoney.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val currentTime = System.currentTimeMillis()
-                val timeInterval = currentTime - lastTouchTime
-                if (currentTime - lastTouchTime < doubleClickDelay) {
-                    // 더블 클릭 처리: 뒤로 가기
-                    setFragmentResult("Back", bundleOf("isSuccess" to false))
-                    dismiss()
-                } else{
-                    RemitBankDialog().show(parentFragmentManager,"보내실 은행")
-                    dismiss()
+        binding.dialogRemitMoney.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (isSingleClick) {
+                        // 더블 클릭 처리: 뒤로 가기
+                        setFragmentResult("Back", bundleOf("isSuccess" to false))
+                        dismiss()
+                    } else {
+                        // 첫 번째 클릭 시작
+                        isSingleClick = true
+                        handler.postDelayed({
+                            if (isSingleClick) {
+                                // 한 번 클릭 처리: Log 출력
+                                RemitBankDialog().show(parentFragmentManager,"보내실 은행")
+                                this.dismiss()
+                            }
+                            isSingleClick = false
+                        }, doubleClickDelay)
+                    }
                 }
-                lastTouchTime = currentTime
             }
             true
         }
@@ -71,5 +81,14 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                 Log.d("TTS INIT", "FAIL")
             }
         })
+    }
+
+    override fun onDestroy() {
+        if (tts.isSpeaking) {
+            tts.stop()
+        }
+        tts.shutdown()
+        handler.removeCallbacksAndMessages(null) // 핸들러 메시지 제거
+        super.onDestroy()
     }
 }

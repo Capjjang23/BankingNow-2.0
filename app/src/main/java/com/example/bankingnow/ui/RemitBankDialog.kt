@@ -2,6 +2,7 @@ package com.example.bankingnow.ui
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Handler
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
@@ -18,6 +19,8 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
     private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
+    private val handler = Handler()
+    private var isSingleClick = false
 
     override fun onResume() {
         super.onResume()
@@ -42,18 +45,26 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
 
     private fun setTouchScreen() {
-        binding.dialogRemitBank.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastTouchTime < doubleClickDelay) {
-                    // 더블 클릭 처리: 뒤로 가기
-                    RemitMoneyDialog().show(parentFragmentManager,"계좌 번호")
-                    dismiss()
-                } else{
-                    RemitAccountDialog().show(parentFragmentManager,"송금")
-                    dismiss()
+        binding.dialogRemitBank.setOnTouchListener { _, event ->
+            when (event.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if (isSingleClick) {
+                        // 더블 클릭 처리: 뒤로 가기
+                        RemitMoneyDialog().show(parentFragmentManager,"계좌 번호")
+                        dismiss()
+                    } else {
+                        // 첫 번째 클릭 시작
+                        isSingleClick = true
+                        handler.postDelayed({
+                            if (isSingleClick) {
+                                // 한 번 클릭 처리: Log 출력
+                                RemitAccountDialog().show(parentFragmentManager,"송금")
+                                dismiss()
+                            }
+                            isSingleClick = false
+                        }, doubleClickDelay)
+                    }
                 }
-                lastTouchTime = currentTime
             }
             true
         }
