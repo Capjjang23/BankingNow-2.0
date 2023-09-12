@@ -47,7 +47,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         // setTTS 함수 실행
         setTTS("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
 
-        setFillCircle(5)
+        setFillCircle(0)
 
         binding.dialogLogin.setOnClickListener{
 //            (activity as MainActivity).setIsLogin()
