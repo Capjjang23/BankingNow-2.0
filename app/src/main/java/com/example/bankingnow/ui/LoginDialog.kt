@@ -7,6 +7,8 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
@@ -14,6 +16,7 @@ import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.writenow.base.BaseDialogFragment
 import java.util.Date
 import java.util.Locale
+import kotlin.collections.ArrayList
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
     private var lastTouchTime: Long = 0
@@ -26,12 +29,25 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
     private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
+    private val ImageViewList : ArrayList<ImageView> = ArrayList()
+
+    override fun initStartView() {
+        ImageViewList.add(binding.ivPw6)
+        ImageViewList.add(binding.ivPw5)
+        ImageViewList.add(binding.ivPw4)
+        ImageViewList.add(binding.ivPw3)
+        ImageViewList.add(binding.ivPw2)
+        ImageViewList.add(binding.ivPw1)
+
+    }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         // setTTS 함수 실행
         setTTS("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
+
+        setFillCircle(5)
 
         binding.dialogLogin.setOnClickListener{
 //            (activity as MainActivity).setIsLogin()
@@ -70,5 +86,12 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                 Log.d("TTS INIT", "FAIL")
             }
         })
+    }
+
+    private fun setFillCircle(index:Int){
+        for (i in 1..index){
+            val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.fill_circle) }
+            ImageViewList[i].setImageDrawable(drawable)
+        }
     }
 }

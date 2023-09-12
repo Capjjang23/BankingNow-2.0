@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
@@ -24,6 +26,9 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     private val handler = Handler()
     private var isSingleClick = false
 
+
+    private val ImageViewList : ArrayList<ImageView> = ArrayList()
+
     override fun onResume() {
         super.onResume()
 
@@ -34,10 +39,14 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     }
 
     override fun initStartView() {
-        super.initStartView()
+        ImageViewList.add(binding.ivPw6)
+        ImageViewList.add(binding.ivPw5)
+        ImageViewList.add(binding.ivPw4)
+        ImageViewList.add(binding.ivPw3)
+        ImageViewList.add(binding.ivPw2)
+        ImageViewList.add(binding.ivPw1)
 
     }
-
 
     override fun initAfterBinding() {
         super.initAfterBinding()
@@ -89,5 +98,12 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
                 Log.d("TTS INIT", "FAIL")
             }
         })
+    }
+
+    private fun setFillCircle(index:Int){
+        for (i in 1..index){
+            val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.fill_circle) }
+            ImageViewList[i].setImageDrawable(drawable)
+        }
     }
 }
