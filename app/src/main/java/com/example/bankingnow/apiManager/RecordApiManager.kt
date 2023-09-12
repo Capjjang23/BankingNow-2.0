@@ -5,11 +5,10 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.api.RecordService
+import com.example.bankingnow.model.PasswordCheckModel
 import com.example.writenow.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import java.time.Duration
-import java.time.LocalDateTime
 
 class RecordApiManager {
     private var retrofit: Retrofit? = null
@@ -34,7 +33,7 @@ class RecordApiManager {
         // http://192.168.47.145:8000
         // https://jsonplaceholder.typicode.com
         retrofit = Retrofit.Builder()
-            .baseUrl("http://172.20.10.14:8000")
+            .baseUrl("http://223.194.128.21:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -91,4 +90,26 @@ class RecordApiManager {
         })
     }
 
+    fun checkPW(password: String){
+        val resultData: Call<PasswordCheckModel>? = retrofitService?.checkPassWord(password)
+        resultData?.enqueue(object : Callback<PasswordCheckModel> {
+            override fun onResponse(
+                call: Call<PasswordCheckModel>,
+                response: Response<PasswordCheckModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: PasswordCheckModel = response.body()!!
+                    Log.d("password check", result.toString())
+                } else {
+                    Log.d("password check", "실패")
+                }
+            }
+
+            override fun onFailure(call: Call<PasswordCheckModel>, t: Throwable) {
+                t.printStackTrace()
+                //EventBus.getDefault().post(GetDataEvent(null))
+                Log.d("password check","통신 실패")
+            }
+        })
+    }
 }

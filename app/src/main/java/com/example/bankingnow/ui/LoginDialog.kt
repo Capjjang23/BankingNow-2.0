@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
+import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.writenow.base.BaseDialogFragment
 import java.util.Date
@@ -23,6 +24,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
     val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
 
     private var recorder = Recorder()
+    private var recordApiManager = RecordApiManager()
 
 
     override fun initAfterBinding() {
@@ -35,9 +37,12 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 //            (activity as MainActivity).setIsLogin()
 //
 //            dismiss()
-            recorder.startRecording(filePath)
+
+//            recorder.startRecording(filePath)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
-            binding.dialogLogin.setOnClickListener(null)
+//            binding.dialogLogin.setOnClickListener(null)
+
+            recordApiManager.checkPW("123456")
         }
     }
 
