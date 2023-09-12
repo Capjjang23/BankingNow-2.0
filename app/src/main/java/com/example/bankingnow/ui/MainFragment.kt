@@ -10,10 +10,10 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     override fun initStartView() {
         super.initStartView()
 
-        // 송금 금액 다이얼로그
-        if (!(activity as MainActivity).getIsLogin()) {
-            LoginDialog().show(parentFragmentManager,"")
-        }
+//        // 송금 금액 다이얼로그
+//        if (!(activity as MainActivity).getIsLogin()) {
+//            LoginDialog().show(parentFragmentManager,"")
+//        }
 
     }
 

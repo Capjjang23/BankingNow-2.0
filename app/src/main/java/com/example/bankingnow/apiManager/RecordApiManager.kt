@@ -1,11 +1,15 @@
 package com.example.bankingnow.apiManager
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.api.RecordService
-import com.example.bankingnow.model.PasswordCheckModel
+import com.example.bankingnow.model.GetBalanceModel
+import com.example.bankingnow.model.PasswordCheckRequest
+import com.example.bankingnow.model.PasswordCheckResponse
+import com.example.bankingnow.ui.BalanceFragment
 import com.example.writenow.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -13,9 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 class RecordApiManager {
     private var retrofit: Retrofit? = null
     private var retrofitService: RecordService? = null
-    val _resultLivedata: MutableLiveData<String> = MutableLiveData()
+    val _resultLivedata: MutableLiveData<String> = MutableLiveData("0")
     val resultLivedata: LiveData<String>
         get() = _resultLivedata
+
+    var listener: getMyBalance? = null
+
+
+    // 클래스내 인터페이스 작성
+    interface getMyBalance {
+        fun getBalance(balance: Long)
+    }
 
     companion object {  // DCL 적용한 싱글톤 구현
         var instance: RecordApiManager? = null
@@ -40,7 +52,7 @@ class RecordApiManager {
         retrofitService = retrofit?.create(RecordService::class.java)
     }
 
-    fun postTest(postData: String){
+    fun postTest(postData: String) {
         val resultData: Call<TestPostModel>? = retrofitService?.postTest(postData)
         resultData?.enqueue(object : Callback<TestPostModel> {
             override fun onResponse(
@@ -60,12 +72,12 @@ class RecordApiManager {
             override fun onFailure(call: Call<TestPostModel>, t: Throwable) {
                 t.printStackTrace()
                 //EventBus.getDefault().post(GetDataEvent(null))
-                Log.d("resultt","통신 실패")
+                Log.d("resultt", "통신 실패")
             }
         })
     }
 
-    fun getTest(){
+    fun getTest() {
         val resultData: Call<TestGetModel>? = retrofitService?.getTest()
         resultData?.enqueue(object : Callback<TestGetModel> {
             override fun onResponse(
@@ -85,30 +97,55 @@ class RecordApiManager {
             override fun onFailure(call: Call<TestGetModel>, t: Throwable) {
                 t.printStackTrace()
                 //EventBus.getDefault().post(GetDataEvent(null))
-                Log.d("resultt","통신 실패")
+                Log.d("resultt", "통신 실패")
             }
         })
     }
 
-    fun checkPW(password: String){
-        val resultData: Call<PasswordCheckModel>? = retrofitService?.checkPassWord(password)
-        resultData?.enqueue(object : Callback<PasswordCheckModel> {
+    fun checkPW(password: String) {
+        val passwordCheckRequest = PasswordCheckRequest(password)
+        val resultData: Call<PasswordCheckResponse>? =
+            retrofitService?.checkPassword(passwordCheckRequest)
+        resultData?.enqueue(object : Callback<PasswordCheckResponse> {
             override fun onResponse(
-                call: Call<PasswordCheckModel>,
-                response: Response<PasswordCheckModel>
+                call: Call<PasswordCheckResponse>,
+                response: Response<PasswordCheckResponse>
             ) {
                 if (response.isSuccessful) {
-                    val result: PasswordCheckModel = response.body()!!
+                    val result: PasswordCheckResponse = response.body()!!
                     Log.d("password check", result.toString())
                 } else {
                     Log.d("password check", "실패")
                 }
             }
 
-            override fun onFailure(call: Call<PasswordCheckModel>, t: Throwable) {
+            override fun onFailure(call: Call<PasswordCheckResponse>, t: Throwable) {
                 t.printStackTrace()
                 //EventBus.getDefault().post(GetDataEvent(null))
-                Log.d("password check","통신 실패")
+                Log.d("password check", "통신 실패")
+            }
+        })
+    }
+
+    fun getBalance(){
+        val resultData: Call<GetBalanceModel>? = retrofitService?.getBalance()
+        resultData?.enqueue(object : Callback<GetBalanceModel> {
+            override fun onResponse(
+                call: Call<GetBalanceModel>,
+                response: Response<GetBalanceModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: GetBalanceModel = response.body()!!
+                    listener?.getBalance(result.balance)
+                    Log.d("getBalance", result.toString())
+                } else {
+                    Log.d("getBalance", "실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetBalanceModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("getBalance", "통신 실패")
             }
         })
     }

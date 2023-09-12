@@ -42,7 +42,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
 //            binding.dialogLogin.setOnClickListener(null)
 
-            recordApiManager.checkPW("123456")
+            recordApiManager.checkPW("capjjang1234")
         }
     }
 

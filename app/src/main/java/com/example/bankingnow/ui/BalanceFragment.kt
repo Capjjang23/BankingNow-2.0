@@ -5,18 +5,26 @@ import android.util.Log
 import android.view.MotionEvent
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
+import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentBalanceBinding
 import com.example.writenow.base.BaseFragment
+import java.text.NumberFormat
 import java.util.Locale
 
-class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_balance) {
+class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_balance),
+    RecordApiManager.getMyBalance {
     private var lastTouchTime: Long = 0
     private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
     private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
 
+    private val apiManager = RecordApiManager()
+
     override fun initStartView() {
         super.initStartView()
+
+        apiManager.listener = this
+        apiManager.getBalance()
     }
 
     override fun initDataBinding() {
@@ -70,4 +78,16 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
             }
         })
     }
+
+    override fun getBalance(balance: Long) {
+        Log.d("잔액확인", balance.toString())
+        binding.tvBalance.text = addCommasToNumber(balance) + " 원"
+
+    }
+
+    fun addCommasToNumber(number: Long): String {
+        val numberFormat = NumberFormat.getNumberInstance(Locale.US)
+        return numberFormat.format(number)
+    }
+
 }
