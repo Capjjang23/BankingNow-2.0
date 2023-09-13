@@ -1,6 +1,7 @@
 package com.example.bankingnow.ui
 
 import android.util.Log
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.databinding.FragmentRemitBinding
@@ -11,7 +12,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-        if (!(activity as MainActivity).getIsLogin()) {
+        if (!prefs.getBoolean("isLogin", false)) {
+            Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
             LoginDialog().show(parentFragmentManager,"")
         }
 
@@ -28,11 +30,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initAfterBinding()
 
         binding.btnBalance.setOnClickListener{
-            vibratePhone()
+            customVibrator?.vibratePhone()
             navController.navigate(R.id.action_mainFragment_to_balanceFragment)
         }
         binding.btnRemit.setOnClickListener{
-            vibratePhone()
+            customVibrator?.vibratePhone()
             navController.navigate(R.id.action_mainFragment_to_remitFragment)
         }
     }

@@ -42,14 +42,6 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        if (tts.isSpeaking) {
-            tts.stop()
-        }
-        tts.shutdown()
-    }
     private fun setTouchScreen() {
         binding.fragmentBalance.setOnTouchListener { _, motionEvent ->
             if (motionEvent.action == MotionEvent.ACTION_DOWN) {

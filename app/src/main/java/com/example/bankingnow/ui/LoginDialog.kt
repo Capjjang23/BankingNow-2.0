@@ -7,6 +7,7 @@ import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.ViewGroup
 import android.view.WindowManager
+import com.example.bankingnow.MyApplication.Companion.prefs
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.bankingnow.R
@@ -19,11 +20,6 @@ import java.util.Locale
 import kotlin.collections.ArrayList
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
-    private var lastTouchTime: Long = 0
-    private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
-    private lateinit var tts: TextToSpeech
-    private val TTS_ID = "TTS"
-
     val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
 
     private var recorder = Recorder()
@@ -43,16 +39,16 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 
     override fun initAfterBinding() {
         super.initAfterBinding()
-
+        Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
         // setTTS 함수 실행
-        setTTS("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
+        customTTS.speak("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
 
         setFillCircle(0)
 
         binding.dialogLogin.setOnClickListener{
-//            (activity as MainActivity).setIsLogin()
-//
-//            dismiss()
+            prefs.setBoolean("isLogin", true)
+            Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
+            dismiss()
 
             recorder.startRecording(filePath)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함

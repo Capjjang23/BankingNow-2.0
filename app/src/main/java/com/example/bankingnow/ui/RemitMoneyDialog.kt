@@ -16,12 +16,7 @@ import com.example.writenow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dialog_remit_money) {
-    private var lastTouchTime: Long = 0
-    private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
-    private lateinit var tts: TextToSpeech
-    private val TTS_ID = "TTS"
     private val handler = Handler()
-    private var isSingleClick = false
 
     override fun onResume() {
         super.onResume()
@@ -34,12 +29,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-        setTTS()
+        customTTS.speak("ajkdsl")
         setTouchScreen()
-//        binding.dialogRemitMoney.setOnClickListener {
-//            RemitBankDialog().show(parentFragmentManager,"보내실 은행")
-//            this.dismiss()
-//        }
     }
 
 
@@ -67,28 +58,5 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
             }
             true
         }
-    }
-
-    private fun setTTS() {
-        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status!=TextToSpeech.ERROR){
-                tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
-                tts.setSpeechRate(1.0f)
-                Log.d("TTS INIT", "SUCCESS")
-            }
-            else{
-                Log.d("TTS INIT", "FAIL")
-            }
-        })
-    }
-
-    override fun onDestroy() {
-        if (tts.isSpeaking) {
-            tts.stop()
-        }
-        tts.shutdown()
-        handler.removeCallbacksAndMessages(null) // 핸들러 메시지 제거
-        super.onDestroy()
     }
 }

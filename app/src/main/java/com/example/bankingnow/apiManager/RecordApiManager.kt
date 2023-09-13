@@ -12,6 +12,8 @@ import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.ui.BalanceFragment
 import com.example.rightnow.model.PostTestModel
 import com.example.rightnow.model.RecordModel
+import com.example.bankingnow.model.PasswordCheckModel
+import com.example.bankingnow.api.RecordService
 import com.example.writenow.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -118,6 +120,7 @@ class RecordApiManager {
                     Log.d("password check", result.toString())
                 } else {
                     Log.d("password check", "실패")
+                    Log.d("response:", response.toString())
                 }
             }
 
