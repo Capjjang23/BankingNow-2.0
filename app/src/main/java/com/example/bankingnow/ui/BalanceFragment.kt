@@ -37,6 +37,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         super.initAfterBinding()
 
         setTouchScreen()
+
 //        setTTS("생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해")
 
     }

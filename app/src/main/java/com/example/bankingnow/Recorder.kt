@@ -3,6 +3,8 @@ package com.example.bankingnow
 import android.media.MediaRecorder
 import android.util.Log
 import com.example.bankingnow.apiManager.RecordApiManager
+import com.example.rightnow.model.PostTestModel
+import com.example.rightnow.model.RecordModel
 import com.example.writenow.model.TestPostModel
 import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
@@ -98,9 +100,7 @@ class Recorder {
         // 서버 전송
         Log.d("[mmihye]","녹음 멈춤 & 서버 전송")
         val byteArray = mediaRecorderToByteArray(filename)
-        apiManager.postTest(byteArray.toString())
+        byteArray?.let { RecordModel(it) }?.let { apiManager.postTest(it) }
 
     }
-
-
 }

@@ -10,6 +10,8 @@ import com.example.bankingnow.model.GetBalanceModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.ui.BalanceFragment
+import com.example.rightnow.model.PostTestModel
+import com.example.rightnow.model.RecordModel
 import com.example.writenow.model.*
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
@@ -52,15 +54,15 @@ class RecordApiManager {
         retrofitService = retrofit?.create(RecordService::class.java)
     }
 
-    fun postTest(postData: String) {
-        val resultData: Call<TestPostModel>? = retrofitService?.postTest(postData)
-        resultData?.enqueue(object : Callback<TestPostModel> {
+    fun postTest(postData: RecordModel) {
+        val resultData: Call<PostTestModel>? = retrofitService?.postTest(postData)
+        resultData?.enqueue(object : Callback<PostTestModel> {
             override fun onResponse(
-                call: Call<TestPostModel>,
-                response: Response<TestPostModel>
+                call: Call<PostTestModel>,
+                response: Response<PostTestModel>
             ) {
                 if (response.isSuccessful) {
-                    val result: TestPostModel = response.body()!!
+                    val result: PostTestModel = response.body()!!
                     Log.d("resultt", result.toString())
                     //EventBus.getDefault().post(GetDataEvent(resultData))
                 } else {
@@ -69,7 +71,7 @@ class RecordApiManager {
                 }
             }
 
-            override fun onFailure(call: Call<TestPostModel>, t: Throwable) {
+            override fun onFailure(call: Call<PostTestModel>, t: Throwable) {
                 t.printStackTrace()
                 //EventBus.getDefault().post(GetDataEvent(null))
                 Log.d("resultt", "통신 실패")

@@ -3,6 +3,8 @@ package com.example.bankingnow.api
 import com.example.bankingnow.model.GetBalanceModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
+import com.example.rightnow.model.PostTestModel
+import com.example.rightnow.model.RecordModel
 import com.example.writenow.model.*
 import retrofit2.Call
 import retrofit2.http.Body
@@ -15,9 +17,8 @@ interface RecordService {
     @GET("/posts/1")
     fun getTest(): Call<TestGetModel>
 
-    @POST("/posts")
-    fun postTest(@Body postData: String): Call<TestPostModel>
-
+    @POST("/process_audio/")
+    fun postTest(@Body postData: RecordModel): Call<PostTestModel>
 
     @POST("/accounts/check_password/")
     fun checkPassword(@Body request: PasswordCheckRequest): Call<PasswordCheckResponse>
