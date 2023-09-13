@@ -14,6 +14,7 @@ import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
+import com.example.bankingnow.util.CustomTTS.Companion.TTS_ID
 import com.example.writenow.base.BaseDialogFragment
 import java.util.Date
 import java.util.Locale
@@ -48,7 +49,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         binding.dialogLogin.setOnClickListener{
             prefs.setBoolean("isLogin", true)
             Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
-            dismiss()
+//            dismiss()
 
             recorder.startRecording(filePath)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함

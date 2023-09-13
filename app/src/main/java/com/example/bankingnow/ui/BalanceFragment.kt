@@ -13,9 +13,6 @@ import java.util.Locale
 
 class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_balance),
     RecordApiManager.getMyBalance {
-    private var lastTouchTime: Long = 0
-    private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
-    private lateinit var tts: TextToSpeech
     private val TTS_ID = "TTS"
 
     private val apiManager = RecordApiManager()
