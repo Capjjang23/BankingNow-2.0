@@ -16,7 +16,6 @@ interface RecordService {
     @POST("/posts")
     fun postTest(@Body postData: String): Call<TestPostModel>
 
-
     @POST("/accounts/check_password/")
     fun checkPassWord(@Body password: String): Call<PasswordCheckModel>
 }

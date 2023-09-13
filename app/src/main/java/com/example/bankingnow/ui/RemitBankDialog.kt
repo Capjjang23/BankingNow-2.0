@@ -15,12 +15,8 @@ import com.example.writenow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dialog_remit_bank) {
-    private var lastTouchTime: Long = 0
-    private val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
-    private lateinit var tts: TextToSpeech
-    private val TTS_ID = "TTS"
     private val handler = Handler()
-    private var isSingleClick = false
+
 
     override fun onResume() {
         super.onResume()
@@ -35,7 +31,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         super.initAfterBinding()
 
         setTouchScreen()
-        setTTS()
 
 //        binding.dialogRemitBank.setOnClickListener {
 //            RemitAccountDialog().show(parentFragmentManager,"계좌 번호")
@@ -68,19 +63,5 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
             }
             true
         }
-    }
-
-    private fun setTTS() {
-        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status!=TextToSpeech.ERROR){
-                tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
-                tts.setSpeechRate(1.0f)
-                Log.d("TTS INIT", "SUCCESS")
-            }
-            else{
-                Log.d("TTS INIT", "FAIL")
-            }
-        })
     }
 }

@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.speech.tts.TextToSpeech
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,13 +19,23 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.example.bankingnow.util.CustomTTS
+import com.example.bankingnow.util.CustomVibrator
 
 abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val layoutResourceId: Int) :
     DialogFragment() {
-
     // protected abstract val viewModel: VM
     protected lateinit var binding: B
     protected lateinit var navController: NavController
+
+    protected var lastTouchTime: Long = 0
+    protected val doubleClickDelay: Long = 500 // 더블 클릭 간격 설정 (0.5초)
+    protected var isSingleClick = false
+
+    protected var customVibrator: CustomVibrator? = null
+    protected lateinit var customTTS: CustomTTS
+    protected var vibrator: Vibrator? = null
+    protected lateinit var tts: TextToSpeech
 
 
     // * 레이아웃을 띄운 직후 호출. * 뷰나 액티비티의 속성 등을 초기화. * ex) 리사이클러뷰, 툴바, 드로어뷰..
@@ -58,10 +69,30 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         super.onViewCreated(view, savedInstanceState)
 
         navController = findNavController()
+        setUtil()
 
         initStartView()
         initDataBinding()
         initAfterBinding()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        vibrator = null
+
+        if (customTTS.tts.isSpeaking) {
+            tts.stop()
+        }
+        tts.shutdown()
+    }
+
+    private fun setUtil() {
+        customTTS = CustomTTS.getInstance(requireContext())
+        customVibrator = CustomVibrator.getInstance(requireContext())
+
+        tts = customTTS.tts
+        vibrator = customVibrator?.vibrator
     }
 
     // 다이얼로그 크기
@@ -86,19 +117,6 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
             val y = (rect.height() * height).toInt()
 
             window?.setLayout(x, y)
-        }
-    }
-
-    fun vibratePhone() {
-        val vibrator = requireActivity().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
-        // Android 26 (Oreo) 버전 이상에서는 VibrationEffect를 사용합니다.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val vibrationEffect = VibrationEffect.createOneShot(300, VibrationEffect.DEFAULT_AMPLITUDE) // 1000ms(1초) 동안 진동
-            vibrator.vibrate(vibrationEffect)
-        } else {
-            // Android 25 (Nougat) 이하에서는 deprecated된 vibrate() 메서드를 사용합니다.
-            vibrator.vibrate(300) // 1000ms(1초) 동안 진동
         }
     }
 

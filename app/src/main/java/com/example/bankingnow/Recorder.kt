@@ -3,13 +3,10 @@ package com.example.bankingnow
 import android.media.MediaRecorder
 import android.util.Log
 import com.example.bankingnow.apiManager.RecordApiManager
-import com.example.writenow.model.TestPostModel
-import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
-import java.lang.Thread.sleep
 
 // 녹음시작 -> 3초후 중단 -> 녹음 데이터 서버로 보냄 -> -결과값을 받아옴 -> 다시 녹음시작
 class Recorder {
@@ -21,7 +18,7 @@ class Recorder {
     private var recorder: MediaRecorder? = null
     private var state: State = State.RELEASE
 
-    private var apiManager:RecordApiManager = RecordApiManager()
+    private var apiManager: RecordApiManager = RecordApiManager()
     fun startRecording(filename: String) {
         state = State.RECORDING
 

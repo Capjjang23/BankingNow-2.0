@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BankingNow</string>
+
+    <string name="spk_app_start">뱅!캥!나!우!</string>
 </resources>

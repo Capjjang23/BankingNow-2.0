@@ -7,8 +7,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.ActivityMainBinding
 
@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController : NavController
-    private var isLogin: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -32,6 +31,8 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment=supportFragmentManager.findFragmentById(R.id.mainFrame) as NavHostFragment
         navController = navHostFragment.navController
+
+        prefs.setBoolean("isLogin", false)
     }
 
     private fun checkRecordPermission() {
@@ -72,12 +73,5 @@ class MainActivity : AppCompatActivity() {
                     REQUEST_RECORD_AUDIO_CODE)
             }.setNegativeButton("취소"){ dialogInterface, _ -> dialogInterface.cancel()}
             .show()
-    }
-
-    fun getIsLogin(): Boolean{
-        return isLogin
-    }
-    fun setIsLogin(){
-        isLogin = true
     }
 }
