@@ -15,7 +15,7 @@ import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
-import com.example.writenow.base.BaseDialogFragment
+import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {

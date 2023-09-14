@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
-            android:id="@+id/dialog_login"
+            android:id="@+id/line"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="63dp"
@@ -44,8 +44,8 @@
             android:text="원"
             android:textColor="@color/mainBlack"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/dialog_login"
-            app:layout_constraintEnd_toEndOf="@+id/dialog_login" />
+            app:layout_constraintBottom_toTopOf="@+id/line"
+            app:layout_constraintEnd_toEndOf="@+id/line" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

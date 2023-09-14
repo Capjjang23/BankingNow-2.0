@@ -11,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitSuccessBinding
-import com.example.writenow.base.BaseDialogFragment
+import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layout.dialog_remit_success) {

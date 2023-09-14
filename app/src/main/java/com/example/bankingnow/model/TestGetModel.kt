@@ -1,4 +1,4 @@
-package com.example.writenow.model
+package com.example.bankingnow.model
 
 data class TestGetModel(
     val userId:Int,

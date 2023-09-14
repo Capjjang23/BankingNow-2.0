@@ -11,7 +11,7 @@ import android.view.WindowManager
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
-import com.example.writenow.base.BaseDialogFragment
+import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitCheckDialog : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {

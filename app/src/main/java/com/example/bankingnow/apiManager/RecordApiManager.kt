@@ -1,18 +1,17 @@
 package com.example.bankingnow.apiManager
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.api.RecordService
+import com.example.bankingnow.event.PostNumberEvent
 import com.example.bankingnow.model.GetBalanceModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
-import com.example.bankingnow.ui.BalanceFragment
-import com.example.rightnow.model.PostTestModel
-import com.example.rightnow.model.RecordModel
-import com.example.writenow.model.*
+import com.example.bankingnow.model.RecordModel
+import com.example.bankingnow.model.*
+import org.greenrobot.eventbus.EventBus
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -149,6 +148,29 @@ class RecordApiManager {
             override fun onFailure(call: Call<GetBalanceModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("getBalance", "통신 실패")
+            }
+        })
+    }
+
+    // 송금 금액, 계좌 번호 받아올때  사용
+    fun postNumber(postData: RecordModel) {
+        val resultData: Call<NumberModel>? = retrofitService?.postNumber(postData)
+        resultData?.enqueue(object : Callback<NumberModel> {
+            override fun onResponse(
+                call: Call<NumberModel>,
+                response: Response<NumberModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: NumberModel = response.body()!!
+                    EventBus.getDefault().post(PostNumberEvent(true, result))
+                } else {
+                    Log.d("resultt", "실패코드_${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<NumberModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("resultt", "통신 실패")
             }
         })
     }

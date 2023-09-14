@@ -5,7 +5,7 @@ import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.databinding.FragmentRemitBinding
-import com.example.writenow.base.BaseFragment
+import com.example.bankingnow.base.BaseFragment
 
 class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     override fun initStartView() {

@@ -15,13 +15,13 @@ import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.util.CustomTTS.Companion.TTS_ID
-import com.example.writenow.base.BaseDialogFragment
+import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
-    val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
+    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
 
     private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
@@ -49,7 +49,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         binding.dialogLogin.setOnClickListener{
             prefs.setBoolean("isLogin", true)
             Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
-//            dismiss()
+            dismiss()
 
             recorder.startRecording(filePath)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함

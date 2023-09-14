@@ -6,8 +6,8 @@ import android.view.MotionEvent
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
+import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.FragmentBalanceBinding
-import com.example.writenow.base.BaseFragment
 import java.text.NumberFormat
 import java.util.Locale
 
