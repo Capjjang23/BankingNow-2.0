@@ -1,12 +1,16 @@
-package com.example.bankingnow
+package com.example.bankingnow.util
 
+import android.content.Context
+import android.content.Intent
 import android.media.MediaRecorder
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.util.Log
+import android.widget.Toast
 import com.example.bankingnow.apiManager.RecordApiManager
-import com.example.rightnow.model.PostTestModel
 import com.example.rightnow.model.RecordModel
-import com.example.writenow.model.TestPostModel
-import kotlinx.coroutines.delay
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileInputStream
@@ -23,7 +27,8 @@ class Recorder {
     private var state: State = State.RELEASE
 
     private var apiManager: RecordApiManager = RecordApiManager()
-    fun startRecording(filename: String) {
+    private lateinit var speechRecognizer: SpeechRecognizer
+    fun startRecordingNumber(filename: String) {
         state = State.RECORDING
 
         // MediaRecorder 객체 초기화 및 설정
@@ -58,8 +63,6 @@ class Recorder {
             start() // 녹음 시작은 여기에서
         }
     }
-
-
 
 
     fun stopRecording() {
@@ -105,3 +108,4 @@ class Recorder {
 
 
 }
+

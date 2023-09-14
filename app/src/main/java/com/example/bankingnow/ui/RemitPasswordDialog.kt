@@ -10,10 +10,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.writenow.base.BaseDialogFragment
 import java.util.Locale
@@ -40,6 +37,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
         ImageViewList.add(binding.ivPw3)
         ImageViewList.add(binding.ivPw2)
         ImageViewList.add(binding.ivPw1)
+
 
     }
 

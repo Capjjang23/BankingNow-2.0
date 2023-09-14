@@ -11,7 +11,7 @@ import com.example.bankingnow.MyApplication.Companion.prefs
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
+import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.util.CustomTTS.Companion.TTS_ID
@@ -51,7 +51,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
             Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
 //            dismiss()
 
-            recorder.startRecording(filePath)
+            recorder.startRecordingNumber(filePath)
             // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
             binding.dialogLogin.setOnClickListener(null)
 
