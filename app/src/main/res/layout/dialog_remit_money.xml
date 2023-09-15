@@ -47,5 +47,16 @@
             app:layout_constraintBottom_toTopOf="@+id/line"
             app:layout_constraintEnd_toEndOf="@+id/line" />
 
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_gothic"
+            android:textColor="@color/mainBlack"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/won"
+            app:layout_constraintStart_toStartOf="@+id/tv_remit_money_info"
+            app:layout_constraintTop_toTopOf="@+id/won" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

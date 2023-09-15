@@ -36,6 +36,14 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    override fun initDataBinding() {
+        super.initDataBinding()
+
+        idx.observe(viewLifecycleOwner) {
+            state = stateList[idx.value!!]
+        }
+    }
+
     override fun initAfterBinding() {
         super.initAfterBinding()
 

@@ -34,6 +34,20 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    private val result: MutableLiveData<String> = MutableLiveData()
+
+    override fun initDataBinding() {
+        super.initDataBinding()
+
+        idx.observe(viewLifecycleOwner) {
+            state = stateList[idx.value!!]
+        }
+
+        result.observe(viewLifecycleOwner) {
+            binding.tvAccount.text = it
+        }
+    }
+
     override fun initAfterBinding() {
         super.initAfterBinding()
 

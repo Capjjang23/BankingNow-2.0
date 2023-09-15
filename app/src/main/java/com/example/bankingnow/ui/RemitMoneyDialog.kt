@@ -32,11 +32,17 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    private val result: MutableLiveData<String> = MutableLiveData()
+
     override fun initDataBinding() {
         super.initDataBinding()
 
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
+        }
+
+        result.observe(viewLifecycleOwner) {
+            binding.tvMoney.text = it
         }
     }
 
@@ -78,6 +84,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     fun onNumberEvent(event: PostNumberEvent) {
         if (event.isSuccess){
             customTTS.speak("12342424324324432")
+            result.postValue(result.value + event.result.predicted_number)
         }
     }
 
