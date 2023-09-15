@@ -50,18 +50,6 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         customTTS.speak("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
 
         setFillCircle(0)
-
-        binding.dialogLogin.setOnClickListener{
-            prefs.setBoolean("isLogin", true)
-            Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
-            dismiss()
-
-            recorder.startRecording(filePath)
-            // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
-            binding.dialogLogin.setOnClickListener(null)
-
-            recordApiManager.checkPW("capjjang1234")
-        }
     }
 
     private fun setFillCircle(index:Int){
@@ -91,6 +79,15 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        prefs.setBoolean("isLogin", true)
+                        Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
+                        dismiss()
+
+                        recorder.startRecording(filePath)
+                        // 클릭 리스너를 제거하여 두 번째 클릭부터는 실행되지 않도록 함
+                        binding.dialogLogin.setOnClickListener(null)
+
+                        recordApiManager.checkPW("capjjang1234")
                     }
                 }
             }
