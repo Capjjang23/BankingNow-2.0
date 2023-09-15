@@ -9,6 +9,8 @@ import android.view.MotionEvent
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitMoneyBinding
@@ -26,11 +28,17 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
 
-    private val stateList: Array<String> = arrayOf("RECORD_START", "RECORD_STOP", "SUCCESS")
-    private val RECORD_START = 0
-    private val RECORD_STOP = 1
-    private val SUCCESS = 2
-    private var state: String = stateList[RECORD_START]
+    private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
+    private val idx: MutableLiveData<Int> = MutableLiveData(0)
+    private lateinit var state: String
+
+    override fun initDataBinding() {
+        super.initDataBinding()
+
+        idx.observe(viewLifecycleOwner) {
+            state = stateList[idx.value!!]
+        }
+    }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
@@ -94,10 +102,26 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                         recorder.stopRecording()
                         setFragmentResult("Back", bundleOf("isSuccess" to false))
                         dismiss()
+                    } else if (state=="SUCCESS" && distanceX > 100){
+                        RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
+                        dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
-                        Log.d("통신?","클릭")
-                        recorder.startOneRecord(filePath, true)
+                        when (state) {
+                            "FAIL" -> {
+                                idx.postValue(1)
+                                recorder.startOneRecord(filePath, true)
+                            }
+                            "RECORD_START" -> {
+                                idx.postValue(2)
+                                recorder.stopRecording()
+                                customTTS.speak("1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
+                            }
+                            "SUCCESS" -> {
+                                idx.postValue(1)
+                                recorder.startOneRecord(filePath, true)
+                            }
+                        }
                     }
                 }
             }

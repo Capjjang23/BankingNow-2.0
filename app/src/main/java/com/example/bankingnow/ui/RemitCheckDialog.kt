@@ -40,24 +40,28 @@ class RemitCheckDialog : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.di
 
 
     private fun setTouchScreen() {
+        var startX = 0f
+        var startY = 0f
+
         binding.dialogRemitCheck.setOnTouchListener { _, event ->
-            when (event.action) {
+            when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (isSingleClick) {
-                        // 더블 클릭 처리: 뒤로 가기
-                        RemitAccountDialog().show(parentFragmentManager,"비밀 번호")
+                    startX = event.x
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    val endX = event.x
+                    val distanceX = endX - startX
+
+                    // 스와이프를 감지하기 위한 조건 설정
+                    if (distanceX < -100) {
+                        // 왼쪽으로 스와이프
+                        RemitAccountDialog().show(parentFragmentManager, "비밀 번호")
                         dismiss()
-                    } else {
-                        // 첫 번째 클릭 시작
-                        isSingleClick = true
-                        handler.postDelayed({
-                            if (isSingleClick) {
-                                // 한 번 클릭 처리: Log 출력
-                                RemitPasswordDialog().show(parentFragmentManager,"송금")
-                                dismiss()
-                            }
-                            isSingleClick = false
-                        }, doubleClickDelay)
+                    } else if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
+                        RemitPasswordDialog().show(parentFragmentManager, "송금")
+                        dismiss()
                     }
                 }
             }

@@ -23,13 +23,4 @@ class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layou
             dismiss()
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        // dialog full Screen code
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-    }
 }

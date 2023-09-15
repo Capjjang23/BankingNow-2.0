@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogLoginBinding
@@ -31,56 +32,15 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
 
-    override fun onResume() {
-        super.onResume()
-
-        // dialog full Screen code
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-    }
+    private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
+    private val idx: MutableLiveData<Int> = MutableLiveData(0)
+    private lateinit var state: String
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
-
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-            }
-
-            override fun onDone(utteranceId: String?) {
-                // 말하기가 완료된 후 실행할 코드
-                // tts 이벤트는 UI 쓰레드에서 호출해야 함
-                Handler(Looper.getMainLooper()).post {
-                    recorder.startOneRecord(filePath, true)
-                }
-            }
-
-            override fun onError(utteranceId: String?) {
-            }
-        })
     }
-
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: PostNumberEvent) {
-        if (event.isSuccess){
-            customTTS.speak("1")
-        }
-    }
-
 
     private fun setTouchScreen() {
         var startX = 0f
@@ -99,11 +59,28 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX < -100) {
                         // 왼쪽으로 스와이프
-                        setFragmentResult("Back", bundleOf("isSuccess" to false))
+                        RemitMoneyDialog().show(parentFragmentManager, "송금 금액")
+                        dismiss()
+                    } else if (state=="SUCCESS" && distanceX > 100){
+                        // 오른쪽으로 스와이프
+                        RemitCheckDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
-                        recorder.startOneRecord(filePath, true)
+                        when (state) {
+                            "FAIL" -> {
+                                idx.postValue(1)
+                                // stt 구현
+                            }
+                            "RECORD_START" -> {
+                                idx.postValue(2)
+                                customTTS.speak("은행 확인")
+                            }
+                            "SUCCESS" -> {
+                                idx.postValue(1)
+                                // stt 구현
+                            }
+                        }
                     }
                 }
             }

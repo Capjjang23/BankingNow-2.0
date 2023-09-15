@@ -3,6 +3,8 @@ package com.example.bankingnow.ui
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
@@ -34,39 +36,33 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         super.initAfterBinding()
 
         setTouchScreen()
-
-//        setTTS("생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해생일축하해")
-
     }
 
     private fun setTouchScreen() {
-        binding.fragmentBalance.setOnTouchListener { _, motionEvent ->
-            if (motionEvent.action == MotionEvent.ACTION_DOWN) {
-                val currentTime = System.currentTimeMillis()
-                if (currentTime - lastTouchTime < doubleClickDelay) {
-                    // 더블 클릭 처리: 뒤로 가기
-                    requireActivity().onBackPressed()
+        var startX = 0f
+        var startY = 0f
+
+        binding.fragmentBalance.setOnTouchListener { _, event ->
+            when (event?.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startX = event.x
                 }
-                lastTouchTime = currentTime
+
+                MotionEvent.ACTION_UP -> {
+                    val endX = event.x
+                    val distanceX = endX - startX
+
+                    // 스와이프를 감지하기 위한 조건 설정
+                    if (distanceX < -100) {
+                        // 왼쪽으로 스와이프
+                        requireActivity().onBackPressed()
+                    } else if (distanceX>-10 && distanceX<10){
+                        // 클릭으로 처리
+                    }
+                }
             }
-            true
+            true // 이벤트 소비
         }
-    }
-
-    private fun setTTS(message: String) {
-        tts = TextToSpeech(context, TextToSpeech.OnInitListener { status ->
-            if (status!=TextToSpeech.ERROR){
-                tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
-                tts.setSpeechRate(1.0f)
-
-                tts.speak(message, TextToSpeech.QUEUE_FLUSH, null, TTS_ID)
-                Log.d("TTS INIT", "SUCCESS")
-            }
-            else{
-                Log.d("TTS INIT", "FAIL")
-            }
-        })
     }
 
     override fun getBalance(balance: Long) {
