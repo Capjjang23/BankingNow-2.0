@@ -7,12 +7,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.api.RecordService
 import com.example.bankingnow.model.GetBalanceModel
+import com.example.bankingnow.model.GetBankRequestModel
+import com.example.bankingnow.model.GetBankResponseModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.ui.BalanceFragment
 import com.example.rightnow.model.PostTestModel
 import com.example.rightnow.model.RecordModel
 import com.example.writenow.model.*
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -31,6 +35,16 @@ class RecordApiManager {
         fun getBalance(balance: Long)
     }
 
+    val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
+    val client = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
+        // 다른 인터셉터 또는 설정들을 추가할 수 있습니다.
+        .build()
+
+
     companion object {  // DCL 적용한 싱글톤 구현
         var instance: RecordApiManager? = null
         fun getInstance(context: Context?): RecordApiManager? {
@@ -47,8 +61,9 @@ class RecordApiManager {
         // http://192.168.47.145:8000
         // https://jsonplaceholder.typicode.com
         retrofit = Retrofit.Builder()
-            .baseUrl("http://223.194.128.21:8000")
+            .baseUrl("http://223.194.133.37:8000")
             .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
             .build()
 
         retrofitService = retrofit?.create(RecordService::class.java)
@@ -149,6 +164,28 @@ class RecordApiManager {
             override fun onFailure(call: Call<GetBalanceModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("getBalance", "통신 실패")
+            }
+        })
+    }
+
+    fun getBank(bankSpeech :String){
+        val resultData: Call<GetBankResponseModel>? = retrofitService?.getBank(GetBankRequestModel(bankSpeech))
+        resultData?.enqueue(object : Callback<GetBankResponseModel> {
+            override fun onResponse(
+                call: Call<GetBankResponseModel>,
+                response: Response<GetBankResponseModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: GetBankResponseModel = response.body()!!
+                    Log.d("getBank", result.toString())
+                } else {
+                    Log.d("getBank", "실패")
+                }
+            }
+
+            override fun onFailure(call: Call<GetBankResponseModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("getBank", "통신 실패")
             }
         })
     }

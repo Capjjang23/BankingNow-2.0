@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
 import com.example.bankingnow.R
+import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.databinding.DialogRemitBankBinding
 import com.example.bankingnow.util.Recorder
@@ -29,6 +30,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
     val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
+    private var recordApiManager = RecordApiManager()
 
     override fun onResume() {
         super.onResume()
@@ -51,10 +53,11 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
         binding.dialogRemitBank.setOnClickListener {
 
+            recordApiManager.getBank("국빈은행")
             // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
-            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-            speechRecognizer.startListening(intent) //듣기시작
+//            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+//            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
+//            speechRecognizer.startListening(intent) //듣기시작
 
         }
 
