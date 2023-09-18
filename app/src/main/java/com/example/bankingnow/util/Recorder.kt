@@ -1,8 +1,15 @@
-package com.example.bankingnow
+package com.example.bankingnow.util
 
+import android.content.Context
+import android.content.Intent
 import android.media.MediaRecorder
+import android.os.Bundle
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.model.RecordModel
 import java.io.ByteArrayOutputStream
@@ -52,39 +59,43 @@ class Recorder {
     }
 
     fun startRecording(filename: String, isPublic: Boolean = false) {
-        state = State.RECORDING
+        lateinit var speechRecognizer: SpeechRecognizer
+        fun startRecordingNumber(filename: String) {
+            state = State.RECORDING
 
-        // MediaRecorder 객체 초기화 및 설정
-        recorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
-            setOutputFile(filename)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
-            setAudioSamplingRate(44100) // set the desired sampling rate
-            setAudioEncodingBitRate(320000)
-            setMaxDuration(1500)
+            // MediaRecorder 객체 초기화 및 설정
+            recorder = MediaRecorder().apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
+                setOutputFile(filename)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
+                setAudioSamplingRate(44100) // set the desired sampling rate
+                setAudioEncodingBitRate(320000)
+                setMaxDuration(1500)
 
-            try {
-                prepare()
-            } catch (e: IOException) {
-                Log.e("APP", "prepare() failed $e")
-            }
-
-            // 녹음 상태 변경을 감시하는 리스너 설정
-            setOnInfoListener { _, what, _ ->
-                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    // 녹음이 완료되면 호출되는 코드
-                    stop()
-                    release()
-
-                    // 녹음 완료 후 다음 작업을 실행
-                    Log.d("audioRecorder","녹음 중단 및 서버 전송")
-                    sendFileToServer(filename, isPublic)
+                try {
+                    prepare()
+                } catch (e: IOException) {
+                    Log.e("APP", "prepare() failed $e")
                 }
-            }
 
-            start() // 녹음 시작은 여기에서
+                // 녹음 상태 변경을 감시하는 리스너 설정
+                setOnInfoListener { _, what, _ ->
+                    if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                        // 녹음이 완료되면 호출되는 코드
+                        stop()
+                        release()
+
+                        // 녹음 완료 후 다음 작업을 실행
+                        Log.d("audioRecorder", "녹음 중단 및 서버 전송")
+                        sendFileToServer(filename, isPublic)
+                    }
+                }
+
+                start() // 녹음 시작은 여기에서
+            }
         }
+
     }
 
     fun stopRecording() {
@@ -96,6 +107,7 @@ class Recorder {
         recorder = null
         state = State.RELEASE
     }
+
 
     private fun mediaRecorderToByteArray(outputFile: String): ByteArray? {
         val file = File(outputFile)
@@ -120,17 +132,18 @@ class Recorder {
         return buffer.toByteArray()
     }
 
-    private fun sendFileToServer(filename:String, isPublic: Boolean){
+    private fun sendFileToServer(filename: String, isPublic: Boolean) {
         // 서버 전송
-        Log.d("[mmihye]","녹음 멈춤 & 서버 전송")
+        Log.d("[mmihye]", "녹음 멈춤 & 서버 전송")
         val byteArray = mediaRecorderToByteArray(filename)
 
         // true: 숫자 정보 공개(음성 안내), false: 숫자 정보 비공개(진동 안내)
         if (isPublic) {
             byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it) }
             Log.d("통신?", "녹음 중단 및 서버 전송")
-        }
-        else
+        } else
             byteArray?.let { RecordModel(it) }?.let { apiManager.postTest(it) }
     }
 }
+
+

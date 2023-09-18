@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.annotation.SuppressLint
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -12,10 +13,10 @@ import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitMoneyBinding
 import com.example.bankingnow.event.PostNumberEvent
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -96,6 +97,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f

@@ -6,7 +6,6 @@ import android.view.MotionEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.FragmentBalanceBinding

@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
@@ -10,10 +11,7 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Locale
@@ -41,6 +39,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
         ImageViewList.add(binding.ivPw2)
         ImageViewList.add(binding.ivPw1)
 
+
     }
 
     override fun initAfterBinding() {
@@ -54,6 +53,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f

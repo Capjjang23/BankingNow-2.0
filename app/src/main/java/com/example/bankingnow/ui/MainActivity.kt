@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkRecordPermission() {
         when {
-            // 권한확인
             ContextCompat.checkSelfPermission(
                 this, // this => context
                 android.Manifest.permission.RECORD_AUDIO

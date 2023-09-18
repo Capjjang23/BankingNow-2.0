@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Environment
@@ -13,7 +14,7 @@ import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
+import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.util.CustomTTS.Companion.TTS_ID
@@ -59,6 +60,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f
