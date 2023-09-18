@@ -6,7 +6,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResultListener
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.FragmentRemitBinding
-import com.example.writenow.base.BaseFragment
+import com.example.bankingnow.base.BaseFragment
 
 class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remit) {
     override fun initStartView() {

@@ -1,4 +1,4 @@
-package com.example.writenow.base
+package com.example.bankingnow.base
 
 import android.content.Context
 import android.graphics.Color
@@ -76,6 +76,15 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         initAfterBinding()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        // dialog full Screen code
+        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
 
@@ -84,7 +93,7 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         if (customTTS.tts.isSpeaking) {
             tts.stop()
         }
-        tts.shutdown()
+        // tts.shutdown()
     }
 
     private fun setUtil() {

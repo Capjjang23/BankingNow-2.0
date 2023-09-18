@@ -1,4 +1,4 @@
-package com.example.writenow.base
+package com.example.bankingnow.base
 
 import android.content.Context
 import android.content.Intent
@@ -24,6 +24,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.example.bankingnow.util.CustomTTS
 import com.example.bankingnow.util.CustomVibrator
+import org.greenrobot.eventbus.EventBus
 import java.util.Locale
 
 abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutResourceId: Int) :
@@ -82,13 +83,13 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
         if (customTTS.tts.isSpeaking) {
             tts.stop()
         }
-        tts.shutdown()
+        // tts.shutdown()
     }
 
     private fun setUtil() {
         customTTS = CustomTTS.getInstance(requireContext())
         customVibrator = CustomVibrator.getInstance(requireContext())
-
+        customTTS.initTTS()
         tts = customTTS.tts
         vibrator = customVibrator?.vibrator
     }

@@ -11,7 +11,7 @@
         android:background="@color/mainWhite">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_account"
+            android:id="@+id/tv_account_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="36dp"
@@ -31,8 +31,8 @@
             android:layout_marginEnd="36dp"
             android:background="@color/mainBlack"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_account"
-            app:layout_constraintTop_toBottomOf="@+id/tv_account" />
+            app:layout_constraintStart_toStartOf="@+id/tv_account_info"
+            app:layout_constraintTop_toBottomOf="@+id/tv_account_info" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
@@ -45,6 +45,16 @@
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/dialog_login"
             app:layout_constraintTop_toBottomOf="@+id/dialog_login" />
+
+        <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textColor="@color/mainBlack"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/dialog_login"
+            app:layout_constraintStart_toStartOf="@+id/tv_account_info" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

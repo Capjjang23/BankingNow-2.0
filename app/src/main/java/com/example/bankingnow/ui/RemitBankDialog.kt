@@ -3,24 +3,37 @@ package com.example.bankingnow.ui
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Environment
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
+import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.speech.tts.TextToSpeech
+import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.MotionEvent
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
+import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.databinding.DialogRemitBankBinding
 import com.example.bankingnow.util.Recorder
 import com.example.writenow.base.BaseDialogFragment
+import java.util.Date
+import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.event.PostNumberEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
 import java.util.Locale
 
@@ -31,14 +44,19 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
+    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
+    private var recorder = Recorder()
 
-    override fun onResume() {
-        super.onResume()
+    private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
+    private val idx: MutableLiveData<Int> = MutableLiveData(0)
+    private lateinit var state: String
 
-        // dialog full Screen code
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+    override fun initDataBinding() {
+        super.initDataBinding()
+
+        idx.observe(viewLifecycleOwner) {
+            state = stateList[idx.value!!]
+        }
     }
 
     override fun initStartView() {
@@ -66,38 +84,52 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-//        setTouchScreen()
-
-//        binding.dialogRemitBank.setOnClickListener {
-//            RemitAccountDialog().show(parentFragmentManager,"계좌 번호")
-//            this.dismiss()
-//        }
+        setTouchScreen()
     }
 
-
     private fun setTouchScreen() {
+        var startX = 0f
+        var startY = 0f
+
         binding.dialogRemitBank.setOnTouchListener { _, event ->
-            when (event.action) {
+            when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    if (isSingleClick) {
-                        // 더블 클릭 처리: 뒤로 가기
-                        RemitMoneyDialog().show(parentFragmentManager,"계좌 번호")
+                    startX = event.x
+                }
+
+                MotionEvent.ACTION_UP -> {
+                    val endX = event.x
+                    val distanceX = endX - startX
+
+                    // 스와이프를 감지하기 위한 조건 설정
+                    if (distanceX < -100) {
+                        // 왼쪽으로 스와이프
+                        RemitMoneyDialog().show(parentFragmentManager, "송금 금액")
                         dismiss()
-                    } else {
-                        // 첫 번째 클릭 시작
-                        isSingleClick = true
-                        handler.postDelayed({
-                            if (isSingleClick) {
-                                // 한 번 클릭 처리: Log 출력
-                                RemitAccountDialog().show(parentFragmentManager,"송금")
-                                dismiss()
+                    } else if (state=="SUCCESS" && distanceX > 100){
+                        // 오른쪽으로 스와이프
+                        RemitCheckDialog().show(parentFragmentManager, "송금 계좌")
+                        dismiss()
+                    } else if (distanceX>-10 && distanceX<10){
+                        // 클릭으로 처리
+                        when (state) {
+                            "FAIL" -> {
+                                idx.postValue(1)
+                                // stt 구현
                             }
-                            isSingleClick = false
-                        }, doubleClickDelay)
+                            "RECORD_START" -> {
+                                idx.postValue(2)
+                                customTTS.speak("은행 확인")
+                            }
+                            "SUCCESS" -> {
+                                idx.postValue(1)
+                                // stt 구현
+                            }
+                        }
                     }
                 }
             }
-            true
+            true // 이벤트 소비
         }
     }
 }

@@ -11,7 +11,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitSuccessBinding
-import com.example.writenow.base.BaseDialogFragment
+import com.example.bankingnow.base.BaseDialogFragment
 import java.util.Locale
 
 class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layout.dialog_remit_success) {
@@ -22,14 +22,5 @@ class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layou
             setFragmentResult("Back", bundleOf("isSuccess" to true))
             dismiss()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        // dialog full Screen code
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
 }
