@@ -165,12 +165,14 @@ class RecordApiManager {
                     EventBus.getDefault().post(PostNumberEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
+                    EventBus.getDefault().post(PostNumberEvent(false, NumberModel("")))
                 }
             }
 
             override fun onFailure(call: Call<NumberModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("resultt", "통신 실패")
+                EventBus.getDefault().post(PostNumberEvent(false, NumberModel("")))
             }
         })
     }

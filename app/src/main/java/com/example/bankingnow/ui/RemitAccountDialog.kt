@@ -34,6 +34,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData()
 
     override fun initDataBinding() {
@@ -61,7 +62,8 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                 // 말하기가 완료된 후 실행할 코드
                 // tts 이벤트는 UI 쓰레드에서 호출해야 함
                 Handler(Looper.getMainLooper()).post {
-                    recorder.startOneRecord(filePath, true)
+                    if (isResponse.value!!)
+                        recorder.startOneRecord(filePath, true)
                 }
             }
 
@@ -85,7 +87,13 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: PostNumberEvent) {
         if (event.isSuccess){
-            customTTS.speak("1")
+            isResponse.postValue(true)
+            customTTS.speak("메롱")
+            result.postValue(result.value + event.result.predicted_number)
+        } else{
+            isResponse.postValue(false)
+            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            idx.postValue(1)
         }
     }
 
@@ -116,8 +124,10 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                         // 클릭으로 처리
                         when (state) {
                             "FAIL" -> {
-                                idx.postValue(1)
-                                recorder.startOneRecord(filePath, true)
+                                RemitCheckDialog().show(parentFragmentManager, "송금 계좌")
+                                dismiss()
+//                                idx.postValue(1)
+//                                recorder.startOneRecord(filePath, true)
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)

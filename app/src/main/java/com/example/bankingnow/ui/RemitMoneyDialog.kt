@@ -32,6 +32,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData()
 
     override fun initDataBinding() {
@@ -59,7 +60,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                 // 말하기가 완료된 후 실행할 코드
                 // tts 이벤트는 UI 쓰레드에서 호출해야 함
                 Handler(Looper.getMainLooper()).post {
-                    recorder.startOneRecord(filePath, true)
+                    if (isResponse.value!!)
+                        recorder.startOneRecord(filePath, true)
                 }
             }
 
@@ -83,8 +85,13 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: PostNumberEvent) {
         if (event.isSuccess){
+            isResponse.postValue(true)
             customTTS.speak("12342424324324432")
             result.postValue(result.value + event.result.predicted_number)
+        } else{
+            isResponse.postValue(false)
+            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            idx.postValue(1)
         }
     }
 
@@ -110,14 +117,16 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                         setFragmentResult("Back", bundleOf("isSuccess" to false))
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX > 100){
-                        RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
+                        RemitBankDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
                         when (state) {
                             "FAIL" -> {
-                                idx.postValue(1)
-                                recorder.startOneRecord(filePath, true)
+                                RemitBankDialog().show(parentFragmentManager, "송금 계좌")
+                                dismiss()
+                                // idx.postValue(1)
+                                // recorder.startOneRecord(filePath, true)
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)

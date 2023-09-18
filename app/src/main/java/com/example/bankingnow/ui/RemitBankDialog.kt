@@ -71,7 +71,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX > 100){
                         // 오른쪽으로 스와이프
-                        RemitCheckDialog().show(parentFragmentManager, "송금 계좌")
+                        RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
