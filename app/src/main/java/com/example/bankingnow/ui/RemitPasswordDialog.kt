@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Handler
@@ -52,6 +53,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     }
 
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f

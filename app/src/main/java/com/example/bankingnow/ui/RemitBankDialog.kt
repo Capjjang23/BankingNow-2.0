@@ -5,44 +5,25 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Environment
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
-import android.speech.tts.TextToSpeech
-import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.Toast
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
-import com.example.bankingnow.Recorder
-import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.databinding.DialogRemitBankBinding
 import com.example.bankingnow.util.Recorder
-import com.example.writenow.base.BaseDialogFragment
 import java.util.Date
 import com.example.bankingnow.base.BaseDialogFragment
-import com.example.bankingnow.event.PostNumberEvent
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
-import java.util.Date
-import java.util.Locale
 
 class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dialog_remit_bank) {
     private val handler = Handler()
     private lateinit var speechRecognizer: SpeechRecognizer
 
-    val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-    private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()

@@ -13,11 +13,6 @@ import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.model.RecordModel
 import com.example.bankingnow.model.*
-import org.greenrobot.eventbus.EventBus
-import com.example.bankingnow.ui.BalanceFragment
-import com.example.rightnow.model.PostTestModel
-import com.example.rightnow.model.RecordModel
-import com.example.writenow.model.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.*
@@ -203,7 +198,7 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: NumberModel = response.body()!!
-                    EventBus.getDefault().post(PostNumberEvent(true, result))
+//                    EventBus.getDefault().post(PostNumberEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
                 }

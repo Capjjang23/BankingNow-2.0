@@ -13,14 +13,11 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.R
-import com.example.bankingnow.Recorder
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.databinding.DialogRemitAccountBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.PostNumberEvent
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import com.example.bankingnow.util.Recorder
 import java.util.Date
 import java.util.Locale
 
@@ -70,24 +67,24 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: PostNumberEvent) {
-        if (event.isSuccess){
-            customTTS.speak("1")
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // EventBus 등록
+//        EventBus.getDefault().register(this)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        // EventBus 해제
+//        EventBus.getDefault().unregister(this)
+//    }
+//
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun onNumberEvent(event: PostNumberEvent) {
+//        if (event.isSuccess){
+//            customTTS.speak("1")
+//        }
+//    }
 
     private fun setTouchScreen() {
         var startX = 0f
