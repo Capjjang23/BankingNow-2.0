@@ -10,6 +10,10 @@ import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.databinding.FragmentRemitBinding
 import com.example.bankingnow.base.BaseFragment
+import com.example.bankingnow.event.NumberPublicEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import com.example.bankingnow.event.PostNumberEvent
 import com.example.bankingnow.util.CustomVibrator
 import com.example.bankingnow.util.Recorder
@@ -30,18 +34,15 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-//        if (!prefs.getBoolean("isLogin", false)) {
-//            Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
-//            LoginDialog().show(parentFragmentManager,"")
-//        }
-
-        // setTTS 함수 실행
-        customTTS.speak("현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 화면을 터치하면 녹음을 시작합니다.")
+        if (!prefs.getBoolean("isLogin", false)) {
+            LoginDialog().show(parentFragmentManager,"")
+        }
 
     }
 
     override fun initDataBinding() {
         super.initDataBinding()
+
 
     }
 
@@ -51,46 +52,13 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
 
         setTouchScreen()
 
-//        binding.btnBalance.setOnClickListener{
-//            customVibrator?.vibratePhone()
-//            navController.navigate(R.id.action_mainFragment_to_balanceFragment)
-//        }
-//        binding.btnRemit.setOnClickListener{
-//            customVibrator?.vibratePhone()
-//            navController.navigate(R.id.action_mainFragment_to_remitFragment)
-//        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: PostNumberEvent) {
-        if (event.isSuccess){
-            val num = event.result.predicted_number
-            when("2"){
-                "1" -> {
-                    customTTS.speak("현재잔액 확인을 선택하셨습니다.")
-                    sleep(1000)
-                    navController.navigate(R.id.action_mainFragment_to_balanceFragment)
-                }
-                "2" ->{
-                    customTTS.speak("송금하기를 선택하셨습니다.")
-                    sleep(1000)
-                    navController.navigate(R.id.action_mainFragment_to_remitFragment)
-                }
-                else -> customTTS.speak("잘못된 번호입니다. 현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 다시 녹음을 시작하려면 화면을 터치하세요.")
-
-            }
+        binding.btnBalance.setOnClickListener{
+            customVibrator?.vibratePhone()
+            navController.navigate(R.id.action_mainFragment_to_balanceFragment)
+        }
+        binding.btnRemit.setOnClickListener{
+            customVibrator?.vibratePhone()
+            navController.navigate(R.id.action_mainFragment_to_remitFragment)
         }
     }
 
@@ -109,8 +77,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                     val distanceX = endX - startX
 
                     // 스와이프를 감지하기 위한 조건 설정
-                    if (distanceX < -100) {
-                        // 왼쪽으로 스와이프
+                    if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리

@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.bankingnow.base.BaseDialogFragment
@@ -19,17 +21,8 @@ import java.util.Locale
 class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
     private val handler = Handler()
 
-
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
 
-    override fun onResume() {
-        super.onResume()
-
-        // dialog full Screen code
-        dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-    }
 
     override fun initStartView() {
         ImageViewList.add(binding.ivPw6)
@@ -69,9 +62,9 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
                     val distanceX = endX - startX
 
                     // 스와이프를 감지하기 위한 조건 설정
-                    if (distanceX < -100) {
-                        // 왼쪽으로 스와이프
-                        RemitCheckDialog().show(parentFragmentManager, "송금 체크")
+                    if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
+                        setFragmentResult("ReCheck", bundleOf())
                         dismiss()
                     } else if (distanceX > -10 && distanceX < 10) {
                         // 클릭으로 처리

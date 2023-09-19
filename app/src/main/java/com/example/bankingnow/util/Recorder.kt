@@ -137,11 +137,8 @@ class Recorder {
         val byteArray = mediaRecorderToByteArray(filename)
 
         // true: 숫자 정보 공개(음성 안내), false: 숫자 정보 비공개(진동 안내)
-        if (isPublic) {
-            byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it) }
-            Log.d("통신?", "녹음 중단 및 서버 전송")
-        } else
-            byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it) }
+        byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it, isPublic) }
+        Log.d("통신?", "녹음 중단 및 서버 전송")
     }
 }
 

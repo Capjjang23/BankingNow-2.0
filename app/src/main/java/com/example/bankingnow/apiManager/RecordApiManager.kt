@@ -5,10 +5,14 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.api.RecordService
-import com.example.bankingnow.event.PostNumberEvent
+import com.example.bankingnow.event.BankEvent
+import com.example.bankingnow.event.LoginEvent
+import com.example.bankingnow.event.NumberPrivateEvent
+import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.event.UserNameEvent
 import com.example.bankingnow.model.GetBalanceModel
-import com.example.bankingnow.model.GetBankRequestModel
-import com.example.bankingnow.model.GetBankResponseModel
+import com.example.bankingnow.model.BankRequestModel
+import com.example.bankingnow.model.BankResponseModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.model.RecordModel
@@ -106,15 +110,17 @@ class RecordApiManager {
                 if (response.isSuccessful) {
                     val result: PasswordCheckResponse = response.body()!!
                     Log.d("password check", result.toString())
+                    EventBus.getDefault().post(LoginEvent(true, result))
                 } else {
                     Log.d("password check", "실패")
                     Log.d("response:", response.toString())
+                    EventBus.getDefault().post(LoginEvent(false, PasswordCheckResponse()))
                 }
             }
 
             override fun onFailure(call: Call<PasswordCheckResponse>, t: Throwable) {
                 t.printStackTrace()
-                //EventBus.getDefault().post(GetDataEvent(null))
+                EventBus.getDefault().post(LoginEvent(false, PasswordCheckResponse()))
                 Log.d("password check", "통신 실패")
             }
         })
@@ -155,20 +161,23 @@ class RecordApiManager {
                 if (response.isSuccessful) {
                     val result: GetBankResponseModel = response.body()!!
                     Log.d("getBank", result.toString())
+                    EventBus.getDefault().post(BankEvent(false, result))
                 } else {
                     Log.d("getBank", "실패")
+                    EventBus.getDefault().post(BankEvent(false, BankResponseModel("")))
                 }
             }
 
-            override fun onFailure(call: Call<GetBankResponseModel>, t: Throwable) {
+            override fun onFailure(call: Call<BankResponseModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("getBank", "통신 실패")
+                EventBus.getDefault().post(BankEvent(false, BankResponseModel("")))
             }
         })
     }
 
     // 송금 금액, 계좌 번호 받아올때  사용
-    fun postNumber(postData: RecordModel) {
+    fun postNumber(postData: RecordModel, isPublic: Boolean) {
         val resultData: Call<NumberModel>? = retrofitService?.postNumber(postData)
         resultData?.enqueue(object : Callback<NumberModel> {
             override fun onResponse(
@@ -177,16 +186,53 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: NumberModel = response.body()!!
-                    Log.d("resultt", result.toString())
-                    EventBus.getDefault().post(PostNumberEvent(true, result))
+
+                    if (isPublic)
+                        EventBus.getDefault().post(NumberPublicEvent(true, result))
+                    else
+                        EventBus.getDefault().post(NumberPrivateEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
+
+                    if (isPublic)
+                        EventBus.getDefault().post(NumberPublicEvent(false, NumberModel("")))
+                    else
+                        EventBus.getDefault().post(NumberPrivateEvent(false, NumberModel("")))
                 }
             }
 
             override fun onFailure(call: Call<NumberModel>, t: Throwable) {
                 t.printStackTrace()
                 Log.d("resultt", "통신 실패")
+                if (isPublic)
+                    EventBus.getDefault().post(NumberPublicEvent(false, NumberModel("")))
+                else
+                    EventBus.getDefault().post(NumberPrivateEvent(false, NumberModel("")))
+            }
+        })
+    }
+
+    fun postUserName(postData: UserRequestModel) {
+        Log.d("resultt", postData.toString())
+        val resultData: Call<UserResponseModel>? = retrofitService?.postUserName(postData)
+        resultData?.enqueue(object : Callback<UserResponseModel> {
+            override fun onResponse(
+                call: Call<UserResponseModel>,
+                response: Response<UserResponseModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: UserResponseModel = response.body()!!
+                    EventBus.getDefault().post(UserNameEvent(true, result))
+                } else {
+                    Log.d("resultt", "실패코드_${response.code()}")
+                    EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponseModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("resultt", "통신 실패")
+                EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
             }
         })
     }

@@ -1,8 +1,8 @@
 package com.example.bankingnow.api
 
 import com.example.bankingnow.model.GetBalanceModel
-import com.example.bankingnow.model.GetBankRequestModel
-import com.example.bankingnow.model.GetBankResponseModel
+import com.example.bankingnow.model.BankRequestModel
+import com.example.bankingnow.model.BankResponseModel
 import com.example.bankingnow.model.NumberModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
@@ -28,5 +28,8 @@ interface RecordService {
     fun getBalance():Call<GetBalanceModel>
 
     @POST("/post_bank/")
-    fun getBank(@Body request: GetBankRequestModel):Call<GetBankResponseModel>
+    fun postBank(@Body request: BankRequestModel):Call<BankResponseModel>
+
+    @POST("/money/account-check/")
+    fun postUserName(@Body request: UserRequestModel):Call<UserResponseModel>
 }

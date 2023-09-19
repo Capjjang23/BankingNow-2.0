@@ -5,5 +5,5 @@ data class PasswordCheckRequest(
 )
 
 data class PasswordCheckResponse (
-    val is_password_correct : Boolean
+    var is_password_correct : Boolean = false
 )

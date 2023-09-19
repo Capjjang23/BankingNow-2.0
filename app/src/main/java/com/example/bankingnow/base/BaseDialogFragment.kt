@@ -88,7 +88,7 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
     override fun onDestroy() {
         super.onDestroy()
 
-        vibrator = null
+        // vibrator = null
 
         if (customTTS.tts.isSpeaking) {
             tts.stop()
@@ -101,7 +101,7 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         customVibrator = CustomVibrator.getInstance(requireContext())
 
         tts = customTTS.tts
-        vibrator = customVibrator?.vibrator
+        vibrator = customVibrator!!.vibrator
     }
 
     // 다이얼로그 크기
