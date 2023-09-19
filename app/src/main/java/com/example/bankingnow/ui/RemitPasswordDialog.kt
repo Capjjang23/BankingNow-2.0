@@ -22,6 +22,8 @@ import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
+import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.model.RemitRequestModel
 import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -29,7 +31,7 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
 import java.util.Locale
 
-class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
+class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
     private val stateList: Array<String> = arrayOf("START", "RECORD_START")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
@@ -121,7 +123,9 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
         fun onLoginEvent(event: LoginEvent) {
             if (event.isSuccess) {
                 if (event.result.is_password_correct) {
-                    customTTS.speak("로그인 성공")
+                    customTTS.speak("송금이 완료되었습니다")
+                    recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
+                    RemitSuccessDialog().show(parentFragmentManager,"")
                     dismiss()
                 } else {
                     customTTS.speak(resources.getString(R.string.not_correct_pw))
@@ -178,8 +182,10 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
 //                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트
-                                RemitSuccessDialog().show(parentFragmentManager, "송금 성공")
-                                dismiss()
+//                                customTTS.speak("송금이 완료되었습니다")
+//                                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
+//                                RemitSuccessDialog().show(parentFragmentManager,"")
+//                                dismiss()
                             }
                         }
                     }

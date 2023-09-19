@@ -2,14 +2,18 @@ package com.example.bankingnow.ui
 
 import android.os.Handler
 import android.view.MotionEvent
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
+import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.model.RemitRequestModel
 
 class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
     private val handler = Handler()
     private val remitInfo: RemitCheckModel = remitInfo
+    private var recordApiManager = RecordApiManager()
 
     override fun initDataBinding() {
         super.initDataBinding()
@@ -48,7 +52,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
                         dismiss()
                     } else if (distanceX < -100) {
                         // 왼쪽으로 스와이프
-                        RemitPasswordDialog().show(parentFragmentManager, "송금")
+                        RemitPasswordDialog(remitInfo).show(parentFragmentManager, "송금")
                         dismiss()
                     }
                 }

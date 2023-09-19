@@ -10,6 +10,8 @@ import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.model.UserRequestModel
 import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -28,9 +30,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-        if (!prefs.getBoolean("isLogin", false)) {
-            LoginDialog().show(parentFragmentManager,"")
-        }
+//        if (!prefs.getBoolean("isLogin", false)) {
+//            LoginDialog().show(parentFragmentManager,"")
+//        }
+
+        RemitCheckDialog(RemitCheckModel("10000","졸려", UserRequestModel("국민은행","111111111"))).show(parentFragmentManager,"")
     }
 
     override fun initDataBinding() {
