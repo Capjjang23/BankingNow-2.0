@@ -28,10 +28,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-//        if (!prefs.getBoolean("isLogin", false)) {
-//            LoginDialog().show(parentFragmentManager,"")
-//        }
-
+        if (!prefs.getBoolean("isLogin", false)) {
+            LoginDialog().show(parentFragmentManager,"")
+        }
         RemitBankDialog().show(parentFragmentManager,"")
 
 

@@ -28,22 +28,11 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         RemitMoneyDialog().show(parentFragmentManager,"")
     }
 
-    override fun initDataBinding() {
-        super.initDataBinding()
-
-        Log.d("vm?", "F: "+this)
-        Log.d("vm?", "PF: "+requireParentFragment())
-        Log.d("vm?", viewModel.toString())
-
-    }
-
-
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         viewModel.remitLiveData.observeForever {
             remitResult = it
-            Log.d("resultt1", remitResult.toString())
         }
 
         setFragmentResultListener("Back") { _, bundle ->
@@ -61,7 +50,6 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
                 // 서버 통신 코드 구현
                 // 계좌 정보가 유효 하다면 CheckDialog show
                 remitResult = viewModel.remitLiveData.value!!
-                Log.d("resultt2", remitResult.user.toString())
                 apiManager.postUserName(remitResult.user)
             } else {
                 customTTS.speak("필수 항목이 비어 있습니다. 금액 선택 화면으로 돌아갑니다.")

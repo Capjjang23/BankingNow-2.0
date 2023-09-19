@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
-    private val stateList: Array<String> = arrayOf("START","RECORD_START")
+    private val stateList: Array<String> = arrayOf("START", "RECORD_START")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
@@ -101,6 +101,16 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 
             if (result.value!!.length < 6) {
                 recorder.startOneRecord(filePath, false)
+
+            if (idx.value == 1 && result.value!!.length <= 6) {
+                customVibrator?.vibratePhone()
+                result.value = result.value + event.result.predicted_number
+                if (result.value!!.length < 6) {
+                    recorder.startOneRecord(filePath, false)
+                }
+            } else {
+                isResponse.postValue(false)
+                idx.postValue(0)
             }
         } else{
             isResponse.postValue(false)
@@ -164,9 +174,13 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                         // 클릭으로 처리
                         when (state) {
                             "START" -> {
-                                idx.postValue(1)
-                                result.value = ""
-                                recorder.startOneRecord(filePath, false)
+//                                idx.postValue(1)
+//                                result.value = ""
+//                                recorder.startOneRecord(filePath, false)
+
+                                // 테스트
+                                prefs.setBoolean("isLogin", true)
+                                dismiss()
                             }
                         }
                     }

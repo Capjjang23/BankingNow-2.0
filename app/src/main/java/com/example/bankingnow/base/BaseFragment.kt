@@ -86,10 +86,10 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
         // tts.shutdown()
     }
 
-    private fun setUtil() {
+    fun setUtil(ttsStr: String = "") {
         customTTS = CustomTTS.getInstance(requireContext())
         customVibrator = CustomVibrator.getInstance(requireContext())
-        customTTS.initTTS()
+        customTTS.initTTS(ttsStr)
         tts = customTTS.tts
         vibrator = customVibrator?.vibrator
     }
