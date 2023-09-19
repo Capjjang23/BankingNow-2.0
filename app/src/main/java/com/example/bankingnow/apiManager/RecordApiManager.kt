@@ -161,7 +161,7 @@ class RecordApiManager {
                 if (response.isSuccessful) {
                     val result: BankResponseModel = response.body()!!
                     Log.d("getBank", result.toString())
-                    EventBus.getDefault().post(BankEvent(false, result))
+                    EventBus.getDefault().post(BankEvent(true, result))
                 } else {
                     Log.d("getBank", "실패")
                     EventBus.getDefault().post(BankEvent(false, BankResponseModel("")))
@@ -186,14 +186,12 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: NumberModel = response.body()!!
-
                     if (isPublic)
                         EventBus.getDefault().post(NumberPublicEvent(true, result))
                     else
                         EventBus.getDefault().post(NumberPrivateEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
-
                     if (isPublic)
                         EventBus.getDefault().post(NumberPublicEvent(false, NumberModel("")))
                     else

@@ -1,25 +1,15 @@
 package com.example.bankingnow.ui
 
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Handler
-import android.speech.tts.TextToSpeech
-import android.util.Log
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.WindowManager
-import androidx.fragment.app.viewModels
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
-import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.bankingnow.base.BaseDialogFragment
-import com.example.bankingnow.model.RemitModel
-import com.example.bankingnow.viewmodel.RemitViewModel
-import java.util.Locale
+import com.example.bankingnow.model.RemitCheckModel
 
-class RemitCheckDialog(remitInfo: RemitModel) : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
+class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
     private val handler = Handler()
-    private val remitInfo: RemitModel = remitInfo
+    private val remitInfo: RemitCheckModel = remitInfo
 
     override fun initDataBinding() {
         super.initDataBinding()

@@ -4,5 +4,5 @@ data class BankRequestModel(
     val voice_bank :String
 )
 data class BankResponseModel(
-    val closet_bank :String
+    val closest_bank :String
 )

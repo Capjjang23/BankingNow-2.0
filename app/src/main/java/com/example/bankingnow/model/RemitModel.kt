@@ -1,7 +1,13 @@
 package com.example.bankingnow.model
 
-data class RemitModel (
-    var money: String = "",
-    var name: String = "",
-    var user: UserRequestModel = UserRequestModel()
+data class RemitRequestModel(
+    val account_bank_to : String,
+    val account_no_to : String,
+    val amount : String,
+    val money : Int,
+    val user_to: Int
+)
+
+data class RemitResponseModel(
+    val return_msg: String
 )

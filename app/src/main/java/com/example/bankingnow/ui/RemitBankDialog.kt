@@ -9,8 +9,11 @@ import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.MotionEvent
+import android.view.View
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.Visibility
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitBankBinding
@@ -33,7 +36,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val handler = Handler()
     private lateinit var speechRecognizer: SpeechRecognizer
 
-    private var recordApiManager = RecordApiManager()
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
 
@@ -82,8 +84,13 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     fun onBankEvent(event: BankEvent) {
         if (event.isSuccess){
             isResponse.postValue(true)
-            customTTS.speak(event.result.closet_bank)
-            result.postValue(event.result.closet_bank)
+            customTTS.speak("${event.result.closest_bank}으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.")
+            result.postValue(event.result.closest_bank)
+            binding.tvBank.text = event.result.closest_bank
+            binding.bank.visibility = View.INVISIBLE
+            state = "SUCCESS"
+            prefs.setString("Account",event.result.closest_bank)
+
         } else{
             isResponse.postValue(false)
             customTTS.speak("네트워크 연결이 안되어있습니다.")
@@ -112,7 +119,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
         speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-        // speechRecognizer.startListening(intent) //듣기시작
+//        speechRecognizer.startListening(intent) //듣기시작
     }
 
     private fun setTouchScreen() {
@@ -143,8 +150,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                         when (state) {
                             "FAIL" -> {
                                 idx.postValue(1)
-                                recorder.startRecording(filePath)
-//                                recordApiManager.getBank("국빈은행")
                                 // stt 구현
                                 speechRecognizer.startListening(intent) //듣기시작
                             }
@@ -167,6 +172,8 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
 // 리스너 설정
 private val recognitionListener: RecognitionListener = object : RecognitionListener {
+    private var recordApiManager = RecordApiManager()
+
     // 말하기 시작할 준비가되면 호출
     override fun onReadyForSpeech(params: Bundle) {
         Log.d("bankSpeech", "음성인식 시작")
@@ -205,6 +212,8 @@ private val recognitionListener: RecognitionListener = object : RecognitionListe
         val matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
         for (i in matches!!.indices)
             Log.d("bankSpeech", "$matches")
+        recordApiManager.getBank(matches.toString())
+
     }
     // 부분 인식 결과를 사용할 수 있을 때 호출
     override fun onPartialResults(partialResults: Bundle) {}

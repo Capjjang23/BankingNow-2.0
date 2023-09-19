@@ -32,4 +32,7 @@ interface RecordService {
 
     @POST("/money/account-check/")
     fun postUserName(@Body request: UserRequestModel):Call<UserResponseModel>
+
+    @POST("money/transfer/")
+    fun remit(@Body request: RemitRequestModel):Call<RemitResponseModel>
 }

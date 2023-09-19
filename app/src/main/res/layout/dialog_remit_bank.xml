@@ -59,6 +59,17 @@
             app:layout_constraintTop_toBottomOf="@+id/dialog_login"
             tools:text="궁민은행은 없습니다. 다시 말씀해주세요." />
 
+        <TextView
+            android:id="@+id/tv_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="16sp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/gray_545454"
+            app:layout_constraintBottom_toTopOf="@+id/dialog_login"
+            app:layout_constraintStart_toStartOf="@+id/dialog_login" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
