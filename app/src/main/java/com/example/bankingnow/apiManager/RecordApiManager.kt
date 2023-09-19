@@ -150,16 +150,16 @@ class RecordApiManager {
     }
 
     fun getBank(bankSpeech :String){
-        val bankRequestModel = GetBankRequestModel(bankSpeech)
+        val bankRequestModel = BankRequestModel(bankSpeech)
         Log.d("getBank", bankRequestModel.toString())
-        val resultData: Call<GetBankResponseModel>? = retrofitService?.getBank(bankRequestModel)
-        resultData?.enqueue(object : Callback<GetBankResponseModel> {
+        val resultData: Call<BankResponseModel>? = retrofitService?.postBank(bankRequestModel)
+        resultData?.enqueue(object : Callback<BankResponseModel> {
             override fun onResponse(
-                call: Call<GetBankResponseModel>,
-                response: Response<GetBankResponseModel>
+                call: Call<BankResponseModel>,
+                response: Response<BankResponseModel>
             ) {
                 if (response.isSuccessful) {
-                    val result: GetBankResponseModel = response.body()!!
+                    val result: BankResponseModel = response.body()!!
                     Log.d("getBank", result.toString())
                     EventBus.getDefault().post(BankEvent(false, result))
                 } else {

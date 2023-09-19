@@ -65,12 +65,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         }
     }
 
-    override fun initAfterBinding() {
-        super.initAfterBinding()
-
-        setTouchScreen()
-        setSTT()
-    }
 
     override fun onStart() {
         super.onStart()
@@ -112,6 +106,8 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     override fun initAfterBinding() {
         super.initAfterBinding()
 
+
+        setSTT()
         setTouchScreen()
         // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
