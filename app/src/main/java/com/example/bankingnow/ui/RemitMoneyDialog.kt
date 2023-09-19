@@ -45,7 +45,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-        setUtil("송금하실 금액을 입력해주세요")
+        setUtil(resources.getString(R.string.RemitMoney_info))
         setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {
@@ -85,7 +85,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
             }
         } else{
             isResponse.postValue(false)
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(0)
         }
     }
@@ -124,7 +124,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                             "RECORD_START" -> {
                                 idx.postValue(2)
                                 recorder.stopRecording()
-                                customTTS.speak("${result.value}원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
+                                customTTS.speak(resources.getString(R.string.RemitMoney_money_check))
                             }
                             "SUCCESS" -> {
                                 idx.postValue(1)

@@ -53,7 +53,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
         ImageViewList.add(binding.ivPw1)
 
         // setTTS 함수 실행
-        customTTS.speak("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
+        customTTS.speak(resources.getString(R.string.Password_info))
 
     }
 
@@ -106,7 +106,7 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
             }
         } else{
             isResponse.postValue(false)
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(0)
         }
     }
@@ -118,11 +118,11 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
                 customTTS.speak("로그인 성공")
                 dismiss()
             } else {
-                customTTS.speak("비밀번호가 틀립니다. 터치하여 다시 시도해주세요.")
+                customTTS.speak(resources.getString(R.string.not_correct_pw))
                 idx.postValue(0)
             }
         } else{
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(0)
         }
     }

@@ -71,7 +71,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         Log.d("잔액확인", balanceModel.toString())
         binding.tvUserInfo.text = "${balanceModel.user_id} 님\n${balanceModel.bank_name} 통장잔액"
         binding.tvBalance.text = addCommasToNumber(balanceModel.balance) + " 원"
-        customTTS.speak("${balanceModel.user_id}님의 ${balanceModel.bank_name}통장 현재잔액은 ${balanceModel.balance} 원입니다. 다시 들으시려면 화면을 터치해주세요.")
+        customTTS.speak(resources.getString(R.string.account_balance))
     }
 
     fun addCommasToNumber(number: Long): String {

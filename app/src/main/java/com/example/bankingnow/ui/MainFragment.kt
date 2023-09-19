@@ -77,16 +77,16 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             val num = event.result.predicted_number
             when("2"){
                 "1" -> {
-                    customTTS.speak("현재잔액 확인을 선택하셨습니다.")
+                    customTTS.speak(resources.getString(R.string.Main_choose_one))
                     sleep(1000)
                     navController.navigate(R.id.action_mainFragment_to_balanceFragment)
                 }
                 "2" ->{
-                    customTTS.speak("송금하기를 선택하셨습니다.")
+                    customTTS.speak(resources.getString(R.string.Main_choose_two))
                     sleep(1000)
                     navController.navigate(R.id.action_mainFragment_to_remitFragment)
                 }
-                else -> customTTS.speak("잘못된 번호입니다. 현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 다시 녹음을 시작하려면 화면을 터치하세요.")
+                else -> customTTS.speak(resources.getString(R.string.Main_choose_again))
 
             }
         }

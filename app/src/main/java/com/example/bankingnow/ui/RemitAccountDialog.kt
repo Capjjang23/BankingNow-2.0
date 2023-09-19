@@ -93,7 +93,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
             }
         } else{
             isResponse.postValue(false)
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(0)
         }
     }
@@ -135,7 +135,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                             "RECORD_START" -> {
                                 idx.postValue(2)
                                 recorder.stopRecording()
-                                customTTS.speak("1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
+                                customTTS.speak(resources.getString(R.string.RemitAccount_check_account))
                             }
                             "SUCCESS" -> {
                                 idx.postValue(1)

@@ -52,7 +52,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
                 remitResult = viewModel.remitLiveData.value!!
                 apiManager.postUserName(remitResult.user)
             } else {
-                customTTS.speak("필수 항목이 비어 있습니다. 금액 선택 화면으로 돌아갑니다.")
+                customTTS.speak(resources.getString(R.string.RemitFragment_noRemit))
                 requireActivity().onBackPressed()
             }
         }
@@ -80,7 +80,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
             viewModel.remitLiveData.value!!.name = event.result.name
             RemitCheckDialog(remitResult).show(parentFragmentManager, "")
         } else {
-            customTTS.speak("없는 고객입니다.")
+            customTTS.speak(resources.getString(R.string.RemitFragment_noReceiver))
         }
     }
 }

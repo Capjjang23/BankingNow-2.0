@@ -23,7 +23,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
         super.initAfterBinding()
 
         setTouchScreen()
-        customTTS.speak("${remitInfo.name}님에게 보내겠습니까")
+        customTTS.speak(resources.getString(R.string.RemitCheck_receiver_check))
     }
 
 

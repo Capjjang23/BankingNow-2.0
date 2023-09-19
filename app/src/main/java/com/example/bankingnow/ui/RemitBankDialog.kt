@@ -60,7 +60,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     override fun initStartView() {
         super.initStartView()
 
-        customTTS.speak("송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.")
+        customTTS.speak(resources.getString(R.string.Login_info))
 
         result.observe(viewLifecycleOwner){
             viewModel.setRemitBank(it)
@@ -84,7 +84,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     fun onBankEvent(event: BankEvent) {
         if (event.isSuccess){
             isResponse.postValue(true)
-            customTTS.speak("${event.result.closest_bank}으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.")
+            customTTS.speak(resources.getString(R.string.RemitBank_remit_check))
             result.postValue(event.result.closest_bank)
             binding.tvBank.text = event.result.closest_bank
             binding.bank.visibility = View.INVISIBLE
@@ -93,7 +93,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
         } else{
             isResponse.postValue(false)
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(1)
         }
     }
@@ -105,7 +105,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")         // 언어 설정
 
 
-        customTTS.speak("송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.")
+        customTTS.speak(resources.getString(R.string.RemitBank_info))
 
 
     }
