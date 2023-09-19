@@ -6,7 +6,6 @@
 
     <string name="Login_info">로그인 단계입니다.</string>
 
-    <string name="account_balance">${balanceModel.user_id}님의 ${balanceModel.bank_name}통장 현재잔액은 ${balanceModel.balance} 원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
     <string name="account_balance">%s님의 %s통장 현재잔액은 %s원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
 
     <string name="Password_info">비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한 번 터치해주세요.</string>
