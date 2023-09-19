@@ -27,7 +27,9 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
         super.initAfterBinding()
 
         setTouchScreen()
-        customTTS.speak(resources.getString(R.string.RemitCheck_receiver_check))
+        val formattedString = getString(R.string.RemitCheck_receiver_check, remitInfo.name)
+        customTTS.speak(formattedString)
+
     }
 
 

@@ -4,7 +4,7 @@
     <string name="spk_app_start">뱅!캥!나!우!</string>
     <string name="no_network">네트워크 연결이 안되어있습니다.</string>
 
-    <string name="account_balance">${balanceModel.user_id}님의 ${balanceModel.bank_name}통장 현재잔액은 ${balanceModel.balance} 원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
+    <string name="account_balance">%s님의 %s통장 현재잔액은 %s원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
 
     <string name="Password_info">비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.</string>
     <string name="not_correct_pw">비밀번호가 틀립니다. 터치하여 다시 시도해주세요.</string>
@@ -16,14 +16,14 @@
     <string name="RemitAccount_check_account">1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
 
     <string name="RemitBank_info">송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.</string>
-    <string name="RemitBank_remit_check">${event.result.closest_bank}으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.</string>
+    <string name="RemitBank_remit_check">%s으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.</string>
 
-    <string name="RemitCheck_receiver_check">${remitInfo.name}님에게 보내겠습니까</string>
+    <string name="RemitCheck_receiver_check">%s님에게 보내겠습니까</string>
 
     <string name="RemitFragment_noRemit">필수 항목이 비어 있습니다. 금액 선택 화면으로 돌아갑니다.</string>
     <string name="RemitFragment_noReceiver">없는 고객입니다.</string>
 
     <string name="RemitMoney_info">송금하실 금액을 입력해주세요</string>
-    <string name="RemitMoney_money_check">${result.value}원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitMoney_money_check">%s원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
 
 </resources>

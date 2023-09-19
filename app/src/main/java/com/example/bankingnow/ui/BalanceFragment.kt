@@ -71,7 +71,11 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         Log.d("잔액확인", balanceModel.toString())
         binding.tvUserInfo.text = "${balanceModel.user_id} 님\n${balanceModel.bank_name} 통장잔액"
         binding.tvBalance.text = addCommasToNumber(balanceModel.balance) + " 원"
-        customTTS.speak(resources.getString(R.string.account_balance))
+
+
+        val formattedString = getString(R.string.account_balance, balanceModel.user_id, balanceModel.bank_name, balanceModel.balance.toString())
+        customTTS.speak(formattedString)
+
     }
 
     fun addCommasToNumber(number: Long): String {
