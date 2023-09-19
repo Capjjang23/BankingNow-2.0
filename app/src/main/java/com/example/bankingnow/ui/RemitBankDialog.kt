@@ -1,26 +1,35 @@
 package com.example.bankingnow.ui
 
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Environment
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.MotionEvent
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitBankBinding
 import com.example.bankingnow.util.Recorder
 import java.util.Date
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.event.BankEvent
+import com.example.bankingnow.viewmodel.RemitViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dialog_remit_bank) {
+    private val viewModel by lazy {
+        ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
+    }
+
+    private lateinit var intent: Intent
+
     private val handler = Handler()
     private lateinit var speechRecognizer: SpeechRecognizer
 
@@ -32,40 +41,72 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
+    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
+    private val result: MutableLiveData<String> = MutableLiveData()
+
     override fun initDataBinding() {
         super.initDataBinding()
 
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
         }
+
+        Log.d("vm?", "PF: "+requireParentFragment())
+        Log.d("vm?", viewModel.toString())
     }
 
     override fun initStartView() {
         super.initStartView()
-        // RecognizerIntent 생성
-        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "bankingnow")    // 여분의 키
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")         // 언어 설정
-
 
         customTTS.speak("송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.")
 
-        binding.dialogRemitBank.setOnClickListener {
-
-            recordApiManager.getBank("국빈은행")
-            // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-//            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
-//            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-//            speechRecognizer.startListening(intent) //듣기시작
-
+        result.observe(viewLifecycleOwner){
+            viewModel.setRemitBank(it)
         }
-
     }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
+        setSTT()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // EventBus 등록
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // EventBus 해제
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onBankEvent(event: BankEvent) {
+        if (event.isSuccess){
+            isResponse.postValue(true)
+            customTTS.speak(event.result.closet_bank)
+            result.postValue(event.result.closet_bank)
+        } else{
+            isResponse.postValue(false)
+            customTTS.speak("네트워크 연결이 안되어있습니다.")
+            idx.postValue(1)
+        }
+    }
+
+    private fun setSTT() {
+        // RecognizerIntent 생성
+        intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "bankingnow")    // 여분의 키
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")         // 언어 설정
+
+        // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
+        // speechRecognizer.startListening(intent) //듣기시작
     }
 
     private fun setTouchScreen() {
@@ -83,12 +124,12 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                     val distanceX = endX - startX
 
                     // 스와이프를 감지하기 위한 조건 설정
-                    if (distanceX < -100) {
-                        // 왼쪽으로 스와이프
+                    if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
                         RemitMoneyDialog().show(parentFragmentManager, "송금 금액")
                         dismiss()
-                    } else if (state=="SUCCESS" && distanceX > 100){
-                        // 오른쪽으로 스와이프
+                    } else if (state=="SUCCESS" && distanceX < -100){
+                        // 왼쪽으로 스와이프
                         RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
@@ -97,14 +138,15 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                             "FAIL" -> {
                                 idx.postValue(1)
                                 // stt 구현
+                                speechRecognizer.startListening(intent) //듣기시작
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)
-                                customTTS.speak("은행 확인")
                             }
                             "SUCCESS" -> {
                                 idx.postValue(1)
                                 // stt 구현
+                                speechRecognizer.startListening(intent) //듣기시작
                             }
                         }
                     }

@@ -10,31 +10,57 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/tv_remit_info"
+            android:id="@+id/tv_remit_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="33dp"
             android:layout_marginTop="116dp"
             android:fontFamily="@font/nanum_gothic_bold"
             android:lineHeight="30dp"
-            android:text="한성대 님\n국민은행 통장"
+            android:text="한성대"
             android:textColor="@color/mainBlack"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:lineHeight="30dp"
+            android:text=" 님"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_remit_name"
+            app:layout_constraintStart_toEndOf="@+id/tv_remit_name"
+            app:layout_constraintTop_toTopOf="@+id/tv_remit_name" />
+
+        <TextView
+            android:id="@+id/tv_remit_bank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:lineHeight="30dp"
+            android:text="국민은행"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_remit_name"
+            app:layout_constraintTop_toBottomOf="@+id/tv_remit_name" />
+
+        <TextView
             android:id="@+id/tv_remit_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="26dp"
             android:fontFamily="@font/nanum_gothic_extra_bold"
             android:lineHeight="30dp"
-            android:text="10,000 원"
+            android:text="10,000"
             android:textColor="@color/mainBlack"
             android:textSize="30sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_remit_info"
-            app:layout_constraintTop_toBottomOf="@+id/tv_remit_info" />
+            app:layout_constraintStart_toStartOf="@+id/tv_remit_bank"
+            app:layout_constraintTop_toBottomOf="@+id/tv_remit_bank" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -56,6 +82,32 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/logo_screen_bottom_right" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:lineHeight="30dp"
+            android:text=" 통장"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_remit_bank"
+            app:layout_constraintStart_toEndOf="@+id/tv_remit_bank"
+            app:layout_constraintTop_toTopOf="@+id/tv_remit_bank" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" 원"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_remit_money"
+            app:layout_constraintStart_toEndOf="@+id/tv_remit_money"
+            app:layout_constraintTop_toTopOf="@+id/tv_remit_money"
+            android:fontFamily="@font/nanum_gothic_extra_bold"
+            android:lineHeight="30dp"
+            android:textColor="@color/mainBlack"
+            android:textSize="30sp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

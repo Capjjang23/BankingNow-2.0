@@ -8,6 +8,10 @@ import com.example.bankingnow.R
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.databinding.FragmentRemitBinding
 import com.example.bankingnow.base.BaseFragment
+import com.example.bankingnow.event.NumberPublicEvent
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import kotlin.system.exitProcess
 
 class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
@@ -16,7 +20,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
 
         // 송금 금액 다이얼로그
         if (!prefs.getBoolean("isLogin", false)) {
-            Log.d("isLogin?: ", prefs.getBoolean("isLogin", false).toString())
             LoginDialog().show(parentFragmentManager,"")
         }
 
@@ -59,8 +62,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                     val distanceX = endX - startX
 
                     // 스와이프를 감지하기 위한 조건 설정
-                    if (distanceX < -100) {
-                        // 왼쪽으로 스와이프
+                    if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리

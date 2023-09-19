@@ -52,8 +52,8 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
                     val distanceX = endX - startX
 
                     // 스와이프를 감지하기 위한 조건 설정
-                    if (distanceX < -100) {
-                        // 왼쪽으로 스와이프
+                    if (distanceX > 100) {
+                        // 오른쪽으로 스와이프
                         requireActivity().onBackPressed()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
