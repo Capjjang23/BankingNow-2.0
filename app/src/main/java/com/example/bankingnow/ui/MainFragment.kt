@@ -77,7 +77,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     fun onNumberEvent(event: PostNumberEvent) {
         if (event.isSuccess){
             val num = event.result.predicted_number
-            when("1"){
+            when("2"){
                 "1" -> {
                     customTTS.speak("현재잔액 확인을 선택하셨습니다.")
                     sleep(1000)

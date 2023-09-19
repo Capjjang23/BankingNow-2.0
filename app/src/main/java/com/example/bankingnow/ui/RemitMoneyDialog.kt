@@ -91,8 +91,11 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: PostNumberEvent) {
         if (event.isSuccess){
-            customTTS.speak("12342424324324432")
-            result.postValue(result.value + event.result.predicted_number)
+            if (result.value == null){
+                result.postValue(event.result.predicted_number)
+            }else{
+                result.postValue(result.value + event.result.predicted_number)
+            }
         }
     }
 
