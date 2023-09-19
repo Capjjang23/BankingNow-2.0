@@ -50,15 +50,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
 
         customTTS.speak("송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.")
 
-        binding.dialogRemitBank.setOnClickListener {
-
-            recordApiManager.getBank("국빈은행")
-            // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-//            speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
-//            speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-//            speechRecognizer.startListening(intent) //듣기시작
-
-        }
 
     }
 
@@ -96,7 +87,8 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                         when (state) {
                             "FAIL" -> {
                                 idx.postValue(1)
-                                // stt 구현
+                                recorder.startRecording(filePath)
+//                                recordApiManager.getBank("국빈은행")
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)

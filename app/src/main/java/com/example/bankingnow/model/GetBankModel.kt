@@ -1,8 +1,8 @@
 package com.example.bankingnow.model
 
 data class GetBankRequestModel(
-    val voiceBank :String
+    val voice_bank :String
 )
 data class GetBankResponseModel(
-    val closet_bank :String
+    val closest_bank :String
 )

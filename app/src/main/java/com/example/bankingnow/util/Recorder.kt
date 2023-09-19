@@ -60,43 +60,42 @@ class Recorder {
 
     fun startRecording(filename: String, isPublic: Boolean = false) {
         lateinit var speechRecognizer: SpeechRecognizer
-        fun startRecordingNumber(filename: String) {
-            state = State.RECORDING
+        state = State.RECORDING
 
-            // MediaRecorder 객체 초기화 및 설정
-            recorder = MediaRecorder().apply {
-                setAudioSource(MediaRecorder.AudioSource.MIC)
-                setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
-                setOutputFile(filename)
-                setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
-                setAudioSamplingRate(44100) // set the desired sampling rate
-                setAudioEncodingBitRate(320000)
-                setMaxDuration(1500)
+        // MediaRecorder 객체 초기화 및 설정
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
+            setOutputFile(filename)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
+            setAudioSamplingRate(44100) // set the desired sampling rate
+            setAudioEncodingBitRate(320000)
+            setMaxDuration(1500)
 
-                try {
-                    prepare()
-                } catch (e: IOException) {
-                    Log.e("APP", "prepare() failed $e")
-                }
-
-                // 녹음 상태 변경을 감시하는 리스너 설정
-                setOnInfoListener { _, what, _ ->
-                    if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                        // 녹음이 완료되면 호출되는 코드
-                        stop()
-                        release()
-
-                        // 녹음 완료 후 다음 작업을 실행
-                        Log.d("audioRecorder", "녹음 중단 및 서버 전송")
-                        sendFileToServer(filename, isPublic)
-                    }
-                }
-
-                start() // 녹음 시작은 여기에서
+            try {
+                prepare()
+            } catch (e: IOException) {
+                Log.e("APP", "prepare() failed $e")
             }
-        }
 
+            // 녹음 상태 변경을 감시하는 리스너 설정
+            setOnInfoListener { _, what, _ ->
+                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
+                    // 녹음이 완료되면 호출되는 코드
+                    stop()
+                    release()
+
+                    // 녹음 완료 후 다음 작업을 실행
+                    Log.d("audioRecorder", "녹음 중단 및 서버 전송")
+                    sendFileToServer(filename, isPublic)
+                }
+            }
+
+            start() // 녹음 시작은 여기에서
+        }
     }
+
+
 
     fun stopRecording() {
         recorder?.apply {
@@ -142,7 +141,7 @@ class Recorder {
             byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it) }
             Log.d("통신?", "녹음 중단 및 서버 전송")
         } else
-            byteArray?.let { RecordModel(it) }?.let { apiManager.postTest(it) }
+            byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it) }
     }
 }
 

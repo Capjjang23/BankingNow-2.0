@@ -59,7 +59,7 @@ class RecordApiManager {
         // http://192.168.47.145:8000
         // https://jsonplaceholder.typicode.com
         retrofit = Retrofit.Builder()
-            .baseUrl("http://223.194.133.37:8000")
+            .baseUrl("http://192.168.0.17:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -67,30 +67,6 @@ class RecordApiManager {
         retrofitService = retrofit?.create(RecordService::class.java)
     }
 
-    fun postTest(postData: RecordModel) {
-        val resultData: Call<PostTestModel>? = retrofitService?.postTest(postData)
-        resultData?.enqueue(object : Callback<PostTestModel> {
-            override fun onResponse(
-                call: Call<PostTestModel>,
-                response: Response<PostTestModel>
-            ) {
-                if (response.isSuccessful) {
-                    val result: PostTestModel = response.body()!!
-                    Log.d("resultt", result.toString())
-                    //EventBus.getDefault().post(GetDataEvent(resultData))
-                } else {
-                    //EventBus.getDefault().post(GetDataEvent(null))
-                    Log.d("resultt", "실패코드_${response.code()}")
-                }
-            }
-
-            override fun onFailure(call: Call<PostTestModel>, t: Throwable) {
-                t.printStackTrace()
-                //EventBus.getDefault().post(GetDataEvent(null))
-                Log.d("resultt", "통신 실패")
-            }
-        })
-    }
 
     fun getTest() {
         val resultData: Call<TestGetModel>? = retrofitService?.getTest()
@@ -167,7 +143,9 @@ class RecordApiManager {
     }
 
     fun getBank(bankSpeech :String){
-        val resultData: Call<GetBankResponseModel>? = retrofitService?.getBank(GetBankRequestModel(bankSpeech))
+        val bankRequestModel = GetBankRequestModel(bankSpeech)
+        Log.d("getBank", bankRequestModel.toString())
+        val resultData: Call<GetBankResponseModel>? = retrofitService?.getBank(bankRequestModel)
         resultData?.enqueue(object : Callback<GetBankResponseModel> {
             override fun onResponse(
                 call: Call<GetBankResponseModel>,
@@ -198,6 +176,7 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: NumberModel = response.body()!!
+                    Log.d("resultt", result.toString())
 //                    EventBus.getDefault().post(PostNumberEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")

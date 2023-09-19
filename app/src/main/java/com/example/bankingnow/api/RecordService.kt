@@ -19,9 +19,6 @@ interface RecordService {
     fun getTest(): Call<TestGetModel>
 
     @POST("/process_audio/")
-    fun postTest(@Body postData: RecordModel): Call<PostTestModel>
-
-    @POST("/process_audio/")
     fun postNumber(@Body postData: RecordModel): Call<NumberModel>
 
     @POST("/accounts/check_password/")
@@ -30,6 +27,6 @@ interface RecordService {
     @GET("/money/check_balance/")
     fun getBalance():Call<GetBalanceModel>
 
-    @POST("/get_bank/")
+    @POST("/post_bank/")
     fun getBank(@Body request: GetBankRequestModel):Call<GetBankResponseModel>
 }
