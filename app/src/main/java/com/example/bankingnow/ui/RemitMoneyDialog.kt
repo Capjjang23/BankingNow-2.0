@@ -81,7 +81,6 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                 recorder.startOneRecord(filePath, true)
             } else {
                 isResponse.postValue(false)
-                idx.postValue(0)
             }
         } else{
             isResponse.postValue(false)
@@ -127,7 +126,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 customTTS.speak("${result.value}원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
                             }
                             "SUCCESS" -> {
-                                idx.postValue(1)
+                                idx.postValue(0)
                                 recorder.startOneRecord(filePath, true)
                             }
                         }

@@ -89,7 +89,6 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                 recorder.startOneRecord(filePath, true)
             } else {
                 isResponse.postValue(false)
-                idx.postValue(0)
             }
         } else{
             isResponse.postValue(false)
