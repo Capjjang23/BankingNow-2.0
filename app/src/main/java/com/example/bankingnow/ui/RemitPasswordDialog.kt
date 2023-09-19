@@ -45,12 +45,12 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
     private val result: MutableLiveData<String> = MutableLiveData("")
 
     override fun initStartView() {
-        ImageViewList.add(binding.ivPw6)
-        ImageViewList.add(binding.ivPw5)
-        ImageViewList.add(binding.ivPw4)
-        ImageViewList.add(binding.ivPw3)
-        ImageViewList.add(binding.ivPw2)
         ImageViewList.add(binding.ivPw1)
+        ImageViewList.add(binding.ivPw2)
+        ImageViewList.add(binding.ivPw3)
+        ImageViewList.add(binding.ivPw4)
+        ImageViewList.add(binding.ivPw5)
+        ImageViewList.add(binding.ivPw6)
 
         // setTTS 함수 실행
         customTTS.speak(resources.getString(R.string.Password_info))
@@ -91,49 +91,64 @@ class RemitPasswordDialog : BaseDialogFragment<DialogRemitPasswordBinding>(R.lay
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: NumberPrivateEvent) {
-        if (event.isSuccess){
+        if (event.isSuccess) {
             isResponse.postValue(true)
+            customVibrator?.vibratePhone()
+            result.value = result.value + event.result.predicted_number
+            setFillCircle(result.value!!.length)
 
-            if (idx.value == 1 && result.value!!.length <= 6) {
-                customVibrator?.vibratePhone()
-                result.value = result.value + event.result.predicted_number
-                if (result.value!!.length < 6) {
-                    recorder.startOneRecord(filePath, false)
+            if (result.value!!.length < 6) {
+                recorder.startOneRecord(filePath, false)
+
+                if (idx.value == 1 && result.value!!.length <= 6) {
+                    customVibrator?.vibratePhone()
+                    result.value = result.value + event.result.predicted_number
+                    if (result.value!!.length < 6) {
+                        recorder.startOneRecord(filePath, false)
+                    }
+                } else {
+                    isResponse.postValue(false)
+                    idx.postValue(0)
                 }
             } else {
                 isResponse.postValue(false)
+                customTTS.speak(resources.getString(R.string.no_network))
                 idx.postValue(0)
             }
-        } else{
-            isResponse.postValue(false)
-            customTTS.speak(resources.getString(R.string.no_network))
-            idx.postValue(0)
         }
-    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginEvent(event: LoginEvent) {
-        if (event.isSuccess){
-            if (event.result.is_password_correct) {
-                customTTS.speak("로그인 성공")
-                dismiss()
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        fun onLoginEvent(event: LoginEvent) {
+            if (event.isSuccess) {
+                if (event.result.is_password_correct) {
+                    customTTS.speak("로그인 성공")
+                    dismiss()
+                } else {
+                    customTTS.speak(resources.getString(R.string.not_correct_pw))
+                    resetCircle()
+                    idx.postValue(0)
+                }
             } else {
-                customTTS.speak(resources.getString(R.string.not_correct_pw))
+                customTTS.speak(resources.getString(R.string.no_network))
                 idx.postValue(0)
             }
-        } else{
-            customTTS.speak(resources.getString(R.string.no_network))
-            idx.postValue(0)
         }
     }
-
 
     private fun setFillCircle(index:Int){
         for (i in 1..index){
             val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.fill_circle) }
-            ImageViewList[i].setImageDrawable(drawable)
+            ImageViewList[i-1].setImageDrawable(drawable)
         }
     }
+
+    private fun resetCircle(){
+        for (i in 1..6){
+            val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.circle) }
+            ImageViewList[i-1].setImageDrawable(drawable)
+        }
+    }
+
 
     private fun setTouchScreen() {
         var startX = 0f

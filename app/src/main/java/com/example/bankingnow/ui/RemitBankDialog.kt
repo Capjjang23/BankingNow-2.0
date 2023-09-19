@@ -60,7 +60,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     override fun initStartView() {
         super.initStartView()
 
-        customTTS.speak(resources.getString(R.string.Login_info))
+        customTTS.speak(resources.getString(R.string.RemitBank_info))
 
         result.observe(viewLifecycleOwner){
             viewModel.setRemitBank(it)
