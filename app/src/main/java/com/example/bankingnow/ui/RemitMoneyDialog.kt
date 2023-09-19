@@ -81,7 +81,6 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                 recorder.startOneRecord(filePath, true)
             } else {
                 isResponse.postValue(false)
-                idx.postValue(0)
             }
         } else{
             isResponse.postValue(false)
@@ -127,7 +126,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 customTTS.speak(resources.getString(R.string.RemitMoney_money_check))
                             }
                             "SUCCESS" -> {
-                                idx.postValue(1)
+                                idx.postValue(0)
                                 recorder.startOneRecord(filePath, true)
                             }
                         }
