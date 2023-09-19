@@ -84,7 +84,11 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     fun onBankEvent(event: BankEvent) {
         if (event.isSuccess){
             isResponse.postValue(true)
-            customTTS.speak(resources.getString(R.string.RemitBank_remit_check))
+
+
+            val formattedString = getString(R.string.RemitBank_remit_check, event.result.closest_bank)
+            customTTS.speak(formattedString)
+
             result.postValue(event.result.closest_bank)
             binding.tvBank.text = event.result.closest_bank
             binding.bank.visibility = View.INVISIBLE

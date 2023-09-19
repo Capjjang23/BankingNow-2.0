@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitAccountBinding
 import com.example.bankingnow.base.BaseDialogFragment
@@ -84,7 +85,11 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
             isResponse.postValue(true)
 
             if (idx.value == 1) {
-                result.postValue(result.value + event.result.predicted_number)
+                if (result.value == null){
+                    result.postValue(event.result.predicted_number)
+                }
+                else
+                    result.postValue(result.value + event.result.predicted_number)
                 customTTS.speak(event.result.predicted_number)
                 recorder.startOneRecord(filePath, true)
             } else {
@@ -119,8 +124,10 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                     } else if (state=="SUCCESS" && distanceX < -100){
 
                         // 왼쪽으로 스와이프
-                        if (remitResultIsFill)
+                        if (remitResultIsFill) {
                             setFragmentResult("Check", bundleOf("isFill" to true))
+                            result.value?.let { prefs.setString("account", it) }
+                        }
                         else
                             setFragmentResult("Check", bundleOf("isFill" to false))
 
