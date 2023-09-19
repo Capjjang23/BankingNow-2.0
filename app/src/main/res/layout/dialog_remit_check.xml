@@ -7,7 +7,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/dialog_remit_check"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/mainWhite">
 
         <TextView
             android:id="@+id/tv_remit_name"
@@ -65,13 +66,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@+id/tv_remit_money"
-            android:text="송금하시겠습니까?"
-            app:layout_constraintStart_toStartOf="@+id/tv_remit_money"
             android:layout_marginTop="60dp"
             android:fontFamily="@font/nanum_gothic_bold"
+            android:text="송금하시겠습니까?"
             android:textColor="@color/mainBlack"
-            android:textSize="20dp"/>
+            android:textSize="20dp"
+            app:layout_constraintStart_toStartOf="@+id/tv_remit_money"
+            app:layout_constraintTop_toBottomOf="@+id/tv_remit_money" />
 
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -100,14 +101,14 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" 원"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_remit_money"
-            app:layout_constraintStart_toEndOf="@+id/tv_remit_money"
-            app:layout_constraintTop_toTopOf="@+id/tv_remit_money"
             android:fontFamily="@font/nanum_gothic_extra_bold"
             android:lineHeight="30dp"
+            android:text=" 원"
             android:textColor="@color/mainBlack"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_remit_money"
+            app:layout_constraintStart_toEndOf="@+id/tv_remit_money"
+            app:layout_constraintTop_toTopOf="@+id/tv_remit_money" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

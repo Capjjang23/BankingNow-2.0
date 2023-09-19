@@ -7,6 +7,22 @@
         android:id="@+id/fragment_remit"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/mainBlack"></androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@color/mainWhite">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nanum_gothic_bold"
+            android:gravity="center"
+            android:lineHeight="30dp"
+            android:text="@string/RemitFragment"
+            android:textColor="@color/mainBlack"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

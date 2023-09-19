@@ -81,6 +81,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
             RemitCheckDialog(remitResult).show(parentFragmentManager, "")
         } else {
             customTTS.speak(resources.getString(R.string.RemitFragment_noReceiver))
+            requireActivity().onBackPressed()
         }
     }
 }
