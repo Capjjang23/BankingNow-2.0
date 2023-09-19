@@ -38,6 +38,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     override fun initDataBinding() {
         super.initDataBinding()
 
+
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
         }
@@ -45,6 +46,12 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         result.observe(viewLifecycleOwner) {
             binding.tvMoney.text = it
         }
+
+
+        customTTS.speak("송금하실 금액을 입력해주세요. 녹음을 시작하려면 화면을 터치해주세요.")
+
+
+
     }
 
     override fun initAfterBinding() {
@@ -52,23 +59,23 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
         setTouchScreen()
 
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-            }
-
-            override fun onDone(utteranceId: String?) {
-                // 말하기가 완료된 후 실행할 코드
-                // tts 이벤트는 UI 쓰레드에서 호출해야 함
-                Handler(Looper.getMainLooper()).post {
-                    recorder.startOneRecord(filePath, true)
-                }
-            }
-
-            override fun onError(utteranceId: String?) {
-            }
-        })
+//        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+//            override fun onStart(utteranceId: String?) {
+//            }
+//
+//            override fun onDone(utteranceId: String?) {
+//                // 말하기가 완료된 후 실행할 코드
+//                // tts 이벤트는 UI 쓰레드에서 호출해야 함
+//                Handler(Looper.getMainLooper()).post {
+//                    recorder.startOneRecord(filePath, true)
+//                }
+//            }
+//
+//            override fun onError(utteranceId: String?) {
+//            }
+//        })
     }
-
+//
     override fun onStart() {
         super.onStart()
         // EventBus 등록

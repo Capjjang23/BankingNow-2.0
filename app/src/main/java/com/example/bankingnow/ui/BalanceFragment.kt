@@ -9,6 +9,7 @@ import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.FragmentBalanceBinding
+import com.example.bankingnow.model.GetBalanceModel
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -35,6 +36,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         super.initAfterBinding()
 
         setTouchScreen()
+
     }
 
     private fun setTouchScreen() {
@@ -57,6 +59,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
                         requireActivity().onBackPressed()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        apiManager.getBalance()
                     }
                 }
             }
@@ -64,10 +67,11 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         }
     }
 
-    override fun getBalance(balance: Long) {
-        Log.d("잔액확인", balance.toString())
-        binding.tvBalance.text = addCommasToNumber(balance) + " 원"
-
+    override fun getBalance(balanceModel: GetBalanceModel) {
+        Log.d("잔액확인", balanceModel.toString())
+        binding.tvUserInfo.text = "${balanceModel.user_id} 님\n${balanceModel.bank_name} 통장잔액"
+        binding.tvBalance.text = addCommasToNumber(balanceModel.balance) + " 원"
+        customTTS.speak("${balanceModel.user_id}님의 ${balanceModel.bank_name}통장 현재잔액은 ${balanceModel.balance} 원입니다. 다시 들으시려면 화면을 터치해주세요.")
     }
 
     fun addCommasToNumber(number: Long): String {

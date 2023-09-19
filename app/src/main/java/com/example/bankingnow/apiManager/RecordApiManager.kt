@@ -15,6 +15,7 @@ import com.example.bankingnow.model.RecordModel
 import com.example.bankingnow.model.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import org.greenrobot.eventbus.EventBus
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -30,7 +31,7 @@ class RecordApiManager {
 
     // 클래스내 인터페이스 작성
     interface getMyBalance {
-        fun getBalance(balance: Long)
+        fun getBalance(balanceModel: GetBalanceModel)
     }
 
     val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -128,7 +129,7 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: GetBalanceModel = response.body()!!
-                    listener?.getBalance(result.balance)
+                    listener?.getBalance(result)
                     Log.d("getBalance", result.toString())
                 } else {
                     Log.d("getBalance", "실패")
@@ -177,7 +178,7 @@ class RecordApiManager {
                 if (response.isSuccessful) {
                     val result: NumberModel = response.body()!!
                     Log.d("resultt", result.toString())
-//                    EventBus.getDefault().post(PostNumberEvent(true, result))
+                    EventBus.getDefault().post(PostNumberEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
                 }
