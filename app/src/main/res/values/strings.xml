@@ -1,17 +1,20 @@
 <resources>
     <string name="app_name">BankingNow</string>
 
-    <string name="spk_app_start">뱅!캥!나!우!</string>
+    <string name="app_start">Banking Now 어플을 실행합니다.</string>
     <string name="no_network">네트워크 연결이 안되어있습니다.</string>
+
+    <string name="Login_info">로그인 단계입니다.</string>
 
     <string name="account_balance">${balanceModel.user_id}님의 ${balanceModel.bank_name}통장 현재잔액은 ${balanceModel.balance} 원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
 
-    <string name="Password_info">비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.</string>
+    <string name="Password_info">비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한 번 터치해주세요.</string>
     <string name="not_correct_pw">비밀번호가 틀립니다. 터치하여 다시 시도해주세요.</string>
 
+    <string name="Main_choose_info">현재 잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 녹음을 시작하려면 화면을 터치하세요</string>
     <string name="Main_choose_one">현재잔액 확인을 선택하셨습니다.</string>
     <string name="Main_choose_two">송금하기를 선택하셨습니다.</string>
-    <string name="Main_choose_again">잘못된 번호입니다. 현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 다시 녹음을 시작하려면 화면을 터치하세요.</string>
+    <string name="Main_choose_again">잘못된 번호입니다. 현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 다시 녹음을 시작하려면 화면을 터치하세요</string>
 
     <string name="RemitAccount_check_account">1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
 

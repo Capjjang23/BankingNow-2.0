@@ -55,8 +55,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         ImageViewList.add(binding.ivPw6)
 
         // setTTS 함수 실행
-        customTTS.speak(resources.getString(R.string.Password_info))
-
+        setUtil(resources.getString(R.string.app_start) + resources.getString(R.string.Login_info) + resources.getString(R.string.Password_info))
     }
 
     override fun initAfterBinding() {

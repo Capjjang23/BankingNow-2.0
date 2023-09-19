@@ -31,7 +31,7 @@ class CustomTTS(mContext: Context) {
         tts = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
             if (status!=TextToSpeech.ERROR){
                 tts.language = Locale.KOREAN
-                tts.setPitch(1.0f)
+                tts.setPitch(1.1f)
                 tts.setSpeechRate(1.0f)
 
                 if (str.isNotBlank())
