@@ -47,12 +47,12 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
     private val result: MutableLiveData<String> = MutableLiveData("")
 
     override fun initStartView() {
-        ImageViewList.add(binding.ivPw6)
-        ImageViewList.add(binding.ivPw5)
-        ImageViewList.add(binding.ivPw4)
-        ImageViewList.add(binding.ivPw3)
-        ImageViewList.add(binding.ivPw2)
         ImageViewList.add(binding.ivPw1)
+        ImageViewList.add(binding.ivPw2)
+        ImageViewList.add(binding.ivPw3)
+        ImageViewList.add(binding.ivPw4)
+        ImageViewList.add(binding.ivPw5)
+        ImageViewList.add(binding.ivPw6)
 
         // setTTS 함수 실행
         customTTS.speak("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
@@ -97,6 +97,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
             isResponse.postValue(true)
             customVibrator?.vibratePhone()
             result.value = result.value + event.result.predicted_number
+            setFillCircle(result.value!!.length)
 
             if (result.value!!.length < 6) {
                 recorder.startOneRecord(filePath, false)
@@ -117,6 +118,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                 dismiss()
             } else {
                 customTTS.speak("비밀번호가 틀립니다. 터치하여 다시 시도해주세요.")
+                resetCircle()
                 idx.postValue(0)
             }
         } else{
@@ -129,7 +131,14 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
     private fun setFillCircle(index:Int){
         for (i in 1..index){
             val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.fill_circle) }
-            ImageViewList[i].setImageDrawable(drawable)
+            ImageViewList[i-1].setImageDrawable(drawable)
+        }
+    }
+
+    private fun resetCircle(){
+        for (i in 1..6){
+            val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.circle) }
+            ImageViewList[i-1].setImageDrawable(drawable)
         }
     }
 
