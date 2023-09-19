@@ -26,4 +26,6 @@
     <string name="RemitMoney_info">송금하실 금액을 입력해주세요</string>
     <string name="RemitMoney_money_check">${result.value}원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
 
+    <string name="RemitFragment">계좌 정보 확인 중 입니다.\n잠시 기다려 주세요.</string>
+
 </resources>
