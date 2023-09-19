@@ -43,7 +43,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     override fun initDataBinding() {
         super.initDataBinding()
 
-        setUtil("송금 금액을 입력해주세요.")
+        setUtil("계좌번호를 입력해주세요.")
         setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {

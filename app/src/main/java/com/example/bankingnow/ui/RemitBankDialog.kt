@@ -39,7 +39,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
 
-    private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
+    private val stateList: Array<String> = arrayOf("FAIL", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 

@@ -93,7 +93,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: NumberPrivateEvent) {
-        if (event.isSuccess){
+        if (event.isSuccess) {
             isResponse.postValue(true)
             customVibrator?.vibratePhone()
             result.value = result.value + event.result.predicted_number
@@ -102,38 +102,39 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
             if (result.value!!.length < 6) {
                 recorder.startOneRecord(filePath, false)
 
-            if (idx.value == 1 && result.value!!.length <= 6) {
-                customVibrator?.vibratePhone()
-                result.value = result.value + event.result.predicted_number
-                if (result.value!!.length < 6) {
-                    recorder.startOneRecord(filePath, false)
+                if (idx.value == 1 && result.value!!.length <= 6) {
+                    customVibrator?.vibratePhone()
+                    result.value = result.value + event.result.predicted_number
+                    if (result.value!!.length < 6) {
+                        recorder.startOneRecord(filePath, false)
+                    }
+                } else {
+                    isResponse.postValue(false)
+                    idx.postValue(0)
                 }
             } else {
                 isResponse.postValue(false)
+                customTTS.speak("네트워크 연결이 안되어있습니다.")
                 idx.postValue(0)
             }
-        } else{
-            isResponse.postValue(false)
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
-            idx.postValue(0)
         }
-    }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onLoginEvent(event: LoginEvent) {
-        if (event.isSuccess){
-            if (event.result.is_password_correct) {
-                prefs.setBoolean("isLogin", true)
-                customTTS.speak("로그인 성공")
-                dismiss()
+        @Subscribe(threadMode = ThreadMode.MAIN)
+        fun onLoginEvent(event: LoginEvent) {
+            if (event.isSuccess) {
+                if (event.result.is_password_correct) {
+                    prefs.setBoolean("isLogin", true)
+                    customTTS.speak("로그인 성공")
+                    dismiss()
+                } else {
+                    customTTS.speak("비밀번호가 틀립니다. 터치하여 다시 시도해주세요.")
+                    resetCircle()
+                    idx.postValue(0)
+                }
             } else {
-                customTTS.speak("비밀번호가 틀립니다. 터치하여 다시 시도해주세요.")
-                resetCircle()
+                customTTS.speak("네트워크 연결이 안되어있습니다.")
                 idx.postValue(0)
             }
-        } else{
-            customTTS.speak("네트워크 연결이 안되어있습니다.")
-            idx.postValue(0)
         }
     }
 

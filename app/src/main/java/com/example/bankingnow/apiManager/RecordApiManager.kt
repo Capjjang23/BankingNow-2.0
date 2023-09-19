@@ -230,4 +230,29 @@ class RecordApiManager {
             }
         })
     }
+
+    fun remit(postData: RemitRequestModel) {
+        Log.d("resultt", postData.toString())
+        val resultData: Call<RemitResponseModel>? = retrofitService?.remit(postData)
+        resultData?.enqueue(object : Callback<RemitResponseModel> {
+            override fun onResponse(
+                call: Call<RemitResponseModel>,
+                response: Response<RemitResponseModel>
+            ) {
+                if (response.isSuccessful) {
+                    val result: RemitResponseModel = response.body()!!
+//                    EventBus.getDefault().post(UserNameEvent(true, result))
+                } else {
+                    Log.d("resultt", "실패코드_${response.code()}")
+//                    EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
+                }
+            }
+
+            override fun onFailure(call: Call<RemitResponseModel>, t: Throwable) {
+                t.printStackTrace()
+                Log.d("resultt", "통신 실패")
+//                EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
+            }
+        })
+    }
 }
