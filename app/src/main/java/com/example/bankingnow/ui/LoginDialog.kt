@@ -32,7 +32,7 @@ import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
 class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
-    private val stateList: Array<String> = arrayOf("START")
+    private val stateList: Array<String> = arrayOf("START","RECORD_START")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
@@ -63,9 +63,6 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         super.initAfterBinding()
 
         setTouchScreen()
-
-        // setTTS 함수 실행
-        customTTS.speak("비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한번 터치해주세요.")
 
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
@@ -136,7 +133,6 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f

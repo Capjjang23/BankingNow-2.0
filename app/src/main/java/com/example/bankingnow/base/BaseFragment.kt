@@ -78,7 +78,7 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
     override fun onDestroy() {
         super.onDestroy()
 
-        vibrator = null
+        // vibrator = null
 
         if (customTTS.tts.isSpeaking) {
             tts.stop()
