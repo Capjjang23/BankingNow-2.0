@@ -117,6 +117,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                         RemitBankDialog().show(parentFragmentManager,"송금 계좌")
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
+
                         // 왼쪽으로 스와이프
                         if (remitResultIsFill)
                             setFragmentResult("Check", bundleOf("isFill" to true))
