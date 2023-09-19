@@ -43,12 +43,16 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     override fun initDataBinding() {
         super.initDataBinding()
 
+        setUtil("송금 금액을 입력해주세요.")
+        setTouchScreen()
+
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
         }
 
         result.observe(viewLifecycleOwner) {
             binding.tvAccount.text = it
+            viewModel.setRemitAccount(it)
         }
     }
 
@@ -57,29 +61,8 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
 
         setTouchScreen()
 
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-            }
-
-            override fun onDone(utteranceId: String?) {
-                // 말하기가 완료된 후 실행할 코드
-                // tts 이벤트는 UI 쓰레드에서 호출해야 함
-                Handler(Looper.getMainLooper()).post {
-                    if (isResponse.value!!)
-                        recorder.startOneRecord(filePath, true)
-                }
-            }
-
-            override fun onError(utteranceId: String?) {
-            }
-        })
-
         viewModel.remitLiveData?.observe(viewLifecycleOwner) {
             remitResultIsFill = viewModel.getRemit()!!.isFill
-        }
-
-        result.observe(viewLifecycleOwner) {
-            viewModel.setRemitAccount(it)
         }
     }
 
@@ -99,13 +82,19 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     fun onNumberEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
             isResponse.postValue(true)
-            customTTS.speak(event.result.predicted_number)
-            result.postValue(result.value + event.result.predicted_number)
-            recorder.startOneRecord(filePath, true)
+
+            if (idx.value == 1) {
+                result.postValue(result.value + event.result.predicted_number)
+                customTTS.speak(event.result.predicted_number)
+                recorder.startOneRecord(filePath, true)
+            } else {
+                isResponse.postValue(false)
+                idx.postValue(0)
+            }
         } else{
             isResponse.postValue(false)
             customTTS.speak("네트워크 연결이 안되어있습니다.")
-            idx.postValue(1)
+            idx.postValue(0)
         }
     }
 

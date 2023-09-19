@@ -27,12 +27,15 @@ class CustomTTS(mContext: Context) {
         initTTS()
     }
 
-    fun initTTS() {
+    fun initTTS(str:String = "") {
         tts = TextToSpeech(mContext, TextToSpeech.OnInitListener { status ->
             if (status!=TextToSpeech.ERROR){
                 tts.language = Locale.KOREAN
                 tts.setPitch(1.0f)
                 tts.setSpeechRate(1.0f)
+
+                if (str.isNotBlank())
+                    speak(str)
 
                 Log.d("TTS INIT", "SUCCESS")
             }

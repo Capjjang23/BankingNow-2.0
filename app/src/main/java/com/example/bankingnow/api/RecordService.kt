@@ -15,8 +15,8 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RecordService {
-    @GET("/posts/1")
-    fun getTest(): Call<TestGetModel>
+    @POST("/audio_test/")
+    fun postTest(@Body postData: RecordModel): Call<NumberModel>
 
     @POST("/process_audio/")
     fun postNumber(@Body postData: RecordModel): Call<NumberModel>

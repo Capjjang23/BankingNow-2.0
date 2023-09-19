@@ -133,12 +133,10 @@ class Recorder {
 
     private fun sendFileToServer(filename: String, isPublic: Boolean) {
         // 서버 전송
-        Log.d("[mmihye]", "녹음 멈춤 & 서버 전송")
         val byteArray = mediaRecorderToByteArray(filename)
 
         // true: 숫자 정보 공개(음성 안내), false: 숫자 정보 비공개(진동 안내)
         byteArray?.let { RecordModel(it) }?.let { apiManager.postNumber(it, isPublic) }
-        Log.d("통신?", "녹음 중단 및 서버 전송")
     }
 }
 

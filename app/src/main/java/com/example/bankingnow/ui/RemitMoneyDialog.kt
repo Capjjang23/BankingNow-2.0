@@ -15,6 +15,8 @@ import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitMoneyBinding
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.util.CustomTTS
+import com.example.bankingnow.util.CustomVibrator
 import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
@@ -30,7 +32,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
     private val handler = Handler()
 
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
+    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download" + "/bankingNow" + ".aac"
     private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
@@ -40,9 +42,11 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
 
-    override fun initDataBinding() {
-        super.initDataBinding()
+    override fun initAfterBinding() {
+        super.initAfterBinding()
 
+        setUtil("송금하실 금액을 입력해주세요")
+        setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
@@ -52,40 +56,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
             binding.tvMoney.text = it
             viewModel.setRemitMoney(it)
         }
-
-
-        customTTS.speak("송금하실 금액을 입력해주세요. 녹음을 시작하려면 화면을 터치해주세요.")
-
-
-
-
-        Log.d("vm?", "PF: "+requireParentFragment())
-        Log.d("vm?", viewModel.toString())
     }
 
-    override fun initAfterBinding() {
-        super.initAfterBinding()
-
-        setTouchScreen()
-
-        tts.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-            override fun onStart(utteranceId: String?) {
-            }
-
-            override fun onDone(utteranceId: String?) {
-                // 말하기가 완료된 후 실행할 코드
-                // tts 이벤트는 UI 쓰레드에서 호출해야 함
-                Handler(Looper.getMainLooper()).post {
-                    if (isResponse.value!!)
-                        recorder.startOneRecord(filePath, true)
-                }
-            }
-
-            override fun onError(utteranceId: String?) {
-            }
-        })
-    }
-//
     override fun onStart() {
         super.onStart()
         // EventBus 등록
@@ -102,18 +74,22 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     fun onNumberEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
             isResponse.postValue(true)
-            customTTS.speak(event.result.predicted_number)
-            result.postValue(result.value + event.result.predicted_number)
-            recorder.startOneRecord(filePath, true)
+
+            if (idx.value == 1) {
+                result.postValue(result.value + event.result.predicted_number)
+                customTTS.speak(event.result.predicted_number)
+                recorder.startOneRecord(filePath, true)
+            } else {
+                isResponse.postValue(false)
+                idx.postValue(0)
+            }
         } else{
             isResponse.postValue(false)
             customTTS.speak("네트워크 연결이 안되어있습니다.")
-            idx.postValue(1)
+            idx.postValue(0)
         }
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f
@@ -148,7 +124,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                             "RECORD_START" -> {
                                 idx.postValue(2)
                                 recorder.stopRecording()
-                                customTTS.speak("1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
+                                customTTS.speak("${result.value}원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.")
                             }
                             "SUCCESS" -> {
                                 idx.postValue(1)

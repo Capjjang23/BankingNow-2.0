@@ -96,12 +96,12 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         // tts.shutdown()
     }
 
-    private fun setUtil() {
+    fun setUtil(ttsStr: String = "") {
         customTTS = CustomTTS.getInstance(requireContext())
         customVibrator = CustomVibrator.getInstance(requireContext())
-
+        customTTS.initTTS(ttsStr)
         tts = customTTS.tts
-        vibrator = customVibrator!!.vibrator
+        vibrator = customVibrator?.vibrator
     }
 
     // 다이얼로그 크기

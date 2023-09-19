@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bankingnow.model.RemitIsFillModel
-import com.example.bankingnow.model.RemitModel
+import com.example.bankingnow.model.RemitCheckModel
 
 class RemitViewModel: ViewModel() {
-    private val _remitLiveData: MutableLiveData<RemitModel> = MutableLiveData(RemitModel())
-    val remitLiveData: LiveData<RemitModel>
+    private val _remitLiveData: MutableLiveData<RemitCheckModel> = MutableLiveData(RemitCheckModel())
+    val remitLiveData: LiveData<RemitCheckModel>
         get() = _remitLiveData
 
     fun getRemit(): RemitIsFillModel {
@@ -18,7 +18,7 @@ class RemitViewModel: ViewModel() {
             && _remitLiveData.value!!.user.bank.isNotBlank())
             RemitIsFillModel(true, _remitLiveData.value!!)
         else
-            RemitIsFillModel(false, RemitModel())
+            RemitIsFillModel(false, RemitCheckModel())
     }
 
     fun setRemitMoney(newMoney: String) {

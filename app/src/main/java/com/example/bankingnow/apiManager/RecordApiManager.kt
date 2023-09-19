@@ -73,26 +73,22 @@ class RecordApiManager {
     }
 
 
-    fun getTest() {
-        val resultData: Call<TestGetModel>? = retrofitService?.getTest()
-        resultData?.enqueue(object : Callback<TestGetModel> {
+    fun postTest(postData: RecordModel, isPublic: Boolean) {
+        val resultData: Call<NumberModel>? = retrofitService?.postNumber(postData)
+        resultData?.enqueue(object : Callback<NumberModel> {
             override fun onResponse(
-                call: Call<TestGetModel>,
-                response: Response<TestGetModel>
+                call: Call<NumberModel>,
+                response: Response<NumberModel>
             ) {
                 if (response.isSuccessful) {
-                    val result: TestGetModel = response.body()!!
-                    Log.d("resultt", result.toString())
-                    //EventBus.getDefault().post(GetDataEvent(resultData))
+                    val result: NumberModel = response.body()!!
                 } else {
-                    //EventBus.getDefault().post(GetDataEvent(null))
-                    Log.d("resultt", "실패")
+                    Log.d("resultt", "실패코드_${response.code()}")
                 }
             }
 
-            override fun onFailure(call: Call<TestGetModel>, t: Throwable) {
+            override fun onFailure(call: Call<NumberModel>, t: Throwable) {
                 t.printStackTrace()
-                //EventBus.getDefault().post(GetDataEvent(null))
                 Log.d("resultt", "통신 실패")
             }
         })
