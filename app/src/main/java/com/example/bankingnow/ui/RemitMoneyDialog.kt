@@ -32,7 +32,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
     private val handler = Handler()
 
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download" + "/bankingNow" + ".aac"
+    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
     private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")

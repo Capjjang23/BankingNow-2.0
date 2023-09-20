@@ -123,6 +123,7 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
         fun onLoginEvent(event: LoginEvent) {
             if (event.isSuccess) {
                 if (event.result.is_password_correct) {
+
                     customTTS.speak("송금이 완료되었습니다")
                     recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
                     RemitSuccessDialog().show(parentFragmentManager,"")

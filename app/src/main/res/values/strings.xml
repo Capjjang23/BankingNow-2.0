@@ -20,6 +20,7 @@
 
     <string name="RemitBank_info">송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.</string>
     <string name="RemitBank_remit_check">%s으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.</string>
+    <string name="RemitBank_Empty">은행이 입력되지않았습니다</string>
 
     <string name="RemitCheck_receiver_check">%s님에게 보내겠습니까</string>
 
