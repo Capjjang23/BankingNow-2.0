@@ -21,8 +21,8 @@ class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layou
         setUtil(resources.getString(R.string.RemitSuccessDialog_info))
 
         binding.dialogRemitSuccess.setOnClickListener {
-            setFragmentResult("Back", bundleOf("isSuccess" to true))
             dismiss()
+            navController.navigate(R.id.action_remitFragment_to_mainFragment)
         }
     }
 }

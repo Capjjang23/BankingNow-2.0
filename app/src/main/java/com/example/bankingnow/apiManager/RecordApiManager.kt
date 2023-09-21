@@ -9,6 +9,7 @@ import com.example.bankingnow.event.BankEvent
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.event.UserNameEvent
 import com.example.bankingnow.model.GetBalanceModel
 import com.example.bankingnow.model.BankRequestModel
@@ -241,10 +242,10 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: RemitResponseModel = response.body()!!
-//                    EventBus.getDefault().post(UserNameEvent(true, result))
+                    EventBus.getDefault().post(RemitEvent(true, result))
                 } else {
                     Log.d("resultt", "실패코드_${response.code()}")
-//                    EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
+                    EventBus.getDefault().post(RemitEvent(false, RemitResponseModel("")))
                 }
             }
 

@@ -36,5 +36,5 @@
 
     <string name="RemitCheck_receiver_check">%s.님에게 %s원.을 송금하시려면, 왼쪽으로 스와이프를, 계좌 번호 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
 
-    <string name="RemitSuccessDialog_info">송금이 완료되었습니다. 화면을 터치하면, 메인 화면으로 돌아갑니다.</string>
+    <string name="RemitSuccessDialog_info">화면을 터치하면, 메인 화면으로 돌아갑니다.</string>
 </resources>

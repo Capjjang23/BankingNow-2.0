@@ -7,7 +7,11 @@
     <fragment
         android:id="@+id/remitFragment"
         android:name="com.example.bankingnow.ui.RemitFragment"
-        android:label="RemitFragment" />
+        android:label="RemitFragment" >
+        <action
+            android:id="@+id/action_remitFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.example.bankingnow.ui.MainFragment"

@@ -2,25 +2,33 @@ package com.example.bankingnow.ui
 
 import android.os.Handler
 import android.view.MotionEvent
+import android.view.View
+import androidx.lifecycle.MutableLiveData
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.event.BankEvent
+import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitCheckModel
 import com.example.bankingnow.model.RemitRequestModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.text.NumberFormat
+import java.util.Locale
 
 class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
     private val handler = Handler()
     private val remitInfo: RemitCheckModel = remitInfo
     private var recordApiManager = RecordApiManager()
-
     override fun initDataBinding() {
         super.initDataBinding()
 
         binding.tvRemitName.text = remitInfo.name
         binding.tvRemitBank.text = remitInfo.user.bank
-        binding.tvRemitMoney.text = remitInfo.money
+        binding.tvRemitMoney.text = addCommasToNumber(remitInfo.money.toLong())
     }
 
     override fun initAfterBinding() {
@@ -30,6 +38,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
         setUtil(resources.getString(R.string.RemitCheck_receiver_check, remitInfo.name, remitInfo.money))
 
     }
+
 
 
     private fun setTouchScreen() {
@@ -68,5 +77,11 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
             }
             true
         }
+    }
+
+
+    fun addCommasToNumber(number: Long): String {
+        val numberFormat = NumberFormat.getNumberInstance(Locale.US)
+        return numberFormat.format(number)
     }
 }

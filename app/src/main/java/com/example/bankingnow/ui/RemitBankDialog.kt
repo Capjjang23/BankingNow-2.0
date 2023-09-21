@@ -135,7 +135,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                         if (customTTS.tts.isSpeaking) {
                             tts.stop()
                         }
-
+                        Log.d("RemitIsNotFill",viewModel.toString())
                         RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX > -10 && distanceX < 10) {
