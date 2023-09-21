@@ -17,8 +17,9 @@ class RemitViewModel: ViewModel() {
             && _remitLiveData.value!!.user.account.isNotBlank()
             && _remitLiveData.value!!.user.bank.isNotBlank())
             RemitIsFillModel(true, _remitLiveData.value!!)
-        else
+        else {
             RemitIsFillModel(false, RemitCheckModel())
+        }
     }
 
     fun setRemitMoney(newMoney: String) {
@@ -35,4 +36,10 @@ class RemitViewModel: ViewModel() {
         _remitLiveData.value!!.user.bank = newBank
         Log.d("resultt", remitLiveData.value.toString())
     }
+
+    override fun toString(): String {
+        return "RemitViewModel(_remitLiveData=${_remitLiveData.value.toString()})"
+    }
+
+
 }

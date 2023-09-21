@@ -41,7 +41,7 @@ class Recorder {
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
             setAudioSamplingRate(44100) // set the desired sampling rate
             setAudioEncodingBitRate(320000)
-            setMaxDuration(2000)
+            setMaxDuration(2500)
 
             try {
                 prepare()
@@ -53,7 +53,7 @@ class Recorder {
             Handler().postDelayed({
                 stopRecording()
                 sendFileToServer(filename, isPublic)
-            }, 2000)
+            }, 2500)
 
             start()
         }
@@ -71,7 +71,7 @@ class Recorder {
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
             setAudioSamplingRate(44100) // set the desired sampling rate
             setAudioEncodingBitRate(320000)
-            setMaxDuration(2000)
+            setMaxDuration(2500)
 
             try {
                 prepare()

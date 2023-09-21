@@ -34,7 +34,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             LoginDialog().show(parentFragmentManager, "")
         }
 
-//        RemitCheckDialog(RemitCheckModel("10000","졸려", UserRequestModel("국민은행","111111111"))).show(parentFragmentManager,"")
     }
 
     override fun initDataBinding() {
@@ -74,7 +73,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     fun NumberPublicEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
             val num = event.result.predicted_number
-            when(num){
+            when("1"){
                 "1" -> {
                     customTTS.speak(resources.getString(R.string.Main_choose_one))
                     sleep(1000)
@@ -112,6 +111,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                         // 오른쪽으로 스와이프
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
+                        customTTS.tts.stop()
                         // 클릭으로 처리
                         recorder.startOneRecord(filePath,true)
                     }

@@ -1,6 +1,7 @@
 package com.example.bankingnow.ui
 
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Environment
@@ -88,6 +89,12 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         super.onStop()
         // EventBus 해제
         EventBus.getDefault().unregister(this)
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        // 다이얼로그가 dismiss될 때 실행할 코드
+        customTTS.speak(resources.getString(R.string.Main_choose_info) + resources.getString(R.string.record_start))
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

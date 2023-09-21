@@ -25,8 +25,6 @@
 
     <string name="RemitBank_info">은행 입력 단계입니다. 은행 이름을 말씀해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 송금 금액 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
     <string name="RemitBank_remit_check">%s. 다음 단계로 가시려면 왼쪽으로 스와이프를, 은행을 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
-    <string name="RemitBank_info">송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.</string>
-    <string name="RemitBank_remit_check">%s으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.</string>
     <string name="RemitBank_Empty">은행이 입력되지않았습니다</string>
 
     <string name="RemitAccount_info">계좌 번호 입력 단계입니다. 테이블에 숫자를 써 입력해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 은행 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
@@ -38,5 +36,5 @@
 
     <string name="RemitCheck_receiver_check">%s.님에게 %s원.을 송금하시려면, 왼쪽으로 스와이프를, 계좌 번호 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
 
-    <string name="RemitSuccessDialog_info">송금이 완료되었습니다. 화면을 터치하면, 메인 화면으로 돌아갑니다.</string>
+    <string name="RemitSuccessDialog_info">화면을 터치하면, 메인 화면으로 돌아갑니다.</string>
 </resources>

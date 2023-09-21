@@ -191,10 +191,10 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
 //                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트
-//                                customTTS.speak("송금이 완료되었습니다")
-//                                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
-//                                RemitSuccessDialog().show(parentFragmentManager,"")
-//                                dismiss()
+                                customTTS.speak("송금이 완료되었습니다")
+                                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
+                                RemitSuccessDialog().show(parentFragmentManager,"")
+                                dismiss()
                             }
                         }
                     }

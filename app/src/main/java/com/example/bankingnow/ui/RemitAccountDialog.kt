@@ -1,5 +1,6 @@
 package com.example.bankingnow.ui
 
+import android.annotation.SuppressLint
 import android.os.Environment
 import android.os.Handler
 import android.os.Looper
@@ -20,6 +21,7 @@ import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.lang.Thread.sleep
 import java.util.Date
 
 class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layout.dialog_remit_account) {
@@ -102,6 +104,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f
@@ -131,14 +134,19 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                             tts.stop()
                         }
 
+                        remitResultIsFill = viewModel.getRemit().isFill
+                        dismiss()
                         if (remitResultIsFill) {
+                            Log.d("RemitIsNotFill",viewModel.toString())
                             setFragmentResult("Check", bundleOf("isFill" to true))
                             result.value?.let { prefs.setString("account", it) }
                         }
-                        else
+                        else {
+                            Log.d("RemitIsNotFill",viewModel.toString())
                             setFragmentResult("Check", bundleOf("isFill" to false))
-
-                        dismiss()
+                            sleep(1000)
+                            dismiss()
+                        }
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
                         if (customTTS.tts.isSpeaking) {
