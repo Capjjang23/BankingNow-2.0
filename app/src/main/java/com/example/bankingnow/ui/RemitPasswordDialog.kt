@@ -55,7 +55,7 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
         ImageViewList.add(binding.ivPw6)
 
         // setTTS 함수 실행
-        customTTS.speak(resources.getString(R.string.Password_info))
+        setUtil(resources.getString(R.string.Password_info))
 
     }
 
@@ -171,10 +171,18 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         setFragmentResult("ReCheck", bundleOf())
                         dismiss()
                     } else if (distanceX > -10 && distanceX < 10) {
                         // 클릭으로 처리
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         when (state) {
                             "START" -> {
 //                                idx.postValue(1)

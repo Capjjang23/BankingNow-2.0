@@ -3,32 +3,37 @@
 
     <string name="app_start">Banking Now 어플을 실행합니다.</string>
     <string name="no_network">네트워크 연결이 안되어있습니다.</string>
+    <string name="before_step">이전 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="next_step">다음 단계로 넘어가시려면 왼쪽으로 스와이프 해주세요.</string>
+    <string name="record_start">입력을 시작하시려면 화면을 한 번 터치해주세요.</string>
 
     <string name="Login_info">로그인 단계입니다.</string>
 
-    <string name="account_balance">%s님의 %s통장 현재잔액은 %s원입니다. 다시 들으시려면 화면을 터치해주세요.</string>
+    <string name="Password_info">비밀번호 입력을 시작하려면 화면을 한 번 터치 해주세요.</string>
+    <string name="not_correct_pw">비밀번호가 틀립니다. 다시 입력하시려면 화면을 한 번 터치 해주세요.</string>
 
-    <string name="Password_info">비밀번호를 입력해주세요. 입력을 시작하려면 화면을 한 번 터치해주세요.</string>
-    <string name="not_correct_pw">비밀번호가 틀립니다. 터치하여 다시 시도해주세요.</string>
+    <string name="Main_choose_info">현재 잔액 확인은 1, 송금은 2. 를 입력해주세요.</string>
+    <string name="Main_choose_one">현재 잔액 확인을 선택하셨습니다.</string>
 
-    <string name="Main_choose_info">현재 잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 녹음을 시작하려면 화면을 터치하세요</string>
-    <string name="Main_choose_one">현재잔액 확인을 선택하셨습니다.</string>
+    <string name="account_balance">%s.님의 %s 통장. 현재 잔액은 %s원. 입니다. 이전 단계로 돌아가시려면 오른쪽으로 스와이프를, 다시 들으시려면 화면을 한 번 터치해주세요.</string>
+
     <string name="Main_choose_two">송금하기를 선택하셨습니다.</string>
     <string name="Main_choose_again">잘못된 번호입니다. 현재잔액을 확인하시려면 1, 송금하시려면 2를 써주세요. 다시 녹음을 시작하려면 화면을 터치하세요</string>
 
-    <string name="RemitAccount_check_account">1000원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitMoney_info">송금 금액 입력 단계 입니다. 테이블에 숫자를 써 입력해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 메인화면으로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitMoney_money_check">%s원. 다음 단계로 가시려면 왼쪽으로 스와이프를, 송금 금액을 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
 
-    <string name="RemitBank_info">송금하실 은행을 말씀해주세요. 녹음을 시작하려면 화면을 한번 터치해주세요.</string>
-    <string name="RemitBank_remit_check">%s으로 송금하시겠습니까? 송금하시려면 왼쪽으로 스와이프해주세요.</string>
+    <string name="RemitBank_info">은행 입력 단계입니다. 은행 이름을 말씀해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 송금 금액 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitBank_remit_check">%s. 다음 단계로 가시려면 왼쪽으로 스와이프를, 은행을 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
 
-    <string name="RemitCheck_receiver_check">%s님에게 보내겠습니까</string>
+    <string name="RemitAccount_info">계좌 번호 입력 단계입니다. 테이블에 숫자를 써 입력해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 은행 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitAccount_check_account">다음 단계로 가시려면 왼쪽으로 스와이프를, 계좌 번호를 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
 
+    <string name="RemitFragment">계좌 정보 확인 중 입니다.\n잠시 기다려 주세요.</string>
     <string name="RemitFragment_noRemit">필수 항목이 비어 있습니다. 금액 선택 화면으로 돌아갑니다.</string>
     <string name="RemitFragment_noReceiver">없는 고객입니다.</string>
 
-    <string name="RemitMoney_info">송금하실 금액을 입력해주세요</string>
-    <string name="RemitMoney_money_check">%s원. 다시 입력하시려면 터치, 다음 단계로 가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitCheck_receiver_check">%s.님에게 %s원.을 송금하시려면, 왼쪽으로 스와이프를, 계좌 번호 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
 
-    <string name="RemitFragment">계좌 정보 확인 중 입니다.\n잠시 기다려 주세요.</string>
-
+    <string name="RemitSuccessDialog_info">송금이 완료되었습니다. 화면을 터치하면, 메인 화면으로 돌아갑니다.</string>
 </resources>

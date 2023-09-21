@@ -27,8 +27,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
         super.initAfterBinding()
 
         setTouchScreen()
-        val formattedString = getString(R.string.RemitCheck_receiver_check, remitInfo.name)
-        customTTS.speak(formattedString)
+        setUtil(resources.getString(R.string.RemitCheck_receiver_check, remitInfo.name, remitInfo.money))
 
     }
 
@@ -50,10 +49,18 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitAccountDialog().show(parentFragmentManager, "비밀 번호")
                         dismiss()
                     } else if (distanceX < -100) {
                         // 왼쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitPasswordDialog(remitInfo).show(parentFragmentManager, "송금")
                         dismiss()
                     }

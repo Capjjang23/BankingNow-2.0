@@ -32,7 +32,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
     private val handler = Handler()
 
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download" + "/bankingNow" + ".aac"
+    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download" + "/BankingNow_audio" + ".aac"
     private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
@@ -106,18 +106,31 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         recorder.stopRecording()
                         setFragmentResult("Back", bundleOf("isSuccess" to false))
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
                         // 왼쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitBankDialog().show(parentFragmentManager,"송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         when (state) {
                             "FAIL" -> {
                                 idx.postValue(1)
+                                result.value = ""
                                 recorder.startOneRecord(filePath, true)
                             }
                             "RECORD_START" -> {
@@ -128,7 +141,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 customTTS.speak(formattedString)
                             }
                             "SUCCESS" -> {
-                                idx.postValue(0)
+                                idx.postValue(1)
+                                result.value = ""
                                 recorder.startOneRecord(filePath, true)
                             }
                         }

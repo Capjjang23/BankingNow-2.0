@@ -46,21 +46,19 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
     private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData()
 
-    override fun initDataBinding() {
-        super.initDataBinding()
+    override fun initAfterBinding() {
+        super.initStartView()
+
+        setSTT()
+        setTouchScreen()
+        setUtil(resources.getString(R.string.RemitBank_info))
+
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
+        speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
 
         idx.observe(viewLifecycleOwner) {
             state = stateList[idx.value!!]
         }
-
-        Log.d("vm?", "PF: "+requireParentFragment())
-        Log.d("vm?", viewModel.toString())
-    }
-
-    override fun initStartView() {
-        super.initStartView()
-
-        customTTS.speak(resources.getString(R.string.RemitBank_info))
 
         result.observe(viewLifecycleOwner){
             viewModel.setRemitBank(it)
@@ -85,7 +83,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         if (event.isSuccess){
             isResponse.postValue(true)
 
-
             val formattedString = getString(R.string.RemitBank_remit_check, event.result.closest_bank)
             customTTS.speak(formattedString)
 
@@ -107,23 +104,6 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "bankingnow")    // 여분의 키
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR")         // 언어 설정
-
-
-        customTTS.speak(resources.getString(R.string.RemitBank_info))
-
-
-    }
-
-    override fun initAfterBinding() {
-        super.initAfterBinding()
-
-
-        setSTT()
-        setTouchScreen()
-        // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context)
-        speechRecognizer.setRecognitionListener(recognitionListener)    // 리스너 설정
-//        speechRecognizer.startListening(intent) //듣기시작
     }
 
     private fun setTouchScreen() {
@@ -143,14 +123,26 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitMoneyDialog().show(parentFragmentManager, "송금 금액")
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
                         // 왼쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitAccountDialog().show(parentFragmentManager, "송금 계좌")
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         when (state) {
                             "FAIL" -> {
                                 idx.postValue(1)

@@ -29,27 +29,17 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     override fun initStartView() {
         super.initStartView()
 
-
         // 송금 금액 다이얼로그
-//        if (!prefs.getBoolean("isLogin", false)) {
-//            LoginDialog().show(parentFragmentManager,"")
-//        }
-
-        RemitCheckDialog(RemitCheckModel("10000","졸려", UserRequestModel("국민은행","111111111"))).show(parentFragmentManager,"")
+        if (!prefs.getBoolean("isLogin", false)) {
+            LoginDialog().show(parentFragmentManager, "")
+        }
     }
-
-    override fun initDataBinding() {
-        super.initDataBinding()
-
-
-    }
-
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
-
+        setUtil(resources.getString(R.string.Main_choose_info) + resources.getString(R.string.record_start))
         binding.btnBalance.setOnClickListener{
             customVibrator?.vibratePhone()
             navController.navigate(R.id.action_mainFragment_to_balanceFragment)
@@ -59,7 +49,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
             navController.navigate(R.id.action_mainFragment_to_remitFragment)
         }
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -77,7 +66,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     fun NumberPublicEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
             val num = event.result.predicted_number
-            when("2"){
+            when(num){
                 "1" -> {
                     customTTS.speak(resources.getString(R.string.Main_choose_one))
                     sleep(1000)
@@ -91,6 +80,8 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                 else -> customTTS.speak(resources.getString(R.string.Main_choose_again))
 
             }
+        } else{
+            customTTS.speak(resources.getString(R.string.no_network) + resources.getString(R.string.record_start))
         }
     }
 
@@ -114,7 +105,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
-                        recorder.startRecording(filePath,true)
+                        recorder.startOneRecord(filePath,true)
                     }
                 }
             }

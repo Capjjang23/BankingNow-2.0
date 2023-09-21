@@ -18,6 +18,8 @@ class RemitSuccessDialog : BaseDialogFragment<DialogRemitSuccessBinding>(R.layou
     override fun initAfterBinding() {
         super.initAfterBinding()
 
+        setUtil(resources.getString(R.string.RemitSuccessDialog_info))
+
         binding.dialogRemitSuccess.setOnClickListener {
             setFragmentResult("Back", bundleOf("isSuccess" to true))
             dismiss()

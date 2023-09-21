@@ -44,7 +44,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     override fun initDataBinding() {
         super.initDataBinding()
 
-        setUtil("계좌번호를 입력해주세요.")
+        setUtil(resources.getString(R.string.RemitAccount_info))
         setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {
@@ -119,11 +119,18 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         RemitBankDialog().show(parentFragmentManager,"송금 계좌")
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
-
                         // 왼쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         if (remitResultIsFill) {
                             setFragmentResult("Check", bundleOf("isFill" to true))
                             result.value?.let { prefs.setString("account", it) }
@@ -134,8 +141,13 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                         dismiss()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
+
                         when (state) {
                             "FAIL" -> {
+                                result.value = ""
                                 idx.postValue(1)
                                 recorder.startOneRecord(filePath, true)
                             }
@@ -145,6 +157,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                                 customTTS.speak(resources.getString(R.string.RemitAccount_check_account))
                             }
                             "SUCCESS" -> {
+                                result.value = ""
                                 idx.postValue(1)
                                 recorder.startOneRecord(filePath, true)
                             }

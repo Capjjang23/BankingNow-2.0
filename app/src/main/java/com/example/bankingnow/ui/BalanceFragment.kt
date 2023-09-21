@@ -56,9 +56,15 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
                         requireActivity().onBackPressed()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
+                        if (customTTS.tts.isSpeaking) {
+                            tts.stop()
+                        }
                         apiManager.getBalance()
                     }
                 }
