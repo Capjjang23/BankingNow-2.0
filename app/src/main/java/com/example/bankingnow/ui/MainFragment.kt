@@ -33,6 +33,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         if (!prefs.getBoolean("isLogin", false)) {
             LoginDialog().show(parentFragmentManager, "")
         }
+
+//        RemitCheckDialog(RemitCheckModel("10000","졸려", UserRequestModel("국민은행","111111111"))).show(parentFragmentManager,"")
+    }
+
+    override fun initDataBinding() {
+        super.initDataBinding()
+
+
     }
 
     override fun initAfterBinding() {

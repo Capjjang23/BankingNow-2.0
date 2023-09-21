@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.MediaRecorder
 import android.os.Bundle
+import android.os.Environment
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
@@ -40,7 +41,7 @@ class Recorder {
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
             setAudioSamplingRate(44100) // set the desired sampling rate
             setAudioEncodingBitRate(320000)
-            //setMaxDuration(1500)
+            setMaxDuration(2000)
 
             try {
                 prepare()
@@ -70,7 +71,7 @@ class Recorder {
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
             setAudioSamplingRate(44100) // set the desired sampling rate
             setAudioEncodingBitRate(320000)
-            setMaxDuration(1500)
+            setMaxDuration(2000)
 
             try {
                 prepare()
