@@ -45,55 +45,18 @@ class Recorder {
 
             try {
                 prepare()
+                Log.d("RECORD!", "START")
             } catch (e: IOException) {
                 Log.e("APP", "prepare() failed $e")
             }
-
-            // 1.5초 후에 녹음 중단 및 서버 전송
-            Handler().postDelayed({
-                stopRecording()
-                sendFileToServer(filename, isPublic)
-            }, 2500)
 
             start()
         }
-    }
-
-    fun startRecording(filename: String, isPublic: Boolean = false) {
-        lateinit var speechRecognizer: SpeechRecognizer
-        state = State.RECORDING
-
-        // MediaRecorder 객체 초기화 및 설정
-        recorder = MediaRecorder().apply {
-            setAudioSource(MediaRecorder.AudioSource.MIC)
-            setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS) // or MediaRecorder.OutputFormat.MPEG_4
-            setOutputFile(filename)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AAC) // or MediaRecorder.AudioEncoder.DEFAULT
-            setAudioSamplingRate(44100) // set the desired sampling rate
-            setAudioEncodingBitRate(320000)
-            setMaxDuration(2500)
-
-            try {
-                prepare()
-            } catch (e: IOException) {
-                Log.e("APP", "prepare() failed $e")
-            }
-
-            // 녹음 상태 변경을 감시하는 리스너 설정
-            setOnInfoListener { _, what, _ ->
-                if (what == MediaRecorder.MEDIA_RECORDER_INFO_MAX_DURATION_REACHED) {
-                    // 녹음이 완료되면 호출되는 코드
-                    stop()
-                    release()
-
-                    // 녹음 완료 후 다음 작업을 실행
-                    Log.d("audioRecorder", "녹음 중단 및 서버 전송")
-                    sendFileToServer(filename, isPublic)
-                }
-            }
-
-            start() // 녹음 시작은 여기에서
-        }
+        // 2.5초 후에 녹음 중단 및 서버 전송
+        Handler().postDelayed({
+            stopRecording()
+            sendFileToServer(filename, isPublic)
+        }, 2500)
     }
 
 

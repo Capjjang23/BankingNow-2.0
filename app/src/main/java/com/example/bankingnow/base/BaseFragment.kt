@@ -75,8 +75,8 @@ abstract class BaseFragment<B : ViewDataBinding>(@LayoutRes private val layoutRe
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
 
         // vibrator = null
 

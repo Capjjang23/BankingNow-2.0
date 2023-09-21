@@ -85,8 +85,8 @@ abstract class BaseDialogFragment <B: ViewDataBinding> (@LayoutRes private  val 
         dialog?.window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onStop() {
+        super.onStop()
 
         // vibrator = null
 

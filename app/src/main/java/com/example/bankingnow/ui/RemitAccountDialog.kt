@@ -42,12 +42,17 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     private lateinit var state: String
 
     private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
-    private val result: MutableLiveData<String> = MutableLiveData()
+    private val result: MutableLiveData<String> = MutableLiveData("")
 
     override fun initDataBinding() {
         super.initDataBinding()
 
         setUtil(resources.getString(R.string.RemitAccount_info))
+    }
+
+    override fun initAfterBinding() {
+        super.initAfterBinding()
+
         setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {
@@ -58,12 +63,6 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
             binding.tvAccount.text = it
             viewModel.setRemitAccount(it)
         }
-    }
-
-    override fun initAfterBinding() {
-        super.initAfterBinding()
-
-        setTouchScreen()
 
         viewModel.remitLiveData?.observe(viewLifecycleOwner) {
             remitResultIsFill = viewModel.getRemit()!!.isFill
@@ -88,11 +87,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
             isResponse.postValue(true)
 
             if (idx.value == 1) {
-                if (result.value == null){
-                    result.postValue(event.result.predicted_number)
-                }
-                else
-                    result.postValue(result.value + event.result.predicted_number)
+                result.postValue(result.value + event.result.predicted_number)
                 customTTS.speak(event.result.predicted_number)
                 recorder.startOneRecord(filePath, true)
             } else {
@@ -127,6 +122,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                             tts.stop()
                         }
 
+                        recorder.stopRecording()
                         RemitBankDialog().show(parentFragmentManager,"송금 계좌")
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
@@ -138,14 +134,13 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                         remitResultIsFill = viewModel.getRemit().isFill
 
                         if (remitResultIsFill) {
-                            Log.d("RemitIsNotFill",viewModel.toString())
+                            Log.d("RemitIsNotFill", viewModel.toString())
                             setFragmentResult("Check", bundleOf("isFill" to true))
                             dismiss()
                         }
                         else {
                             Log.d("RemitIsNotFill",viewModel.toString())
                             setFragmentResult("Check", bundleOf("isFill" to false))
-                            sleep(1000)
                             dismiss()
                         }
                     } else if (distanceX>-10 && distanceX<10){
