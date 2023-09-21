@@ -12,6 +12,7 @@ class RemitViewModel: ViewModel() {
     val remitLiveData: LiveData<RemitCheckModel>
         get() = _remitLiveData
 
+
     fun getRemit(): RemitIsFillModel {
         return if (_remitLiveData.value!!.money.isNotBlank()
             && _remitLiveData.value!!.user.account.isNotBlank()

@@ -242,17 +242,18 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: RemitResponseModel = response.body()!!
+                    Log.d("remitt",result.result_msg)
                     EventBus.getDefault().post(RemitEvent(true, result))
                 } else {
-                    Log.d("resultt", "실패코드_${response.code()}")
+                    Log.d("remitt", "실패코드_${response.code()}")
                     EventBus.getDefault().post(RemitEvent(false, RemitResponseModel("")))
                 }
             }
 
             override fun onFailure(call: Call<RemitResponseModel>, t: Throwable) {
                 t.printStackTrace()
-                Log.d("resultt", "통신 실패")
-//                EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
+                Log.d("remitt", "통신 실패")
+                EventBus.getDefault().post(UserNameEvent(false, UserResponseModel("")))
             }
         })
     }

@@ -102,18 +102,17 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         if (event.isSuccess) {
             isResponse.postValue(true)
             customVibrator?.vibratePhone()
-            result.value = result.value + event.result.predicted_number
-            setFillCircle(result.value!!.length)
+//            result.value = result.value + event.result.predicted_number
+//            setFillCircle(result.value!!.length)
 
-            if (result.value!!.length < 6) {
-                recorder.startOneRecord(filePath, false)
+            if (idx.value == 1 && result.value!!.length <= 6) {
+                result.value = result.value + event.result.predicted_number
+                setFillCircle(result.value!!.length)
 
-                if (idx.value == 1 && result.value!!.length <= 6) {
+                if (result.value!!.length < 6) {
+                    recorder.startOneRecord(filePath, false)
                     customVibrator?.vibratePhone()
-                    result.value = result.value + event.result.predicted_number
-                    if (result.value!!.length < 6) {
-                        recorder.startOneRecord(filePath, false)
-                    }
+
                 } else {
                     isResponse.postValue(false)
                     idx.postValue(0)
@@ -124,25 +123,29 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                 idx.postValue(0)
             }
         }
+    }
 
         @Subscribe(threadMode = ThreadMode.MAIN)
         fun onLoginEvent(event: LoginEvent) {
             if (event.isSuccess) {
                 if (event.result.is_password_correct) {
+                    Log.d("IsLogin",event.result.is_password_correct.toString())
                     prefs.setBoolean("isLogin", true)
                     customTTS.speak("로그인 성공")
                     dismiss()
                 } else {
-                    customTTS.speak(resources.getString(R.string.not_correct_pw))
-                    resetCircle()
-                    idx.postValue(0)
+//                    Log.d("IsLogin",event.result.is_password_correct.toString())
+//                    customTTS.speak(resources.getString(R.string.not_correct_pw))
+//                    resetCircle()
+//                    idx.postValue(0)
+
                 }
             } else {
                 customTTS.speak(resources.getString(R.string.no_network))
                 idx.postValue(0)
             }
         }
-    }
+
 
 
     private fun setFillCircle(index:Int){
@@ -181,8 +184,9 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                         // 클릭으로 처리
                         when (state) {
                             "START" -> {
-//                                idx.postValue(1)
-//                                result.value = ""
+                                customTTS.tts.stop()
+                                idx.postValue(1)
+                                result.value = ""
 //                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트

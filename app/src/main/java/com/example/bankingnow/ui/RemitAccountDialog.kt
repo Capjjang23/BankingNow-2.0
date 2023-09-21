@@ -16,6 +16,7 @@ import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitAccountBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.model.RemitCheckModel
 import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
@@ -135,11 +136,11 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                         }
 
                         remitResultIsFill = viewModel.getRemit().isFill
-                        dismiss()
+
                         if (remitResultIsFill) {
                             Log.d("RemitIsNotFill",viewModel.toString())
                             setFragmentResult("Check", bundleOf("isFill" to true))
-                            result.value?.let { prefs.setString("account", it) }
+                            dismiss()
                         }
                         else {
                             Log.d("RemitIsNotFill",viewModel.toString())
