@@ -53,7 +53,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
                 apiManager.postUserName(remitResult.user)
             } else {
                 customTTS.speak(resources.getString(R.string.RemitFragment_noRemit))
-                requireActivity().onBackPressed()
+                RemitMoneyDialog().show(parentFragmentManager,"")
             }
         }
 
