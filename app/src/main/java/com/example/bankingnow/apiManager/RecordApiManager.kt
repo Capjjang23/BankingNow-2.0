@@ -62,10 +62,10 @@ class RecordApiManager {
     }
 
     init {
-        // http://192.168.47.145:8000
+        // http://192.168.0.17:8000
         // https://jsonplaceholder.typicode.com
         retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.0.17:8000")
+            .baseUrl("http://192.168.0.6:8000")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

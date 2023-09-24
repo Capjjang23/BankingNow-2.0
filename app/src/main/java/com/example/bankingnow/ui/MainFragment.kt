@@ -31,14 +31,9 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
 
         // 송금 금액 다이얼로그
         if (!prefs.getBoolean("isLogin", false)) {
-            LoginDialog().show(parentFragmentManager, "")
+            navController.navigate(R.id.action_mainFragment_to_loginFragment)
+            // LoginDialog().show(parentFragmentManager, "")
         }
-
-    }
-
-    override fun initDataBinding() {
-        super.initDataBinding()
-
 
     }
 
@@ -73,18 +68,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     fun NumberPublicEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
             val num = event.result.predicted_number
-            when("1"){
+            when(num){
                 "1" -> {
                     customTTS.speak(resources.getString(R.string.Main_choose_one))
-                    sleep(1000)
+                    sleep(3000)
                     navController.navigate(R.id.action_mainFragment_to_balanceFragment)
                 }
-                "2" ->{
+                else ->{
                     customTTS.speak(resources.getString(R.string.Main_choose_two))
-                    sleep(1000)
+                    sleep(3000)
                     navController.navigate(R.id.action_mainFragment_to_remitFragment)
                 }
-                else -> customTTS.speak(resources.getString(R.string.Main_choose_again))
+                // else -> customTTS.speak(resources.getString(R.string.Main_choose_again))
 
             }
         } else{
@@ -109,10 +104,11 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                     // 스와이프를 감지하기 위한 조건 설정
                     if (distanceX > 100) {
                         // 오른쪽으로 스와이프
+                        customTTS.tts.stop()
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
-                        customTTS.tts.stop()
                         // 클릭으로 처리
+                        customTTS.tts.stop()
                         recorder.startOneRecord(filePath,true)
                     }
                 }

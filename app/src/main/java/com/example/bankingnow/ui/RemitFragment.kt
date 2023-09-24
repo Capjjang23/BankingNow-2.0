@@ -1,6 +1,7 @@
 package com.example.bankingnow.ui
 
 import android.util.Log
+import android.view.View
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
@@ -26,6 +27,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
     override fun initStartView() {
         super.initStartView()
 
+        binding.tvLoading.visibility = View.GONE
         // 송금 금액 다이얼로그
         RemitMoneyDialog().show(parentFragmentManager,"")
     }
@@ -38,6 +40,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         }
 
         setFragmentResultListener("Back") { _, bundle ->
+            binding.tvLoading.visibility = View.GONE
             val result = bundle.get("isSuccess") as Boolean
             if (result) {
                 requireActivity().onBackPressed()
@@ -47,6 +50,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         }
 
         setFragmentResultListener("Check") { _, bundle ->
+            binding.tvLoading.visibility = View.VISIBLE
             val result = bundle.get("isFill") as Boolean
             if (result) {
                 // 서버 통신 코드 구현
@@ -60,6 +64,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         }
 
         setFragmentResultListener("ReCheck") { _, _ ->
+            binding.tvLoading.visibility = View.VISIBLE
             RemitCheckDialog(remitResult).show(parentFragmentManager, "")
         }
     }
