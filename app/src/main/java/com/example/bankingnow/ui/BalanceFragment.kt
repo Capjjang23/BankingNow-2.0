@@ -22,6 +22,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
     override fun initStartView() {
         super.initStartView()
 
+
         apiManager.listener = this
         apiManager.getBalance()
     }

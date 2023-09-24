@@ -155,31 +155,3 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         }
     }
 }
-//
-//recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
-//@Subscribe(threadMode = ThreadMode.MAIN)
-//fun onRemitEvent(event: RemitEvent){
-//    if (event.isSuccess){
-//        if (event.result.result_msg == "송금완료"){
-//            remitSuccess.postValue(true)
-//        }else{
-//            remitSuccess.postValue(false)
-//        }
-//    }else{
-//        customTTS.speak(resources.getString(R.string.no_network))
-//        idx.postValue(0)
-//    }
-//}
-
-//"OK" ->{
-//                                if (remitSuccess.value == true) {
-//                                    customTTS.speak("송금이 완료되었습니다")
-//                                    RemitSuccessDialog().show(parentFragmentManager, "")
-//                                    dismiss()
-//                                }
-//                                else{
-//                                    customTTS.speak("잔액이 부족합니다. 메인화면으로 돌아갑니다.")
-//                                    navController.navigate(R.id.action_remitFragment_to_mainFragment)
-//                                    dismiss()
-//                                }
-//                            }

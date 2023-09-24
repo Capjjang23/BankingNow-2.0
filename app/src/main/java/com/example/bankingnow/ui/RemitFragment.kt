@@ -69,4 +69,27 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // EventBus 등록
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // EventBus 해제
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onUserNameEvent(event: UserNameEvent) {
+        if (event.isSuccess){
+            viewModel.remitLiveData.value!!.name = event.result.name
+            RemitCheckDialog(remitResult).show(parentFragmentManager, "")
+        } else {
+            customTTS.speak(resources.getString(R.string.RemitFragment_noReceiver))
+            requireActivity().onBackPressed()
+        }
+    }
 }
+
