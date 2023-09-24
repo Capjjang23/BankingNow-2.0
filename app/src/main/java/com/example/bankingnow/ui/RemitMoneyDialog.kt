@@ -137,7 +137,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 idx.postValue(2)
                                 recorder.stopRecording()
 
-                                val intResult = result.value!!.toInt()
+                                val intResult = result.value!!.toLong()
 
                                 val formattedString = getString(R.string.RemitMoney_money_check, intResult.toString())
                                 customTTS.speak(formattedString)

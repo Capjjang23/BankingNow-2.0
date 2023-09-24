@@ -190,8 +190,8 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 //                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트
-                                prefs.setBoolean("isLogin", true)
-                                dismiss()
+//                                prefs.setBoolean("isLogin", true)
+//                                dismiss()
                             }
                         }
                     }
