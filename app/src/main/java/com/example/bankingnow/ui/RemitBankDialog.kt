@@ -62,6 +62,10 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
         }
 
         result.observe(viewLifecycleOwner){
+            binding.tvBank.text = it
+            binding.bank.visibility = View.INVISIBLE
+            prefs.setString("Account", it)
+
             viewModel.setRemitBank(it)
         }
     }
@@ -88,10 +92,7 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
             customTTS.speak(formattedString)
 
             result.postValue(event.result.closest_bank)
-            binding.tvBank.text = event.result.closest_bank
-            binding.bank.visibility = View.INVISIBLE
             state = "SUCCESS"
-            prefs.setString("Account", event.result.closest_bank)
 
         } else {
             isResponse.postValue(false)
@@ -149,6 +150,11 @@ class RemitBankDialog : BaseDialogFragment<DialogRemitBankBinding>(R.layout.dial
                                 idx.postValue(1)
                                 // stt 구현
                                 speechRecognizer.startListening(intent) //듣기시작
+
+                                // 테스트
+//                                idx.postValue(1)
+//                                result.postValue("카카오뱅크")
+//                                state = "SUCCESS"
                             }
 
                             "RECORD_START" -> {

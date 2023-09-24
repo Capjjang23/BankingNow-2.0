@@ -243,7 +243,7 @@ class RecordApiManager {
                 if (response.isSuccessful) {
                     val result: RemitResponseModel = response.body()!!
                     Log.d("remitt", result.return_msg)
-                    //EventBus.getDefault().post(RemitEvent(true, result))
+                    //EventBus.getDefault().post(RemitEvent(true, result))$
                 } else {
                     Log.d("remitt", "실패코드_${response.code()}")
                     //EventBus.getDefault().post(RemitEvent(false, RemitResponseModel("")))

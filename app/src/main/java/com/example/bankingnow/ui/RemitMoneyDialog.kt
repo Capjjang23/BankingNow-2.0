@@ -132,6 +132,10 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 idx.postValue(1)
                                 result.value = ""
                                 recorder.startOneRecord(filePath, true)
+
+                                // 테스트
+//                                idx.postValue(1)
+//                                result.postValue("100")
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)

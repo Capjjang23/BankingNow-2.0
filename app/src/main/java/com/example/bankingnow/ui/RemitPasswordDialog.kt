@@ -125,13 +125,10 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
-//                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
-//            dismiss()
-//            RemitSuccessDialog().show(parentFragmentManager,"")
-//            Log.d("login","here")
-//            recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
             if (event.result.is_password_correct) {
-                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
+                val remitValue = RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,2)
+                Log.d("remitValuee",remitValue.toString())
+                recordApiManager.remit(remitValue)
                 dismiss()
                 RemitSuccessDialog().show(parentFragmentManager,"")
             } else {
@@ -214,6 +211,9 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
                                 result.value = ""
                                 recorder.startOneRecord(filePath, false)
 
+                                // 테스트
+//                                idx.postValue(1)
+//                                result.postValue("815781")
                             }
                         }
                     }

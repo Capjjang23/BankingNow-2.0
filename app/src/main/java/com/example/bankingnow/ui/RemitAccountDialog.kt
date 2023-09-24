@@ -154,6 +154,10 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                                 result.value = ""
                                 idx.postValue(1)
                                 recorder.startOneRecord(filePath, true)
+
+                                // 테스트
+//                                idx.postValue(1)
+//                                result.postValue("7848539105")
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)
