@@ -181,13 +181,13 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
                         // 클릭으로 처리
                         when (state) {
                             "START" -> {
-//                                idx.postValue(1)
-//                                result.value = ""
-//                                recorder.startOneRecord(filePath, false)
+                                idx.postValue(1)
+                                result.value = ""
+                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트
-                                prefs.setBoolean("isLogin", true)
-                                dismiss()
+//                                prefs.setBoolean("isLogin", true)
+//                                dismiss()
                             }
                         }
                     }
