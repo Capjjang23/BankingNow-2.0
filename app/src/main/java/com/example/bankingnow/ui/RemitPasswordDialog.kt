@@ -131,8 +131,7 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
 //            Log.d("login","here")
 //            recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
             if (event.result.is_password_correct) {
-                customTTS.speak("송금이 완료되었습니다")
-//                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
+                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
                 dismiss()
                 RemitSuccessDialog().show(parentFragmentManager,"")
             } else {
@@ -149,7 +148,7 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRemitEvent(event: RemitEvent){
         if(event.isSuccess){
-            if(event.result.result_msg == "송금완료"){
+            if(event.result.return_msg == "송금완료"){
                 RemitSuccessDialog().show(parentFragmentManager,"송금성공")
                 dismiss()
             }else{
@@ -214,7 +213,6 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
                                 idx.postValue(1)
                                 result.value = ""
                                 recorder.startOneRecord(filePath, false)
-//                                recordApiManager.remit(RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,3))
 
                             }
                         }

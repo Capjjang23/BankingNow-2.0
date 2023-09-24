@@ -9,5 +9,5 @@ data class RemitRequestModel(
 )
 
 data class RemitResponseModel(
-    val result_msg:String
+    val return_msg:String
 )
