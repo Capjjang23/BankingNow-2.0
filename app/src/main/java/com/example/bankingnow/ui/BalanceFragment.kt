@@ -27,12 +27,6 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         apiManager.getBalance()
     }
 
-    override fun initDataBinding() {
-        super.initDataBinding()
-
-    }
-
-
     override fun initAfterBinding() {
         super.initAfterBinding()
 

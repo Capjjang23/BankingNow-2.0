@@ -35,6 +35,17 @@ class MainActivity : AppCompatActivity() {
         prefs.setBoolean("isLogin", false)
     }
 
+    private fun getDrawSize() {
+        val displayMetrics = resources.displayMetrics
+        val screenWidth = displayMetrics.widthPixels
+        val screenHeight = displayMetrics.heightPixels
+
+        val max = if (screenHeight>screenWidth) screenHeight else screenWidth
+        val min = if (screenHeight<screenWidth) screenHeight else screenWidth
+
+        prefs.setString("windowWidth", max.toString())
+    }
+
     private fun checkRecordPermission() {
         when {
             ContextCompat.checkSelfPermission(

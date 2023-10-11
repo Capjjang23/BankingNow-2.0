@@ -12,6 +12,7 @@ import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.model.RemitCheckModel
 import com.example.bankingnow.model.UserRequestModel
+import com.example.bankingnow.util.DrawingView
 import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -37,6 +38,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         // 테스트
         prefs.setBoolean("isLogin", true)
 
+        DrawDialog().show(parentFragmentManager, "DrawDialog")
     }
 
     override fun initAfterBinding() {
