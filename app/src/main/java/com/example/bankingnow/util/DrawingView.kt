@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
+import com.example.bankingnow.MyApplication.Companion.prefs
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -77,13 +78,15 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     }
 
     private fun saveBitmapToImage(bitmap: Bitmap) {
+        val longEdgeSize = if (width >= height) width else height
+
         val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/image.png" // 저장할 파일 경로 및 파일명
         val file = File(filePath)
 
         try {
             val fileOutputStream = FileOutputStream(file)
-            val cropBitmap = toSquare(bitmap) // 1:1 비율로 저장하기 위해
-            cropBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+            val resizedBitmap = resizeBitmapToLongEdge(bitmap, longEdgeSize)
+            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
             fileOutputStream.close()
             Toast.makeText(context, "그림이 저장되었습니다.", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
@@ -92,15 +95,26 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         }
     }
 
-    private fun toSquare(bitmap: Bitmap): Bitmap {
+    private fun resizeBitmapToLongEdge(bitmap: Bitmap, longEdgeSize: Int): Bitmap {
         val width = bitmap.width
         val height = bitmap.height
 
-        val size = if (width >= height) height else width
-        val x = (width - size) / 2
-        val y = (height - size) / 2
+        val max = if(width>height) width else height
 
-        return Bitmap.createBitmap(bitmap, x, y, size, size)
+        val resultBitmap = Bitmap.createBitmap(max, max, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(resultBitmap)
+
+        // 이미지를 중앙에 그릴 위치 계산
+        val left = (max - width) / 2
+        val top = (max - height) / 2
+
+        // 이미지를 중앙에 그리고 나머지 영역을 투명하게 만듭니다.
+        val paint = Paint()
+        paint.color = Color.WHITE
+        canvas.drawRect(0f, 0f, max.toFloat(), max.toFloat(), paint)
+        canvas.drawBitmap(bitmap, left.toFloat(), top.toFloat(), null)
+
+        return resultBitmap
     }
 
     fun clearDrawing() {
