@@ -88,6 +88,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             val resizedBitmap = resizeBitmapToLongEdge(bitmap, longEdgeSize)
             resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
             fileOutputStream.close()
+            clearDrawing()
             Toast.makeText(context, "그림이 저장되었습니다.", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             e.printStackTrace()
