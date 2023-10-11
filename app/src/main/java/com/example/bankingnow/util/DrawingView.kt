@@ -51,14 +51,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             MotionEvent.ACTION_UP -> {
                 val upEventTime = System.currentTimeMillis()
 
-                // ACTION_UP 이벤트가 발생한 후 0.5초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
+                // ACTION_UP 이벤트가 발생한 후 0.7초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
                 val handler = Handler()
                 handler.postDelayed({
-                    if(upEventTime - downEventTime>500){
+                    if(upEventTime>downEventTime){
                         savedBitmap = getDrawingBitmap()
                         saveBitmapToImage(savedBitmap!!)
                     }
-                }, 500)
+                }, 700)
 
                 return true
             }
