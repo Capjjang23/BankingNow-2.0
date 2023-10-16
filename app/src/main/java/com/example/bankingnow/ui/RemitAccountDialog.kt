@@ -1,37 +1,27 @@
 package com.example.bankingnow.ui
 
-import android.os.Environment
+import android.annotation.SuppressLint
+import android.util.Log
 import android.view.MotionEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
-import com.example.bankingnow.databinding.DialogRemitMoneyBinding
-import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.databinding.DialogRemitAccountBinding
 import com.example.bankingnow.base.BaseDialogFragment
-import com.example.bankingnow.util.Recorder
-import com.example.bankingnow.viewmodel.MainViewModel
+import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.lang.Thread.sleep
 import java.util.Date
 
-
-class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dialog_remit_money) {
+class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layout.dialog_remit_account) {
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
-
-
-    private val mainViewModel by lazy {
-        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
-    }
-
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-    private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
@@ -40,15 +30,15 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
 
-    override fun initStartView() {
-        super.initStartView()
+    override fun initDataBinding() {
+        super.initDataBinding()
 
-        viewModel.setRemitAccount(prefs.getString("Dpnm", ""))
+        setUtil(resources.getString(R.string.RemitAccount_info))
     }
+
     override fun initAfterBinding() {
         super.initAfterBinding()
 
-        setUtil(resources.getString(R.string.RemitMoney_info))
         setTouchScreen()
 
         idx.observe(viewLifecycleOwner) {
@@ -56,8 +46,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         }
 
         result.observe(viewLifecycleOwner) {
-            binding.tvMoney.text = it
-            viewModel.setRemitMoney(it)
+            binding.tvAccount.text = it
+            viewModel.setRemitAccount(it)
         }
     }
 
@@ -91,11 +81,12 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun setTouchScreen() {
         var startX = 0f
         var startY = 0f
 
-        binding.dialogRemitMoney.setOnTouchListener { _, event ->
+        binding.dialogRemitAccount.setOnTouchListener { _, event ->
             when (event?.action) {
                 MotionEvent.ACTION_DOWN -> {
                     startX = event.x
@@ -111,7 +102,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                         if (customTTS.tts.isSpeaking) {
                             tts.stop()
                         }
-                        setFragmentResult("Back", bundleOf("isSuccess" to false))
+
+                        RemitMoneyDialog().show(parentFragmentManager,"송금 금액")
                         dismiss()
                     } else if (state=="SUCCESS" && distanceX < -100){
                         // 왼쪽으로 스와이프
@@ -119,8 +111,15 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                             tts.stop()
                         }
 
-                        RemitAccountDialog().show(parentFragmentManager, "")
-                        dismiss()
+                        val remitResultIsFill = viewModel.isFill()
+                        if (remitResultIsFill) {
+                            setFragmentResult("Check", bundleOf("isFill" to true))
+                            dismiss()
+                        }
+                        else {
+                            setFragmentResult("Check", bundleOf("isFill" to false))
+                            dismiss()
+                        }
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
                         if (customTTS.tts.isSpeaking) {
@@ -129,37 +128,26 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
                         when (state) {
                             "FAIL" -> {
-//                                idx.postValue(1)
-//                                result.value = ""
-//                                recorder.startOneRecord(filePath, true)
+                                result.value = ""
+                                idx.postValue(1)
 
                                 // 테스트
-                                idx.postValue(1)
-                                result.postValue("100")
+//                                idx.postValue(1)
+//                                result.postValue("7848539105")
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)
-
-                                if (result.value!!.isNotBlank()){
-                                    val intResult = result.value!!.toLong()
-
-                                    val formattedString = getString(R.string.RemitMoney_money_check, intResult.toString())
-                                    customTTS.speak(formattedString)
-                                } else{
-                                    idx.postValue(0)
-                                    customTTS.speak(resources.getString(R.string.RemitMoney_blank))
-                                }
+                                customTTS.speak(resources.getString(R.string.RemitAccount_check_account))
                             }
                             "SUCCESS" -> {
-                                idx.postValue(1)
                                 result.value = ""
-                                recorder.startOneRecord(filePath, true)
+                                idx.postValue(1)
                             }
                         }
                     }
                 }
             }
-            true // 이벤트 소비
+            true
         }
     }
 }

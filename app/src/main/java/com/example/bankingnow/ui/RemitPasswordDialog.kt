@@ -43,10 +43,6 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     private val stateList: Array<String> = arrayOf("START", "RECORD_START","OK")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
-
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-
-    private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
@@ -84,7 +80,7 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
 
         result.observe(viewLifecycleOwner) {
             if (it.length ==6) {
-                recorder.stopRecording()
+                // DrawView 삭제
                 recordApiManager.toLoginService(it)
             }
         }
@@ -117,7 +113,6 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
                 setFillCircle(result.value!!.length)
 
                 if (result.value!!.length < 6) {
-                    recorder.startOneRecord(filePath, false)
                     customVibrator?.vibratePhone()
 
                 } else {
