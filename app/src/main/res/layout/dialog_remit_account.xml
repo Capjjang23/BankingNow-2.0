@@ -17,7 +17,7 @@
             android:layout_marginStart="36dp"
             android:layout_marginTop="153dp"
             android:fontFamily="@font/nanum_gothic_bold"
-            android:text="핀 번호"
+            android:text="계좌 번호"
             android:textColor="@color/mainBlack"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"

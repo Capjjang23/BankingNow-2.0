@@ -17,7 +17,6 @@ import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitRequestModel
-import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -36,10 +35,6 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     private val stateList: Array<String> = arrayOf("START", "RECORD_START","OK")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
-
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-
-    private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
@@ -77,7 +72,7 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
 
         result.observe(viewLifecycleOwner) {
             if (it.length ==6) {
-                recorder.stopRecording()
+                // DrawView 삭제
                 recordApiManager.toLoginService(it)
             }
         }
@@ -110,7 +105,6 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
                 setFillCircle(result.value!!.length)
 
                 if (result.value!!.length < 6) {
-                    recorder.startOneRecord(filePath, false)
                     customVibrator?.vibratePhone()
 
                 } else {
