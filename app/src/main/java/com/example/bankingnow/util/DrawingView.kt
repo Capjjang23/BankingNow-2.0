@@ -10,12 +10,14 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import com.example.bankingnow.MyApplication.Companion.prefs
+import com.example.bankingnow.model.MainViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var downEventTime: Long = 0
+    private lateinit var viewModel: MainViewModel
 
     private var path = Path()
     private var paint = Paint()
@@ -27,8 +29,9 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         paint.style = Paint.Style.STROKE
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
-        paint.strokeWidth = 10f
+        paint.strokeWidth = 100f
     }
+
 
     override fun onDraw(canvas: Canvas) {
         canvas.drawPath(path, paint)
@@ -77,6 +80,16 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         return bitmap
     }
 
+    fun getBitmapFromFilePath(filePath: String): Bitmap? {
+        return BitmapFactory.decodeFile(filePath)
+    }
+
+
+    fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
+        return Bitmap.createScaledBitmap(bitmap, width, height, false)
+    }
+
+
     private fun saveBitmapToImage(bitmap: Bitmap) {
         val longEdgeSize = if (width >= height) width else height
 
@@ -90,6 +103,20 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             fileOutputStream.close()
             clearDrawing()
             Toast.makeText(context, "그림이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+
+            val bitmap = getBitmapFromFilePath(filePath)
+            if (bitmap != null) {
+                // 비트맵을 성공적으로 가져온 경우 여기에서 처리
+                val resizedBitmap = resizeBitmap(bitmap, 28, 28)
+
+                viewModel.classify(resizedBitmap)
+
+
+                Log.d("viewModell", viewModel.result.value?.label.toString())
+            } else {
+                // 비트맵 가져오기에 실패한 경우 여기에서 처리
+            }
+
         } catch (e: IOException) {
             e.printStackTrace()
             Toast.makeText(context, "그림을 저장하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
