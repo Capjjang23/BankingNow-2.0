@@ -1,8 +1,5 @@
 package com.example.bankingnow.api
 
-import com.example.bankingnow.model.GetBalanceModel
-import com.example.bankingnow.model.BankRequestModel
-import com.example.bankingnow.model.BankResponseModel
 import com.example.bankingnow.model.NumberModel
 import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
@@ -15,8 +12,11 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface RecordService {
-    @POST("/audio_test/")
-    fun postTest(@Body postData: RecordModel): Call<NumberModel>
+    @POST("/server")
+    fun postTest(): Call<PostTestModel>
+
+    @POST("/balance")
+    fun postBalance(@Body request: BalanceRequestModel): Call<BalanceResponseModel>
 
     @POST("/process_audio/")
     fun postNumber(@Body postData: RecordModel): Call<NumberModel>
@@ -24,15 +24,6 @@ interface RecordService {
     @POST("/accounts/check_password/")
     fun checkPassword(@Body request: PasswordCheckRequest): Call<PasswordCheckResponse>
 
-    @GET("/money/check_balance/")
-    fun getBalance():Call<GetBalanceModel>
-
-    @POST("/post_bank/")
-    fun postBank(@Body request: BankRequestModel):Call<BankResponseModel>
-
-    @POST("/money/account-check/")
-    fun postUserName(@Body request: UserRequestModel):Call<UserResponseModel>
-
-    @POST("money/transfer/")
-    fun remit(@Body request: RemitRequestModel):Call<RemitResponseModel>
+    @POST("/draw-transfer")
+    fun tryRemit(@Body request: RemitRequestModel):Call<RemitResponseModel>
 }

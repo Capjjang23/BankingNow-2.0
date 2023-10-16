@@ -1,21 +1,16 @@
 package com.example.bankingnow.ui
 
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Environment
-import android.os.Handler
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
@@ -23,16 +18,23 @@ import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.RemitEvent
-import com.example.bankingnow.model.RemitCheckModel
 import com.example.bankingnow.model.RemitRequestModel
 import com.example.bankingnow.util.Recorder
+import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.lang.Thread.sleep
 import java.util.Date
-import java.util.Locale
 
-class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
+class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.layout.dialog_remit_password) {
+    private val viewModel by lazy {
+        ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
+    }
+    private lateinit var account: String
+    private lateinit var money: String
+    private lateinit var remitValue: RemitRequestModel
+
     private val stateList: Array<String> = arrayOf("START", "RECORD_START","OK")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
@@ -50,6 +52,10 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
     private val pass: MutableLiveData<Boolean> = MutableLiveData(false)
 
     override fun initStartView() {
+        account = prefs.getString("FinAcno","")
+        money = viewModel.remitLiveData.value!!.money
+        remitValue = RemitRequestModel(account, money)
+
         ImageViewList.add(binding.ivPw1)
         ImageViewList.add(binding.ivPw2)
         ImageViewList.add(binding.ivPw3)
@@ -75,7 +81,6 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
             if (it.length ==6) {
                 recorder.stopRecording()
                 recordApiManager.checkPW(it)
-                Log.d("pw_result", it)
             }
         }
 
@@ -126,9 +131,8 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
             if (event.result.is_password_correct) {
-                val remitValue = RemitRequestModel(remitInfo.user.bank,remitInfo.user.account,remitInfo.money,1,2)
-                Log.d("remitValuee",remitValue.toString())
-                recordApiManager.remit(remitValue)
+
+                recordApiManager.tryRemit(remitValue)
                 dismiss()
                 RemitSuccessDialog().show(parentFragmentManager,"")
             } else {
@@ -145,11 +149,12 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRemitEvent(event: RemitEvent){
         if(event.isSuccess){
-            if(event.result.return_msg == "송금완료"){
+            if(event.result.isRemit){
                 RemitSuccessDialog().show(parentFragmentManager,"송금성공")
                 dismiss()
             }else{
                 customTTS.speak(resources.getString(R.string.Remit_low_balance))
+                sleep(3000)
                 dismiss()
                 navController.navigate(R.id.action_remitFragment_to_mainFragment)
             }
@@ -158,8 +163,6 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
             idx.postValue(0)
         }
     }
-
-
 
     private fun setFillCircle(index:Int){
         for (i in 1..index){
@@ -174,7 +177,6 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
             ImageViewList[i-1].setImageDrawable(drawable)
         }
     }
-
 
     private fun setTouchScreen() {
         var startX = 0f
@@ -207,13 +209,13 @@ class RemitPasswordDialog(val remitInfo: RemitCheckModel) : BaseDialogFragment<D
 
                         when (state) {
                             "START" -> {
-                                idx.postValue(1)
-                                result.value = ""
-                                recorder.startOneRecord(filePath, false)
+//                                idx.postValue(1)
+//                                result.value = ""
+//                                recorder.startOneRecord(filePath, false)
 
                                 // 테스트
-//                                idx.postValue(1)
-//                                result.postValue("815781")
+                                idx.postValue(1)
+                                recordApiManager.tryRemit(remitValue)
                             }
                         }
                     }

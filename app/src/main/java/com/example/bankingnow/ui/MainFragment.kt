@@ -1,7 +1,6 @@
 package com.example.bankingnow.ui
 
 import android.os.Environment
-import android.util.Log
 import android.view.MotionEvent
 import androidx.core.app.ActivityCompat
 import com.example.bankingnow.MyApplication.Companion.prefs
@@ -10,9 +9,6 @@ import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.NumberPublicEvent
-import com.example.bankingnow.model.RemitCheckModel
-import com.example.bankingnow.model.UserRequestModel
-import com.example.bankingnow.util.DrawingView
 import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -38,7 +34,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         // 테스트
         prefs.setBoolean("isLogin", true)
 
-        DrawDialog().show(parentFragmentManager, "DrawDialog")
+        // DrawDialog().show(parentFragmentManager, "DrawDialog")
     }
 
     override fun initAfterBinding() {

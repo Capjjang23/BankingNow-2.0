@@ -2,43 +2,45 @@ package com.example.bankingnow.ui
 
 import android.os.Handler
 import android.view.MotionEvent
-import android.view.View
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.base.BaseDialogFragment
-import com.example.bankingnow.event.BankEvent
-import com.example.bankingnow.event.RemitEvent
-import com.example.bankingnow.model.RemitCheckModel
 import com.example.bankingnow.model.RemitRequestModel
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import com.example.bankingnow.viewmodel.RemitViewModel
 import java.text.NumberFormat
 import java.util.Locale
+import kotlin.properties.Delegates
 
-class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
-    private val handler = Handler()
-    private val remitInfo: RemitCheckModel = remitInfo
-    private var recordApiManager = RecordApiManager()
+class RemitCheckDialog() : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.dialog_remit_check) {
+    private val viewModel by lazy {
+        ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
+    }
+    private lateinit var name: String
+    private lateinit var money: String
+
+    override fun initStartView() {
+        super.initStartView()
+
+        name = prefs.getString("Dpnm", "홍길동")
+        money = addCommasToNumber(viewModel.remitLiveData.value!!.money.toLong())
+    }
     override fun initDataBinding() {
         super.initDataBinding()
 
-        binding.tvRemitName.text = remitInfo.name
-        binding.tvRemitBank.text = remitInfo.user.bank
-        binding.tvRemitMoney.text = addCommasToNumber(remitInfo.money.toLong())
+        binding.tvRemitName.text = name
+        binding.tvRemitBank.text = "농협은행"
+        binding.tvRemitMoney.text = money
     }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
-        setUtil(resources.getString(R.string.RemitCheck_receiver_check, remitInfo.name, remitInfo.money))
-
+        setUtil(resources.getString(R.string.RemitCheck_receiver_check, name, money))
     }
-
 
 
     private fun setTouchScreen() {
@@ -62,7 +64,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
                             tts.stop()
                         }
 
-                        RemitAccountDialog().show(parentFragmentManager, "비밀 번호")
+                        RemitMoneyDialog().show(parentFragmentManager, "송금 금액")
                         dismiss()
                     } else if (distanceX < -100) {
                         // 왼쪽으로 스와이프
@@ -70,7 +72,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
                             tts.stop()
                         }
 
-                        RemitPasswordDialog(remitInfo).show(parentFragmentManager, "송금")
+                        RemitPasswordDialog().show(parentFragmentManager, "비밀번호 입력")
                         dismiss()
                     }
                 }
@@ -80,7 +82,7 @@ class RemitCheckDialog(remitInfo: RemitCheckModel) : BaseDialogFragment<DialogRe
     }
 
 
-    fun addCommasToNumber(number: Long): String {
+    private fun addCommasToNumber(number: Long): String {
         val numberFormat = NumberFormat.getNumberInstance(Locale.US)
         return numberFormat.format(number)
     }
