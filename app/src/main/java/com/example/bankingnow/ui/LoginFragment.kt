@@ -16,8 +16,6 @@ import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.util.CustomVibrator
-import com.example.bankingnow.util.DrawingView
-import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.MainViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -32,7 +30,7 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
 
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
 
-    private var recorder = Recorder()
+//    private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
@@ -80,7 +78,7 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
 
         result.observe(viewLifecycleOwner) {
             if (it.length ==6) {
-                recorder.stopRecording()
+//                recorder.stopRecording()
                 recordApiManager.toLoginService(it)
                 Log.d("pw_result", it)
             }
@@ -114,7 +112,7 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
                 setFillCircle(result.value!!.length)
 
                 if (result.value!!.length < 6) {
-                    recorder.startOneRecord(filePath, false)
+//                    recorder.startOneRecord(filePath, false)
                     customVibrator?.vibratePhone()
 
                 } else {

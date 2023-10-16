@@ -11,7 +11,6 @@ import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitMoneyBinding
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.base.BaseDialogFragment
-import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
@@ -31,7 +30,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
     }
 
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-    private var recorder = Recorder()
+//    private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
@@ -153,7 +152,7 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                             "SUCCESS" -> {
                                 idx.postValue(1)
                                 result.value = ""
-                                recorder.startOneRecord(filePath, true)
+//                                recorder.startOneRecord(filePath, true)
                             }
                         }
                     }
