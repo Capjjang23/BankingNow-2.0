@@ -10,7 +10,6 @@ import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.event.RemitEvent
-import com.example.bankingnow.model.PasswordCheckRequest
 import com.example.bankingnow.model.PasswordCheckResponse
 import com.example.bankingnow.model.RecordModel
 import com.example.bankingnow.model.*
@@ -19,8 +18,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.greenrobot.eventbus.EventBus
 import retrofit2.*
 import retrofit2.converter.gson.GsonConverterFactory
-import java.text.SimpleDateFormat
-import java.util.Date
 
 class RecordApiManager {
     private var retrofit: Retrofit? = null
@@ -152,30 +149,29 @@ class RecordApiManager {
         })
     }
 
-    fun checkPW(password: String) {
-        val passwordCheckRequest = PasswordCheckRequest(password)
-        val resultData: Call<PasswordCheckResponse>? =
-            retrofitService?.checkPassword(passwordCheckRequest)
-        resultData?.enqueue(object : Callback<PasswordCheckResponse> {
+    fun toLoginService(password: String) {
+        val request = LoginRequestModel(password)
+        val resultData: Call<LoginResponseModel>? = retrofitService?.loginService(request)
+        resultData?.enqueue(object : Callback<LoginResponseModel> {
             override fun onResponse(
-                call: Call<PasswordCheckResponse>,
-                response: Response<PasswordCheckResponse>
+                call: Call<LoginResponseModel>,
+                response: Response<LoginResponseModel>
             ) {
                 if (response.isSuccessful) {
-                    val result: PasswordCheckResponse = response.body()!!
+                    val result: LoginResponseModel = response.body()!!
                     Log.d("password check", result.toString())
                     updateTokenInRetrofit("")
                     EventBus.getDefault().post(LoginEvent(true, result))
                 } else {
                     Log.d("password check", "실패")
                     Log.d("response:", response.toString())
-                    EventBus.getDefault().post(LoginEvent(false, PasswordCheckResponse()))
+                    EventBus.getDefault().post(LoginEvent(false, LoginResponseModel(false)))
                 }
             }
 
-            override fun onFailure(call: Call<PasswordCheckResponse>, t: Throwable) {
+            override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
                 t.printStackTrace()
-                EventBus.getDefault().post(LoginEvent(false, PasswordCheckResponse()))
+                EventBus.getDefault().post(LoginEvent(false, LoginResponseModel(false)))
                 Log.d("password check", "통신 실패")
             }
         })
@@ -215,9 +211,9 @@ class RecordApiManager {
         })
     }
 
-    fun tryRemit(postData: RemitRequestModel) {
+    fun toRemitService(postData: RemitRequestModel) {
         Log.d("remitt_post: ", postData.toString())
-        val resultData: Call<RemitResponseModel>? = retrofitService?.tryRemit(postData)
+        val resultData: Call<RemitResponseModel>? = retrofitService?.remitService(postData)
         resultData?.enqueue(object : Callback<RemitResponseModel> {
             override fun onResponse(
                 call: Call<RemitResponseModel>,

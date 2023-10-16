@@ -61,7 +61,7 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
         result.observe(viewLifecycleOwner) {
             if (it.length ==6) {
                 recorder.stopRecording()
-                recordApiManager.checkPW(it)
+                recordApiManager.toLoginService(it)
                 Log.d("pw_result", it)
             }
         }
@@ -112,13 +112,13 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
-            if (event.result.is_password_correct) {
-                Log.d("IsLogin",event.result.is_password_correct.toString())
+            if (event.result.isLogin) {
+                Log.d("IsLogin",event.result.isLogin.toString())
                 MyApplication.prefs.setBoolean("isLogin", true)
                 customTTS.speak("로그인 성공")
                 requireActivity().onBackPressed()
             } else {
-                    Log.d("IsLogin",event.result.is_password_correct.toString())
+                    Log.d("IsLogin",event.result.isLogin.toString())
                     customTTS.speak(resources.getString(R.string.not_correct_pw))
                     resetCircle()
                     idx.postValue(0)
@@ -174,7 +174,8 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
                                 result.value = ""
                                 // recorder.startOneRecord(filePath, false)
 
-                                DrawDialog().show(parentFragmentManager, "")
+                                // DrawDialog().show(parentFragmentManager, "")
+                                result.value = "123456"
 
                                 // 테스트
 //                                MyApplication.prefs.setBoolean("isLogin", true)
