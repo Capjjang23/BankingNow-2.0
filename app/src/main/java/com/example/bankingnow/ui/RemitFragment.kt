@@ -1,17 +1,14 @@
 package com.example.bankingnow.ui
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentRemitBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.RemitEvent
-import com.example.bankingnow.event.UserNameEvent
-import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.model.RemitRequestModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -22,7 +19,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
-    private var remitResult = RemitCheckModel()
+    private var remitResult = RemitRequestModel()
 
     override fun initStartView() {
         super.initStartView()
@@ -55,8 +52,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
             if (result) {
                 // 서버 통신 코드 구현
                 // 계좌 정보가 유효 하다면 CheckDialog show
-                remitResult = viewModel.remitLiveData.value!!
-                apiManager.postUserName(remitResult.user)
+                RemitCheckDialog().show(parentFragmentManager, "")
             } else {
                 customTTS.speak(resources.getString(R.string.RemitFragment_noRemit))
                 RemitMoneyDialog().show(parentFragmentManager,"")
@@ -65,30 +61,7 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
 
         setFragmentResultListener("ReCheck") { _, _ ->
             binding.tvLoading.visibility = View.VISIBLE
-            RemitCheckDialog(remitResult).show(parentFragmentManager, "")
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onUserNameEvent(event: UserNameEvent) {
-        if (event.isSuccess){
-            viewModel.remitLiveData.value!!.name = event.result.name
-            RemitCheckDialog(remitResult).show(parentFragmentManager, "")
-        } else {
-            customTTS.speak(resources.getString(R.string.RemitFragment_noReceiver))
-            requireActivity().onBackPressed()
+            RemitCheckDialog().show(parentFragmentManager, "")
         }
     }
 }

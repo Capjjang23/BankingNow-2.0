@@ -1,26 +1,21 @@
 package com.example.bankingnow.ui
 
-import android.content.DialogInterface
 import android.os.Environment
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.DialogLoginBinding
-import com.example.bankingnow.databinding.FragmentRemitBinding
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
-import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.util.DrawingView
 import com.example.bankingnow.util.Recorder
-import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -136,6 +131,8 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
 
 
 
+
+
     private fun setFillCircle(index:Int){
         for (i in 1..index){
             val drawable = context?.let { ContextCompat.getDrawable(it, R.drawable.fill_circle) }
@@ -175,7 +172,9 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
                                 customTTS.tts.stop()
                                 idx.postValue(1)
                                 result.value = ""
-                                recorder.startOneRecord(filePath, false)
+                                // recorder.startOneRecord(filePath, false)
+
+                                DrawDialog().show(parentFragmentManager, "")
 
                                 // 테스트
 //                                MyApplication.prefs.setBoolean("isLogin", true)

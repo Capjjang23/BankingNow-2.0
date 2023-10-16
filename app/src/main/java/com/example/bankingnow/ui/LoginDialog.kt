@@ -1,15 +1,9 @@
 package com.example.bankingnow.ui
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.os.Environment
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
-import android.view.ViewGroup
-import android.view.WindowManager
 import com.example.bankingnow.MyApplication.Companion.prefs
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat
@@ -19,16 +13,13 @@ import com.example.bankingnow.R
 import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogLoginBinding
-import com.example.bankingnow.util.CustomTTS.Companion.TTS_ID
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
-import com.example.bankingnow.event.NumberPublicEvent
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
-import java.util.Locale
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 

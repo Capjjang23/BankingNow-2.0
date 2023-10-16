@@ -11,6 +11,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.ActivityMainBinding
+import java.text.SimpleDateFormat
+import java.util.Date
 
 class MainActivity : AppCompatActivity() {
     companion object {
@@ -33,6 +35,12 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment.navController
 
         prefs.setBoolean("isLogin", false)
+        prefs.setString("Dpnm", "싱크트리")
+        prefs.setString("Iscd", "002116")
+        prefs.setString("AccessToken", "b51e05230924338a995143c03eb8a12d9cc4e48fbfc573a00b0f3fb64a62be6e")
+        prefs.setString("Bncd", "011")
+        prefs.setString("Acno", "3020000009308")
+        prefs.setString("FinAcno", "00820100021160000000000017092")
     }
 
     private fun checkRecordPermission() {

@@ -1,37 +1,34 @@
 package com.example.bankingnow.ui
 
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.MotionEvent
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
+import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.FragmentBalanceBinding
-import com.example.bankingnow.model.GetBalanceModel
-import java.text.NumberFormat
+import com.example.bankingnow.model.BalanceResponseModel
+import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_balance),
-    RecordApiManager.getMyBalance {
-    private val TTS_ID = "TTS"
-
+    RecordApiManager.postMyBalance {
     private val apiManager = RecordApiManager()
+    private val finAcno = prefs.getString("FinAcno", "")
 
     override fun initStartView() {
         super.initStartView()
 
-
         apiManager.listener = this
-        apiManager.getBalance()
+
+        apiManager.postBalance(finAcno)
     }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
-
     }
 
     private fun setTouchScreen() {
@@ -60,7 +57,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
                         if (customTTS.tts.isSpeaking) {
                             tts.stop()
                         }
-                        apiManager.getBalance()
+                        apiManager.postBalance(finAcno)
                     }
                 }
             }
@@ -68,20 +65,28 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
         }
     }
 
-    override fun getBalance(balanceModel: GetBalanceModel) {
+    override fun postBalance(balanceModel: BalanceResponseModel) {
         Log.d("잔액확인", balanceModel.toString())
-        binding.tvUserInfo.text = "${balanceModel.user_id} 님\n${balanceModel.bank_name} 통장잔액"
-        binding.tvBalance.text = addCommasToNumber(balanceModel.balance) + " 원"
+        val depositor = prefs.getString("Dpnm", "")
 
+        binding.tvUserInfo.text = "${depositor} 님\n농협은행 통장잔액"
+        binding.tvBalance.text = balanceModel.Ldbl + " 원"
 
-        val formattedString = getString(R.string.account_balance, balanceModel.user_id, balanceModel.bank_name, balanceModel.balance.toString())
+        val formattedString = getString(R.string.account_balance, depositor, "농협은행", balanceModel.Ldbl)
         customTTS.speak(formattedString)
 
     }
 
-    fun addCommasToNumber(number: Long): String {
-        val numberFormat = NumberFormat.getNumberInstance(Locale.US)
-        return numberFormat.format(number)
+    fun getDate(): String {
+        val sdf = SimpleDateFormat("yyyyMMdd")
+        val currentDate = Date()
+        return sdf.format(currentDate)
+    }
+
+    fun getTime(): String {
+        val sdf = SimpleDateFormat("HHmmss")
+        val currentTime = Date()
+        return sdf.format(currentTime)
     }
 
 }

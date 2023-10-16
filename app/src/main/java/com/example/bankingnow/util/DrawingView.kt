@@ -30,6 +30,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
         paint.strokeWidth = 100f
+        paint.strokeWidth = 50f
     }
 
 
@@ -54,14 +55,14 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             MotionEvent.ACTION_UP -> {
                 val upEventTime = System.currentTimeMillis()
 
-                // ACTION_UP 이벤트가 발생한 후 0.5초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
+                // ACTION_UP 이벤트가 발생한 후 0.7초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
                 val handler = Handler()
                 handler.postDelayed({
-                    if(upEventTime - downEventTime>500){
+                    if(upEventTime>downEventTime){
                         savedBitmap = getDrawingBitmap()
                         saveBitmapToImage(savedBitmap!!)
                     }
-                }, 500)
+                }, 700)
 
                 return true
             }
@@ -93,7 +94,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private fun saveBitmapToImage(bitmap: Bitmap) {
         val longEdgeSize = if (width >= height) width else height
 
-        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/image.png" // 저장할 파일 경로 및 파일명
+        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/num.png" // 저장할 파일 경로 및 파일명
         val file = File(filePath)
 
         try {

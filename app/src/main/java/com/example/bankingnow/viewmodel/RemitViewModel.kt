@@ -4,23 +4,17 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.bankingnow.model.RemitIsFillModel
-import com.example.bankingnow.model.RemitCheckModel
+import com.example.bankingnow.model.RemitRequestModel
 
 class RemitViewModel: ViewModel() {
-    private val _remitLiveData: MutableLiveData<RemitCheckModel> = MutableLiveData(RemitCheckModel())
-    val remitLiveData: LiveData<RemitCheckModel>
+    private val _remitLiveData: MutableLiveData<RemitRequestModel> = MutableLiveData(RemitRequestModel())
+    val remitLiveData: LiveData<RemitRequestModel>
         get() = _remitLiveData
 
 
-    fun getRemit(): RemitIsFillModel {
-        return if (_remitLiveData.value!!.money.isNotBlank()
-            && _remitLiveData.value!!.user.account.isNotBlank()
-            && _remitLiveData.value!!.user.bank.isNotBlank())
-            RemitIsFillModel(true, _remitLiveData.value!!)
-        else {
-            RemitIsFillModel(false, RemitCheckModel())
-        }
+    fun isFill(): Boolean {
+        return (_remitLiveData.value!!.money.isNotBlank()
+                && _remitLiveData.value!!.account.isNotBlank())
     }
 
     fun setRemitMoney(newMoney: String) {
@@ -29,12 +23,7 @@ class RemitViewModel: ViewModel() {
     }
 
     fun setRemitAccount(newAccount: String) {
-        _remitLiveData.value!!.user.account = newAccount
-        Log.d("resultt", remitLiveData.value.toString())
-    }
-
-    fun setRemitBank(newBank: String) {
-        _remitLiveData.value!!.user.bank = newBank
+        _remitLiveData.value!!.account = newAccount
         Log.d("resultt", remitLiveData.value.toString())
     }
 
