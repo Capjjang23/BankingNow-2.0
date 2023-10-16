@@ -9,6 +9,7 @@ import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.model.RemitRequestModel
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import java.text.NumberFormat
 import java.util.Locale
@@ -20,6 +21,11 @@ class RemitCheckDialog() : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.
     }
     private lateinit var name: String
     private lateinit var money: String
+
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     override fun initStartView() {
         super.initStartView()
