@@ -1,7 +1,6 @@
 package com.example.bankingnow.ui
 
 import android.os.Environment
-import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -9,7 +8,6 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
-import com.example.bankingnow.MyApplication
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
@@ -87,7 +85,7 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
         result.observe(viewLifecycleOwner) {
             if (it.length ==6) {
                 recorder.stopRecording()
-                recordApiManager.checkPW(it)
+                recordApiManager.toLoginService(it)
             }
         }
 
@@ -137,9 +135,8 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
-            if (event.result.is_password_correct) {
-
-                recordApiManager.tryRemit(remitValue)
+            if (event.result.isLogin) {
+                recordApiManager.toRemitService(remitValue)
                 dismiss()
                 RemitSuccessDialog().show(parentFragmentManager,"")
             } else {
@@ -222,7 +219,7 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
 
                                 // 테스트
                                 idx.postValue(1)
-                                recordApiManager.tryRemit(remitValue)
+                                recordApiManager.toRemitService(remitValue)
                             }
                         }
                     }
