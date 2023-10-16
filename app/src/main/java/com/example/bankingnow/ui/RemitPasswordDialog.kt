@@ -20,6 +20,7 @@ import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitRequestModel
 import com.example.bankingnow.util.Recorder
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -31,6 +32,12 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
+
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
+
     private lateinit var account: String
     private lateinit var money: String
     private lateinit var remitValue: RemitRequestModel

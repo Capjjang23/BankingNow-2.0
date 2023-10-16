@@ -9,19 +9,21 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
-import com.example.bankingnow.MyApplication.Companion.prefs
-import com.example.bankingnow.model.MainViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.bankingnow.viewmodel.MainViewModel
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.InputStream
 
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var downEventTime: Long = 0
-    private lateinit var viewModel: MainViewModel
-
     private var path = Path()
     private var paint = Paint()
     private var savedBitmap: Bitmap? = null
+    private lateinit var viewModel:MainViewModel
+
+    val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/num.png" // 저장할 파일 경로 및 파일명
 
     init {
         paint.isAntiAlias = true
@@ -30,7 +32,10 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
         paint.strokeWidth = 100f
-        paint.strokeWidth = 50f
+    }
+
+    fun setViewModel(viewModel: MainViewModel){
+        this.viewModel = viewModel
     }
 
 
@@ -60,7 +65,15 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
                 handler.postDelayed({
                     if(upEventTime>downEventTime){
                         savedBitmap = getDrawingBitmap()
-                        saveBitmapToImage(savedBitmap!!)
+                        val longEdgeSize = if (width >= height) width else height
+                        val resizedBitmap = resizeBitmapToLongEdge(savedBitmap!!, longEdgeSize)
+
+                        Log.d("testtesttest", resizedBitmap.toString())
+                        viewModel.classify(resizedBitmap)
+                        viewModel.setNum(viewModel.result.value?.label.toString())
+                        Log.d("viewModell",viewModel.num.value.toString())
+                        clearDrawing()
+
                     }
                 }, 700)
 
@@ -80,49 +93,29 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         draw(canvas)
         return bitmap
     }
-
-    fun getBitmapFromFilePath(filePath: String): Bitmap? {
-        return BitmapFactory.decodeFile(filePath)
-    }
-
-
-    fun resizeBitmap(bitmap: Bitmap, width: Int, height: Int): Bitmap {
-        return Bitmap.createScaledBitmap(bitmap, width, height, false)
-    }
-
-
-    private fun saveBitmapToImage(bitmap: Bitmap) {
-        val longEdgeSize = if (width >= height) width else height
-
-        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/num.png" // 저장할 파일 경로 및 파일명
-        val file = File(filePath)
-
-        try {
-            val fileOutputStream = FileOutputStream(file)
-            val resizedBitmap = resizeBitmapToLongEdge(bitmap, longEdgeSize)
-            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-            fileOutputStream.close()
-            clearDrawing()
-            Toast.makeText(context, "그림이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-
-            val bitmap = getBitmapFromFilePath(filePath)
-            if (bitmap != null) {
-                // 비트맵을 성공적으로 가져온 경우 여기에서 처리
-                val resizedBitmap = resizeBitmap(bitmap, 28, 28)
-
-                viewModel.classify(resizedBitmap)
-
-
-                Log.d("viewModell", viewModel.result.value?.label.toString())
-            } else {
-                // 비트맵 가져오기에 실패한 경우 여기에서 처리
-            }
-
-        } catch (e: IOException) {
-            e.printStackTrace()
-            Toast.makeText(context, "그림을 저장하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
-        }
-    }
+//
+//    private fun saveBitmapToImage(bitmap: Bitmap) {
+//        val longEdgeSize = if (width >= height) width else height
+//
+//        val file = File(filePath)
+//
+//        try {
+//            val fileOutputStream = FileOutputStream(file)
+//            val resizedBitmap = resizeBitmapToLongEdge(bitmap, longEdgeSize)
+//            resizedBitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+//            Log.d("resizedBitmap", resizedBitmap.toString())
+//            fileOutputStream.close()
+////            clearDrawing()
+//
+//            Toast.makeText(context, "그림이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+//
+//
+//
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//            Toast.makeText(context, "그림을 저장하는 중 오류가 발생했습니다.", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     private fun resizeBitmapToLongEdge(bitmap: Bitmap, longEdgeSize: Int): Bitmap {
         val width = bitmap.width
@@ -145,6 +138,8 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
         return resultBitmap
     }
+
+
 
     fun clearDrawing() {
         path.reset()

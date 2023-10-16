@@ -3,6 +3,7 @@ package com.example.bankingnow.ui
 import android.os.Environment
 import android.view.MotionEvent
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
@@ -10,6 +11,7 @@ import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.util.Recorder
+import com.example.bankingnow.viewmodel.MainViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -23,10 +25,14 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
+
     override fun initStartView() {
         super.initStartView()
 
-        // 송금 금액 다이얼로그
+//         송금 금액 다이얼로그
         if (!prefs.getBoolean("isLogin", false)) {
             navController.navigate(R.id.action_mainFragment_to_loginFragment)
         }
@@ -34,7 +40,7 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         // 테스트
         // prefs.setBoolean("isLogin", true)
 
-        // DrawDialog().show(parentFragmentManager, "DrawDialog")
+         DrawDialog().show(parentFragmentManager, "DrawDialog")
     }
 
     override fun initAfterBinding() {

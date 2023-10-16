@@ -9,6 +9,7 @@ import android.widget.ImageView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.R
 import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.apiManager.RecordApiManager
@@ -16,6 +17,7 @@ import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
+import com.example.bankingnow.viewmodel.MainViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -23,7 +25,7 @@ import java.util.Date
 import kotlin.collections.ArrayList
 import kotlin.system.exitProcess
 
-class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
+class LoginDialog(i:Int): BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login) {
     private val stateList: Array<String> = arrayOf("START", "RECORD_START")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
@@ -37,6 +39,11 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
 
     private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
+
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     override fun initStartView() {
         ImageViewList.add(binding.ivPw1)
@@ -68,6 +75,7 @@ class LoginDialog: BaseDialogFragment<DialogLoginBinding>(R.layout.dialog_login)
         }
 
         setFillCircle(0)
+
     }
 
     override fun onStart() {

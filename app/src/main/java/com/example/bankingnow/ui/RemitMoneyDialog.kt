@@ -12,6 +12,7 @@ import com.example.bankingnow.databinding.DialogRemitMoneyBinding
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.util.Recorder
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -22,6 +23,11 @@ import java.util.Date
 class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dialog_remit_money) {
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
+    }
+
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
     }
 
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"

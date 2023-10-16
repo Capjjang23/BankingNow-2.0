@@ -1,40 +1,38 @@
 package com.example.bankingnow.ui
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.ColorMatrix
 import android.graphics.Paint
-import android.util.Log
 import android.graphics.ColorMatrixColorFilter
-import android.os.Environment
+import android.util.Log
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.R
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.databinding.DialogDrawBinding
-import com.example.bankingnow.model.MainViewModel
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.util.DrawingView
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
 
 class DrawDialog: BaseDialogFragment<DialogDrawBinding>(R.layout.dialog_draw) {
     private lateinit var view_draw: DrawingView
 
-    private lateinit var viewModel: MainViewModel
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     override fun initStartView() {
         super.initStartView()
 
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
-        viewModel.initModel()
-
         view_draw = binding.viewDraw
+        view_draw.setViewModel(mainViewModel)
 
+
+        mainViewModel.num.observe(viewLifecycleOwner){
+            Log.d("numnum", it)
+//            i += 1
+//            setFillCircle(i)
+        }
     }
 
     fun invertGrayscale(bitmap: Bitmap): Bitmap {

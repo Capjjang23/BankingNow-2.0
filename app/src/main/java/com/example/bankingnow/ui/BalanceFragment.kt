@@ -2,12 +2,15 @@ package com.example.bankingnow.ui
 
 import android.util.Log
 import android.view.MotionEvent
+import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.FragmentBalanceBinding
 import com.example.bankingnow.model.BalanceResponseModel
+import com.example.bankingnow.viewmodel.MainViewModel
+import com.example.bankingnow.viewmodel.RemitViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -16,6 +19,10 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
     RecordApiManager.postMyBalance {
     private val apiManager = RecordApiManager()
     private val finAcno = prefs.getString("FinAcno", "")
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     override fun initStartView() {
         super.initStartView()

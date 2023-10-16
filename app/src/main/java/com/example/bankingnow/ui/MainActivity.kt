@@ -6,11 +6,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.ActivityMainBinding
+import com.example.bankingnow.viewmodel.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController : NavController
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
 
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         checkRecordPermission()
+
 
         val navHostFragment=supportFragmentManager.findFragmentById(R.id.mainFrame) as NavHostFragment
         navController = navHostFragment.navController
@@ -48,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.checkSelfPermission(
                 this, // this => context
                 android.Manifest.permission.RECORD_AUDIO
+
             ) == PackageManager.PERMISSION_GRANTED -> {
                 // 실제로 녹음 시작하면 됨
             }

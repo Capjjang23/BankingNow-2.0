@@ -9,6 +9,7 @@ import com.example.bankingnow.databinding.FragmentRemitBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitRequestModel
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -20,6 +21,11 @@ class RemitFragment  : BaseFragment<FragmentRemitBinding>(R.layout.fragment_remi
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
     private var remitResult = RemitRequestModel()
+
+
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     override fun initStartView() {
         super.initStartView()
