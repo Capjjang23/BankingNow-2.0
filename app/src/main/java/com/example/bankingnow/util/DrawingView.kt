@@ -51,14 +51,19 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
             MotionEvent.ACTION_UP -> {
                 val upEventTime = System.currentTimeMillis()
 
-                // ACTION_UP 이벤트가 발생한 후 0.7초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
-                val handler = Handler()
-                handler.postDelayed({
-                    if(upEventTime>downEventTime){
-                        savedBitmap = getDrawingBitmap()
-                        saveBitmapToImage(savedBitmap!!)
-                    }
-                }, 700)
+                // 롱 프레스 이벤트를 처리합니다.
+                if (upEventTime - downEventTime > 1500) { // 1.5초 이상 롱 프레스로 판단
+                    Toast.makeText(context, "숫자 입력을 마칩니다.", Toast.LENGTH_SHORT).show()
+                } else{
+                    // ACTION_UP 이벤트가 발생한 후 0.7초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장
+                    val handler = Handler()
+                    handler.postDelayed({
+                        if(upEventTime>downEventTime){
+                            savedBitmap = getDrawingBitmap()
+                            saveBitmapToImage(savedBitmap!!)
+                        }
+                    }, 700)
+                }
 
                 return true
             }

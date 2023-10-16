@@ -26,8 +26,6 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
-
-    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
 
     override fun initDataBinding() {
@@ -47,7 +45,6 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
 
         result.observe(viewLifecycleOwner) {
             binding.tvAccount.text = it
-            viewModel.setRemitAccount(it)
         }
     }
 
@@ -66,16 +63,12 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onNumberEvent(event: NumberPublicEvent) {
         if (event.isSuccess){
-            isResponse.postValue(true)
 
             if (idx.value == 1) {
                 result.postValue(result.value + event.result.predicted_number)
                 customTTS.speak(event.result.predicted_number)
-            } else {
-                isResponse.postValue(false)
             }
         } else{
-            isResponse.postValue(false)
             customTTS.speak(resources.getString(R.string.no_network))
             idx.postValue(0)
         }

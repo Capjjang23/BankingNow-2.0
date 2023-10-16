@@ -13,8 +13,7 @@ class RemitViewModel: ViewModel() {
 
 
     fun isFill(): Boolean {
-        return (_remitLiveData.value!!.money.isNotBlank()
-                && _remitLiveData.value!!.account.isNotBlank())
+        return (_remitLiveData.value!!.money.isNotBlank())
     }
 
     fun setRemitMoney(newMoney: String) {

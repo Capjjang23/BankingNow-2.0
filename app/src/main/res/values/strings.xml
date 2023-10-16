@@ -24,7 +24,7 @@
     <string name="RemitMoney_money_check">%s원. 다음 단계로 가시려면 왼쪽으로 스와이프를, 송금 금액을 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
     <string name="RemitMoney_blank">송금 금액이 입력되지 않았습니다. 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
 
-    <string name="RemitAccount_info">핀 번호 입력 단계입니다. 테이블에 숫자를 써 입력해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 은행 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
+    <string name="RemitAccount_info">계좌 번호 입력 단계입니다. 테이블에 숫자를 써 입력해주세요. 입력하시려면, 화면을 한 번 터치해주세요. 은행 입력 단계로 돌아가시려면 오른쪽으로 스와이프 해주세요.</string>
     <string name="RemitAccount_check_account">다음 단계로 가시려면 왼쪽으로 스와이프를, 핀 번호를 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
     <string name="RemitAccount_blank">핀 번호가 입력되지 않았습니다. 다시 입력하시려면 화면을 한 번 터치해주세요.</string>
 

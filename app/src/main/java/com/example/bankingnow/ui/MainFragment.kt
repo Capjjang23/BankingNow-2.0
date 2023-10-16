@@ -9,7 +9,6 @@ import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.event.NumberPublicEvent
-import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -20,7 +19,6 @@ import kotlin.system.exitProcess
 class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
 
-    private var recorder = Recorder()
     private var recordApiManager = RecordApiManager()
 
     override fun initStartView() {
@@ -109,7 +107,6 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
                         customTTS.tts.stop()
-                        recorder.startOneRecord(filePath,true)
                     }
                 }
             }
