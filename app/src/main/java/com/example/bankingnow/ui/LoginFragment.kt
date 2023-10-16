@@ -14,6 +14,7 @@ import com.example.bankingnow.base.BaseFragment
 import com.example.bankingnow.databinding.DialogLoginBinding
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
+import com.example.bankingnow.util.DrawingView
 import com.example.bankingnow.util.Recorder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -171,7 +172,9 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
                                 customTTS.tts.stop()
                                 idx.postValue(1)
                                 result.value = ""
-                                recorder.startOneRecord(filePath, false)
+                                // recorder.startOneRecord(filePath, false)
+
+                                DrawDialog().show(parentFragmentManager, "")
 
                                 // 테스트
 //                                MyApplication.prefs.setBoolean("isLogin", true)

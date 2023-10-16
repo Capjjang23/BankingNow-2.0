@@ -27,12 +27,12 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
         super.initStartView()
 
         // 송금 금액 다이얼로그
-//        if (!prefs.getBoolean("isLogin", false)) {
-//            navController.navigate(R.id.action_mainFragment_to_loginFragment)
-//        }
+        if (!prefs.getBoolean("isLogin", false)) {
+            navController.navigate(R.id.action_mainFragment_to_loginFragment)
+        }
 
         // 테스트
-        prefs.setBoolean("isLogin", true)
+        // prefs.setBoolean("isLogin", true)
 
         // DrawDialog().show(parentFragmentManager, "DrawDialog")
     }

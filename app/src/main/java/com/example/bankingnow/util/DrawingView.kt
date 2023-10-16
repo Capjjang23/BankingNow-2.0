@@ -27,7 +27,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
         paint.style = Paint.Style.STROKE
         paint.strokeJoin = Paint.Join.ROUND
         paint.strokeCap = Paint.Cap.ROUND
-        paint.strokeWidth = 10f
+        paint.strokeWidth = 50f
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -80,7 +80,7 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private fun saveBitmapToImage(bitmap: Bitmap) {
         val longEdgeSize = if (width >= height) width else height
 
-        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/image.png" // 저장할 파일 경로 및 파일명
+        val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/num.png" // 저장할 파일 경로 및 파일명
         val file = File(filePath)
 
         try {
