@@ -31,7 +31,13 @@
     <fragment
         android:id="@+id/balanceFragment"
         android:name="com.example.bankingnow.ui.BalanceFragment"
-        android:label="BalanceFragment" />
+        android:label="BalanceFragment" >
+        <action
+            android:id="@+id/action_balanceFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/balanceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.bankingnow.ui.LoginFragment"

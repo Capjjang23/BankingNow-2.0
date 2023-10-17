@@ -11,8 +11,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.R
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.databinding.DialogDrawBinding
+import com.example.bankingnow.event.DrawStopEvent
+import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.util.DrawingView
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class DrawDialog: BaseDialogFragment<DialogDrawBinding>(R.layout.dialog_draw) {
     private lateinit var view_draw: DrawingView
@@ -26,13 +31,14 @@ class DrawDialog: BaseDialogFragment<DialogDrawBinding>(R.layout.dialog_draw) {
 
         view_draw = binding.viewDraw
         view_draw.setViewModel(mainViewModel)
+    }
 
+    override fun initAfterBinding() {
+        super.initAfterBinding()
 
-        mainViewModel.num.observe(viewLifecycleOwner){
-            Log.d("numnum", it)
-//            i += 1
-//            setFillCircle(i)
-        }
+//        mainViewModel.listener.observe(viewLifecycleOwner) {
+//            dismiss()
+//        }
     }
 
     fun invertGrayscale(bitmap: Bitmap): Bitmap {
@@ -60,4 +66,20 @@ class DrawDialog: BaseDialogFragment<DialogDrawBinding>(R.layout.dialog_draw) {
         return invertedBitmap
     }
 
+    override fun onStart() {
+        super.onStart()
+        // EventBus 등록
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // EventBus 해제
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onDrawStopEvent(event: DrawStopEvent) {
+        dismiss()
+    }
 }

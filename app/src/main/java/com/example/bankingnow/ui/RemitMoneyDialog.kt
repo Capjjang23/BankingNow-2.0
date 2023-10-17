@@ -1,6 +1,7 @@
 package com.example.bankingnow.ui
 
 import android.os.Environment
+import android.util.Log
 import android.view.MotionEvent
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
@@ -24,13 +25,9 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
 
-
     private val mainViewModel by lazy {
         ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
     }
-
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-//    private var recorder = Recorder()
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
@@ -43,6 +40,17 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         super.initStartView()
 
         viewModel.setRemitAccount(prefs.getString("Dpnm", ""))
+
+        mainViewModel.initModel()
+
+        mainViewModel.num.observe(viewLifecycleOwner){
+            Log.d("money_num", it)
+
+            if (idx.value == 1) {
+                result.value = result.value + it
+                customTTS.speak(it)
+            }
+        }
     }
     override fun initAfterBinding() {
         super.initAfterBinding()
@@ -60,35 +68,35 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // EventBus 등록
+//        EventBus.getDefault().register(this)
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        // EventBus 해제
+//        EventBus.getDefault().unregister(this)
+//    }
 
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: NumberPublicEvent) {
-        if (event.isSuccess){
-            isResponse.postValue(true)
-
-            if (idx.value == 1) {
-                result.postValue(result.value + event.result.predicted_number)
-                customTTS.speak(event.result.predicted_number)
-            } else {
-                isResponse.postValue(false)
-            }
-        } else{
-            isResponse.postValue(false)
-            customTTS.speak(resources.getString(R.string.no_network))
-            idx.postValue(0)
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    fun onNumberEvent(event: NumberPublicEvent) {
+//        if (event.isSuccess){
+//            isResponse.postValue(true)
+//
+//            if (idx.value == 1) {
+//                result.postValue(result.value + event.result.predicted_number)
+//                customTTS.speak(event.result.predicted_number)
+//            } else {
+//                isResponse.postValue(false)
+//            }
+//        } else{
+//            isResponse.postValue(false)
+//            customTTS.speak(resources.getString(R.string.no_network))
+//            idx.postValue(0)
+//        }
+//    }
 
     private fun setTouchScreen() {
         var startX = 0f
@@ -128,13 +136,14 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
 
                         when (state) {
                             "FAIL" -> {
-//                                idx.postValue(1)
-//                                result.value = ""
-//                                recorder.startOneRecord(filePath, true)
+                                idx.postValue(1)
+                                result.value = ""
+
+                                DrawDialog().show(parentFragmentManager, "")
 
                                 // 테스트
-                                idx.postValue(1)
-                                result.postValue("100")
+//                                idx.postValue(1)
+//                                result.postValue("100")
                             }
                             "RECORD_START" -> {
                                 idx.postValue(2)
@@ -153,6 +162,8 @@ class RemitMoneyDialog: BaseDialogFragment<DialogRemitMoneyBinding>(R.layout.dia
                                 idx.postValue(1)
                                 result.value = ""
 //                                recorder.startOneRecord(filePath, true)
+
+                                DrawDialog().show(parentFragmentManager, "")
                             }
                         }
                     }

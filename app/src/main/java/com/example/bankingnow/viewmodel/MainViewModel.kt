@@ -1,7 +1,3 @@
-/**
- * Copyright @marcosscarpim.
- */
-
 package com.example.bankingnow.viewmodel
 
 import android.app.Application
@@ -12,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.bankingnow.model.RemitRequestModel
 import com.scarpim.digitclassifier.classifier.Classifier
 import com.scarpim.digitclassifier.classifier.Recognition
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,11 +17,9 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 
 class MainViewModel(application: Application): AndroidViewModel(application) {
-
     private var classifier: Classifier? = null
 
     private var _num = MutableLiveData<String>()
-
     val num:LiveData<String>
         get() = _num
 
@@ -32,6 +27,13 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
     val result: StateFlow<Recognition?>
         get() = _result
 
+    private val _listener: MutableLiveData<Boolean> = MutableLiveData(false)
+    val listener: LiveData<Boolean>
+        get() = _listener
+
+//    fun setListener() {
+//        _listener.value = !_listener.value!!
+//    }
 
     fun setNum(string: String){
         Log.d("numnum", "update")
@@ -53,6 +55,7 @@ class MainViewModel(application: Application): AndroidViewModel(application) {
 
     }
     fun initModel() {
+        _num.value = "init"
         if (classifier == null) {
             viewModelScope.launch {
                 try {

@@ -4,6 +4,8 @@ import android.content.Context
 import android.os.Vibrator
 import android.speech.tts.TextToSpeech
 import android.util.Log
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.util.Locale
 
 class CustomTTS(mContext: Context) {

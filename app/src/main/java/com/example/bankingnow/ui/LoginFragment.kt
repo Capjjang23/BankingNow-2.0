@@ -12,7 +12,8 @@ import com.example.bankingnow.MyApplication
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.base.BaseFragment
-import com.example.bankingnow.databinding.DialogLoginBinding
+import com.example.bankingnow.databinding.FragmentLoginBinding
+import com.example.bankingnow.event.DrawStopEvent
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.util.CustomVibrator
@@ -23,20 +24,15 @@ import org.greenrobot.eventbus.ThreadMode
 import java.util.Date
 import kotlin.system.exitProcess
 
-class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
+class LoginFragment : BaseFragment<FragmentLoginBinding>(R.layout.fragment_login) {
     private val stateList: Array<String> = arrayOf("START", "RECORD_START")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
 
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-
     private var recordApiManager = RecordApiManager()
 
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
-
-    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
-
 
     private var i = 0
 
@@ -54,12 +50,19 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
 
         mainViewModel.initModel()
 
-
         mainViewModel.num.observe(viewLifecycleOwner){
-            Log.d("numnum", it)
+            Log.d("pw_num", it)
             i += 1
-            setFillCircle(i)
-            CustomVibrator(requireContext())
+
+            if (idx.value == 1 && result.value!!.length <= 6) {
+                result.value = result.value + it
+                setFillCircle(result.value!!.length)
+                if (result.value!!.length < 6) {
+                    customVibrator?.vibratePhone()
+                } else {
+                    idx.postValue(0)
+                }
+            }
         }
 
         // setTTS 함수 실행
@@ -76,8 +79,9 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
         }
 
         result.observe(viewLifecycleOwner) {
-            if (it.length ==6) {
+            if (it.length==6) {
                 // DrawView 종료
+                EventBus.getDefault().post(DrawStopEvent())
                 recordApiManager.toLoginService(it)
                 Log.d("pw_result", it)
             }
@@ -99,55 +103,22 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: NumberPrivateEvent) {
-        if (event.isSuccess) {
-            isResponse.postValue(true)
-            customVibrator?.vibratePhone()
-//            result.value = result.value + event.result.predicted_number
-//            setFillCircle(result.value!!.length)
-
-            if (idx.value == 1 && result.value!!.length <= 6) {
-                result.value = result.value + event.result.predicted_number
-                setFillCircle(result.value!!.length)
-
-                if (result.value!!.length < 6) {
-                    customVibrator?.vibratePhone()
-
-                } else {
-                    isResponse.postValue(false)
-                    idx.postValue(0)
-                }
-            } else {
-                isResponse.postValue(false)
-                customTTS.speak(resources.getString(R.string.no_network))
-                idx.postValue(0)
-            }
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
             if (event.result.isLogin) {
-                Log.d("IsLogin",event.result.isLogin.toString())
                 MyApplication.prefs.setBoolean("isLogin", true)
-                customTTS.speak("로그인 성공")
                 requireActivity().onBackPressed()
             } else {
-                    Log.d("IsLogin",event.result.isLogin.toString())
-                    customTTS.speak(resources.getString(R.string.not_correct_pw))
-                    resetCircle()
-                    idx.postValue(0)
+                customTTS.speak(resources.getString(R.string.not_correct_pw))
+                resetCircle()
+                idx.postValue(0)
             }
         } else {
             customTTS.speak(resources.getString(R.string.no_network))
+            resetCircle()
             idx.postValue(0)
         }
     }
-
-
-
-
 
     private fun setFillCircle(index:Int){
         for (i in 1..index){
@@ -188,10 +159,9 @@ class LoginFragment : BaseFragment<DialogLoginBinding>(R.layout.dialog_login) {
                                 customTTS.tts.stop()
                                 idx.postValue(1)
                                 result.value = ""
-                                // recorder.startOneRecord(filePath, false)
 
-                                // DrawDialog().show(parentFragmentManager, "")
-                                result.value = "123456"
+                                DrawDialog().show(parentFragmentManager, "")
+                                // result.value = "123456"
 
                                 // 테스트
 //                                MyApplication.prefs.setBoolean("isLogin", true)

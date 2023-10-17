@@ -2,6 +2,7 @@ package com.example.bankingnow.ui
 
 import android.util.Log
 import android.view.MotionEvent
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
@@ -14,15 +15,12 @@ import com.example.bankingnow.viewmodel.RemitViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.system.exitProcess
 
 class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_balance),
     RecordApiManager.postMyBalance {
     private val apiManager = RecordApiManager()
     private val finAcno = prefs.getString("FinAcno", "")
-
-    private val mainViewModel by lazy {
-        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
-    }
 
     override fun initStartView() {
         super.initStartView()
@@ -58,7 +56,7 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
                         if (customTTS.tts.isSpeaking) {
                             tts.stop()
                         }
-                        requireActivity().onBackPressed()
+                        navController.navigate(R.id.action_balanceFragment_to_mainFragment)
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
                         if (customTTS.tts.isSpeaking) {
@@ -73,7 +71,6 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
     }
 
     override fun postBalance(balanceModel: BalanceResponseModel) {
-        Log.d("잔액확인", balanceModel.toString())
         val depositor = prefs.getString("Dpnm", "")
 
         binding.tvUserInfo.text = "${depositor} 님\n농협은행 통장잔액"
@@ -81,19 +78,5 @@ class BalanceFragment : BaseFragment<FragmentBalanceBinding>(R.layout.fragment_b
 
         val formattedString = getString(R.string.account_balance, depositor, "농협은행", balanceModel.Ldbl)
         customTTS.speak(formattedString)
-
     }
-
-    fun getDate(): String {
-        val sdf = SimpleDateFormat("yyyyMMdd")
-        val currentDate = Date()
-        return sdf.format(currentDate)
-    }
-
-    fun getTime(): String {
-        val sdf = SimpleDateFormat("HHmmss")
-        val currentTime = Date()
-        return sdf.format(currentTime)
-    }
-
 }

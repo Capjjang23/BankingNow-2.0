@@ -9,12 +9,10 @@ import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
+import com.example.bankingnow.event.DrawStopEvent
 import com.example.bankingnow.viewmodel.MainViewModel
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
+import org.greenrobot.eventbus.EventBus
+import kotlin.math.abs
 
 class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) {
     private var downEventTime: Long = 0
@@ -24,6 +22,9 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
     private lateinit var viewModel:MainViewModel
 
     val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/num.png" // 저장할 파일 경로 및 파일명
+
+    private var startX = 0f
+    private var startY = 0f
 
     init {
         paint.isAntiAlias = true
@@ -49,19 +50,28 @@ class DrawingView(context: Context, attrs: AttributeSet) : View(context, attrs) 
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+
                 downEventTime = System.currentTimeMillis() // ACTION_DOWN 이벤트 발생 시간 저장
                 path.moveTo(x, y)
-                Log.d("DOWN!", "$x$y")
             }
             MotionEvent.ACTION_MOVE -> {
                 path.lineTo(x, y)
                 Log.d("MOVE!", "$x$y")
             }
             MotionEvent.ACTION_UP -> {
-                val upEventTime = System.currentTimeMillis()
+                val endX = event.x
+                val endY = event.y
 
-                // 롱 프레스 이벤트를 처리합니다.
-                if (upEventTime - downEventTime > 1500) { // 1.5초 이상 롱 프레스로 판단
+                val distanceX = abs(endX-startX)
+                val distanceY = abs(endY-startY)
+
+                val upEventTime = System.currentTimeMillis()
+                if (abs(endX-startX) <15 && abs(endY-startY)<15 && (upEventTime - downEventTime) > 500) {
+                    // 0.5초 이상 롱 프레스로 판단
+
+                    EventBus.getDefault().post(DrawStopEvent())
                     Toast.makeText(context, "숫자 입력을 마칩니다.", Toast.LENGTH_SHORT).show()
                 } else{
                     // ACTION_UP 이벤트가 발생한 후 0.7초 이내에 ACTION_DOWN 이벤트가 발생하지 않으면 그림을 저장

@@ -45,7 +45,12 @@ class MainActivity : AppCompatActivity() {
         prefs.setString("AccessToken", "b51e05230924338a995143c03eb8a12d9cc4e48fbfc573a00b0f3fb64a62be6e")
         prefs.setString("Bncd", "011")
         prefs.setString("Acno", "3020000009308")
-        prefs.setString("FinAcno", "00820100021160000000000017092")
+        prefs.setString("FinAcno", "00820100021160000000000017489")
+
+
+//        prefs.setString("Dpnm", "싱커톤")
+//        prefs.setString("Acno", "3020000009310")
+//        prefs.setString("FinAcno", "00820100021160000000000017470")
     }
 
     private fun checkRecordPermission() {

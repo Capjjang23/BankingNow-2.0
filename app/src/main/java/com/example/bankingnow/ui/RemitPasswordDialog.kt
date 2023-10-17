@@ -1,6 +1,6 @@
 package com.example.bankingnow.ui
 
-import android.os.Environment
+import android.util.Log
 import android.view.MotionEvent
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
@@ -8,16 +8,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.bankingnow.MyApplication
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitPasswordBinding
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.event.DrawStopEvent
 import com.example.bankingnow.event.LoginEvent
 import com.example.bankingnow.event.NumberPrivateEvent
 import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitRequestModel
-import com.example.bankingnow.util.Recorder
 import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
@@ -30,7 +31,6 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
-
 
     private val mainViewModel by lazy {
         ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
@@ -47,10 +47,9 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
 
     private val ImageViewList : ArrayList<ImageView> = ArrayList()
 
-    private val isResponse: MutableLiveData<Boolean> = MutableLiveData(false)
     private val result: MutableLiveData<String> = MutableLiveData("")
 
-    private val pass: MutableLiveData<Boolean> = MutableLiveData(false)
+    private var i = 0
 
     override fun initStartView() {
         account = prefs.getString("FinAcno","")
@@ -67,6 +66,22 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
         // setTTS 함수 실행
         setUtil(resources.getString(R.string.Password_info))
 
+        mainViewModel.initModel()
+
+        mainViewModel.num.observe(viewLifecycleOwner){
+            Log.d("pw_num", it)
+            i += 1
+
+            if (idx.value == 1 && result.value!!.length <= 6) {
+                result.value = result.value + it
+                setFillCircle(result.value!!.length)
+                if (result.value!!.length < 6) {
+                    customVibrator?.vibratePhone()
+                } else {
+                    idx.postValue(0)
+                }
+            }
+        }
     }
 
     override fun initAfterBinding() {
@@ -79,9 +94,11 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
         }
 
         result.observe(viewLifecycleOwner) {
-            if (it.length ==6) {
-                // DrawView 삭제
+            if (it.length==6) {
+                // DrawView 종료
+                EventBus.getDefault().post(DrawStopEvent())
                 recordApiManager.toLoginService(it)
+                Log.d("pw_result", it)
             }
         }
 
@@ -101,39 +118,10 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: NumberPrivateEvent) {
-        if (event.isSuccess) {
-            isResponse.postValue(true)
-            customVibrator?.vibratePhone()
-//            result.value = result.value + event.result.predicted_number
-//            setFillCircle(result.value!!.length)
-
-            if (idx.value == 1 && result.value!!.length <= 6) {
-                result.value = result.value + event.result.predicted_number
-                setFillCircle(result.value!!.length)
-
-                if (result.value!!.length < 6) {
-                    customVibrator?.vibratePhone()
-
-                } else {
-                    isResponse.postValue(false)
-                    idx.postValue(0)
-                }
-            } else {
-                isResponse.postValue(false)
-                customTTS.speak(resources.getString(R.string.no_network))
-                idx.postValue(0)
-            }
-        }
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event: LoginEvent) {
         if (event.isSuccess) {
             if (event.result.isLogin) {
                 recordApiManager.toRemitService(remitValue)
-                dismiss()
-                RemitSuccessDialog().show(parentFragmentManager,"")
             } else {
                 customTTS.speak(resources.getString(R.string.not_correct_pw))
                 resetCircle()
@@ -141,6 +129,7 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
             }
         } else {
             customTTS.speak(resources.getString(R.string.no_network))
+            resetCircle()
             idx.postValue(0)
         }
     }
@@ -208,13 +197,14 @@ class RemitPasswordDialog() : BaseDialogFragment<DialogRemitPasswordBinding>(R.l
 
                         when (state) {
                             "START" -> {
-//                                idx.postValue(1)
-//                                result.value = ""
-//                                recorder.startOneRecord(filePath, false)
-
-                                // 테스트
                                 idx.postValue(1)
+                                result.value = ""
+
+                                // DrawDialog().show(parentFragmentManager, "")
                                 recordApiManager.toRemitService(remitValue)
+                                // 테스트
+//                                idx.postValue(1)
+//                                recordApiManager.toRemitService(remitValue)
                             }
                         }
                     }

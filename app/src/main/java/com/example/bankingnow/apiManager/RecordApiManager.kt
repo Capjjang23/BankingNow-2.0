@@ -152,6 +152,8 @@ class RecordApiManager {
     fun toLoginService(password: String) {
         val request = LoginRequestModel(password)
         val resultData: Call<LoginResponseModel>? = retrofitService?.loginService(request)
+        Log.d("pw_request", request.toString())
+        Log.d("pw_response", resultData.toString())
         resultData?.enqueue(object : Callback<LoginResponseModel> {
             override fun onResponse(
                 call: Call<LoginResponseModel>,
@@ -159,11 +161,11 @@ class RecordApiManager {
             ) {
                 if (response.isSuccessful) {
                     val result: LoginResponseModel = response.body()!!
-                    Log.d("password check", result.toString())
+                    Log.d("pw_toLoginService", result.toString())
                     updateTokenInRetrofit("")
                     EventBus.getDefault().post(LoginEvent(true, result))
                 } else {
-                    Log.d("password check", "실패")
+                    Log.d("pw_toLoginService", "실패")
                     Log.d("response:", response.toString())
                     EventBus.getDefault().post(LoginEvent(false, LoginResponseModel(false)))
                 }
@@ -172,7 +174,7 @@ class RecordApiManager {
             override fun onFailure(call: Call<LoginResponseModel>, t: Throwable) {
                 t.printStackTrace()
                 EventBus.getDefault().post(LoginEvent(false, LoginResponseModel(false)))
-                Log.d("password check", "통신 실패")
+                Log.d("pw_toLoginService", "통신 실패")
             }
         })
     }

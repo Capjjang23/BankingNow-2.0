@@ -8,9 +8,13 @@ import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.DialogRemitCheckBinding
 import com.example.bankingnow.base.BaseDialogFragment
+import com.example.bankingnow.event.RemitEvent
 import com.example.bankingnow.model.RemitRequestModel
 import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import java.text.NumberFormat
 import java.util.Locale
 import kotlin.properties.Delegates
@@ -20,8 +24,11 @@ class RemitCheckDialog() : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
     private lateinit var name: String
+    private lateinit var account: String
     private lateinit var money: String
-
+    private lateinit var ttsMoney: String
+    private lateinit var remitValue: RemitRequestModel
+    private var recordApiManager = RecordApiManager()
 
     private val mainViewModel by lazy {
         ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
@@ -31,21 +38,53 @@ class RemitCheckDialog() : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.
         super.initStartView()
 
         name = prefs.getString("Dpnm", "홍길동")
-        money = addCommasToNumber(viewModel.remitLiveData.value!!.money.toLong())
+        account = prefs.getString("FinAcno","")
+        money = viewModel.remitLiveData.value!!.money
+        remitValue = RemitRequestModel(account, money)
+        ttsMoney = addCommasToNumber(viewModel.remitLiveData.value!!.money.toLong())
     }
     override fun initDataBinding() {
         super.initDataBinding()
 
         binding.tvRemitName.text = name
         binding.tvRemitBank.text = "농협은행"
-        binding.tvRemitMoney.text = money
+        binding.tvRemitMoney.text = ttsMoney
     }
 
     override fun initAfterBinding() {
         super.initAfterBinding()
 
         setTouchScreen()
-        setUtil(resources.getString(R.string.RemitCheck_receiver_check, name, money))
+        setUtil(resources.getString(R.string.RemitCheck_receiver_check, name, ttsMoney))
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // EventBus 등록
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        // EventBus 해제
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRemitEvent(event: RemitEvent){
+        if(event.isSuccess){
+            if(event.result.isRemit){
+                RemitSuccessDialog().show(parentFragmentManager,"송금성공")
+                dismiss()
+            }else{
+                customTTS.speak(resources.getString(R.string.Remit_low_balance))
+                Thread.sleep(3000)
+                dismiss()
+                navController.navigate(R.id.action_remitFragment_to_mainFragment)
+            }
+        }else{
+            customTTS.speak(resources.getString(R.string.no_network))
+        }
     }
 
 
@@ -77,9 +116,7 @@ class RemitCheckDialog() : BaseDialogFragment<DialogRemitCheckBinding>(R.layout.
                         if (customTTS.tts.isSpeaking) {
                             tts.stop()
                         }
-
-                        RemitPasswordDialog().show(parentFragmentManager, "비밀번호 입력")
-                        dismiss()
+                        recordApiManager.toRemitService(remitValue)
                     }
                 }
             }

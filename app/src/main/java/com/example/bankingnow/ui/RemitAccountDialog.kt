@@ -7,10 +7,12 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
+import com.example.bankingnow.MyApplication
 import com.example.bankingnow.R
 import com.example.bankingnow.databinding.DialogRemitAccountBinding
 import com.example.bankingnow.base.BaseDialogFragment
 import com.example.bankingnow.event.NumberPublicEvent
+import com.example.bankingnow.viewmodel.MainViewModel
 import com.example.bankingnow.viewmodel.RemitViewModel
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -22,11 +24,28 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
     private val viewModel by lazy {
         ViewModelProvider(requireParentFragment())[RemitViewModel::class.java]
     }
+    private val mainViewModel by lazy {
+        ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
+    }
 
     private val stateList: Array<String> = arrayOf("FAIL", "RECORD_START", "SUCCESS")
     private val idx: MutableLiveData<Int> = MutableLiveData(0)
     private lateinit var state: String
     private val result: MutableLiveData<String> = MutableLiveData("")
+
+    override fun initStartView() {
+        super.initStartView()
+
+        mainViewModel.initModel()
+        mainViewModel.num.observe(viewLifecycleOwner){
+            Log.d("account_num", it)
+
+            if (idx.value == 1) {
+                result.value = result.value + it
+                customTTS.speak(it)
+            }
+        }
+    }
 
     override fun initDataBinding() {
         super.initDataBinding()
@@ -45,32 +64,6 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
 
         result.observe(viewLifecycleOwner) {
             binding.tvAccount.text = it
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onNumberEvent(event: NumberPublicEvent) {
-        if (event.isSuccess){
-
-            if (idx.value == 1) {
-                result.postValue(result.value + event.result.predicted_number)
-                customTTS.speak(event.result.predicted_number)
-            }
-        } else{
-            customTTS.speak(resources.getString(R.string.no_network))
-            idx.postValue(0)
         }
     }
 
@@ -124,6 +117,8 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                                 result.value = ""
                                 idx.postValue(1)
 
+                                DrawDialog().show(parentFragmentManager, "")
+
                                 // 테스트
 //                                idx.postValue(1)
 //                                result.postValue("7848539105")
@@ -135,6 +130,7 @@ class RemitAccountDialog : BaseDialogFragment<DialogRemitAccountBinding>(R.layou
                             "SUCCESS" -> {
                                 result.value = ""
                                 idx.postValue(1)
+                                DrawDialog().show(parentFragmentManager, "")
                             }
                         }
                     }

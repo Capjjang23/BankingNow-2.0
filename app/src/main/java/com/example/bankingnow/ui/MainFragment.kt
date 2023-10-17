@@ -1,14 +1,17 @@
 package com.example.bankingnow.ui
 
 import android.os.Environment
+import android.util.Log
 import android.view.MotionEvent
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import com.example.bankingnow.MyApplication.Companion.prefs
 import com.example.bankingnow.R
 import com.example.bankingnow.apiManager.RecordApiManager
 import com.example.bankingnow.databinding.FragmentMainBinding
 import com.example.bankingnow.base.BaseFragment
+import com.example.bankingnow.event.DrawStopEvent
 import com.example.bankingnow.event.NumberPublicEvent
 import com.example.bankingnow.viewmodel.MainViewModel
 import org.greenrobot.eventbus.EventBus
@@ -19,9 +22,9 @@ import java.util.Date
 import kotlin.system.exitProcess
 
 class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
-    private val filePath = Environment.getExternalStorageDirectory().absolutePath + "/Download/" + Date().time.toString() + ".aac"
-
-    private var recordApiManager = RecordApiManager()
+    private val stateList: Array<String> = arrayOf("START", "RECORD_START")
+    private val idx: MutableLiveData<Int> = MutableLiveData(0)
+    private lateinit var state: String
 
     private val mainViewModel by lazy {
         ViewModelProvider(requireParentFragment())[MainViewModel::class.java]
@@ -30,49 +33,24 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
     override fun initStartView() {
         super.initStartView()
 
-//         송금 금액 다이얼로그
+        Log.d("pw_MAIN","")
+        // 테스트
+        // prefs.setBoolean("isLogin", true)
+
+        // 송금 금액 다이얼로그
         if (!prefs.getBoolean("isLogin", false)) {
             navController.navigate(R.id.action_mainFragment_to_loginFragment)
         }
 
-        // 테스트
-        // prefs.setBoolean("isLogin", true)
+        mainViewModel.initModel()
 
-         DrawDialog().show(parentFragmentManager, "DrawDialog")
-    }
+        mainViewModel.num.observe(viewLifecycleOwner){
+            Log.d("pw_num", it)
+            idx.postValue(0)
+            EventBus.getDefault().post(DrawStopEvent())
 
-    override fun initAfterBinding() {
-        super.initAfterBinding()
-
-        setTouchScreen()
-        setUtil(resources.getString(R.string.Main_choose_info) + resources.getString(R.string.record_start))
-        binding.btnBalance.setOnClickListener{
-            customVibrator?.vibratePhone()
-            navController.navigate(R.id.action_mainFragment_to_balanceFragment)
-        }
-        binding.btnRemit.setOnClickListener{
-            customVibrator?.vibratePhone()
-            navController.navigate(R.id.action_mainFragment_to_remitFragment)
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // EventBus 등록
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // EventBus 해제
-        EventBus.getDefault().unregister(this)
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun NumberPublicEvent(event: NumberPublicEvent) {
-        if (event.isSuccess){
-            val num = event.result.predicted_number
-            when(num){
+            when(it){
+                "init" -> {}
                 "1" -> {
                     customTTS.speak(resources.getString(R.string.Main_choose_one))
                     sleep(3000)
@@ -83,11 +61,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                     sleep(3000)
                     navController.navigate(R.id.action_mainFragment_to_remitFragment)
                 }
-                // else -> customTTS.speak(resources.getString(R.string.Main_choose_again))
-
             }
-        } else{
-            customTTS.speak(resources.getString(R.string.no_network) + resources.getString(R.string.record_start))
+        }
+    }
+
+    override fun initAfterBinding() {
+        super.initAfterBinding()
+
+        setTouchScreen()
+        setUtil(resources.getString(R.string.Main_choose_info) + resources.getString(R.string.record_start))
+
+        idx.observe(viewLifecycleOwner) {
+            state = stateList[idx.value!!]
         }
     }
 
@@ -112,7 +97,18 @@ class MainFragment : BaseFragment<FragmentMainBinding>(R.layout.fragment_main) {
                         exitApp()
                     } else if (distanceX>-10 && distanceX<10){
                         // 클릭으로 처리
-                        customTTS.tts.stop()
+                        when (state) {
+                            "START" -> {
+                                customTTS.tts.stop()
+                                idx.postValue(1)
+
+                                DrawDialog().show(parentFragmentManager, "")
+
+                                // 테스트
+//                                MyApplication.prefs.setBoolean("isLogin", true)
+//                                requireActivity().onBackPressed()
+                            }
+                        }
                     }
                 }
             }
